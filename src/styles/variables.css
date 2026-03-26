@@ -1,0 +1,14 @@
+
+:root {
+  --color-primary: #281559; /* 西浦紫 */
+  --color-accent: #00C4CC;  /* 青蓝互动色 */
+  --color-bg: #F5F6FA;      /* 页面浅灰背景 */
+  --color-surface: #FFFFFF; /* 卡片白底 */
+  --color-text-main: #1A1A1A;
+  --color-text-sub: #888888;
+  
+  --radius-card: 16px;
+  --radius-btn: 8px;
+  
+  --shadow-soft: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
