@@ -1,90 +1,87 @@
-import React from 'react';
+import { useState } from 'react';
+import './MessageCard.css';
 
 export interface MessageCardProps {
-  data: {
-    username: string;
-    avatar: string;
-    text: string;
-    timestamp: string;
-    imageUrl?: string;
-  };
+  userName: string;
+  userAvatar: string;
+  timestamp: string;
+  text: string;
+  imageUrl?: string;
+  initialLikes?: number;
+  onClose?: () => void;
 }
 
-const styles = {
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: '16px',
-    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.05)',
-    padding: '16px',
-    fontFamily: 'sans-serif',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: '12px',
-    maxWidth: '400px',
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  avatar: {
-    width: '32px',
-    height: '32px',
-    borderRadius: '50%',
-    objectFit: 'cover' as const,
-  },
-  username: {
-    fontWeight: 'bold',
-    color: '#281559',
-    margin: 0,
-    fontSize: '14px',
-  },
-  bodyText: {
-    color: '#333333', // Deep grey
-    margin: 0,
-    fontSize: '14px',
-    lineHeight: '1.5',
-  },
-  imageContainer: {
-    marginTop: '4px',
-  },
-  image: {
-    width: '100px',
-    height: '100px',
-    borderRadius: '8px',
-    objectFit: 'cover' as const,
-  },
-  footer: {
-    fontSize: '12px',
-    color: '#999999', // Light grey
-    margin: 0,
-    marginTop: '4px',
-  },
-};
+const MessageCard: React.FC<MessageCardProps> = ({
+  userName,
+  userAvatar,
+  timestamp,
+  text,
+  imageUrl,
+  initialLikes = 0,
+  onClose
+}) => {
+  const [likes, setLikes] = useState(initialLikes);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
-export const MessageCard: React.FC<MessageCardProps> = ({ data }) => {
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    setLikes(isLiked ? likes + 1 : likes - 1);
+  };
+
   return (
-    <div style={styles.card}>
-      {/* Top Section */}
-      <div style={styles.header}>
-        <img src={data.avatar} alt={`${data.username}'s avatar`} style={styles.avatar} />
-        <h4 style={styles.username}>{data.username}</h4>
+    <>
+      <div className="message-card">
+        {/* Header */}
+        <div className="mc-header">
+          <div className="mc-user-info">
+            {userAvatar && <img className="mc-avatar" src={userAvatar} alt={userName} />}
+            <span className="mc-username">{userName}</span>
+          </div>
+          <div className="mc-header-right">
+            <span className="mc-timestamp">{timestamp}</span>
+            {onClose && (
+              <button className="mc-close-btn" onClick={onClose} aria-label="Close">
+                &times;
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Content text */}
+        <div className="mc-text">{text}</div>
+
+        {/* Thumbnail / Image */}
+        {imageUrl && (
+          <div className="mc-image-container" onClick={() => setIsLightboxOpen(true)}>
+            <img src={imageUrl} className="mc-image" alt="Attachment" />
+          </div>
+        )}
+
+        {/* Footer / Interaction */}
+        <div className="mc-footer">
+          <div className="mc-spacer"></div>
+          <button className={`mc-like-btn ${isLiked ? 'liked' : ''}`} onClick={handleLike}>
+            <span className="mc-heart">❤️</span>
+            <span className="mc-like-count">{likes}</span>
+          </button>
+        </div>
       </div>
 
-      {/* Middle Section */}
-      <p style={styles.bodyText}>{data.text}</p>
-
-      {/* Optional Bottom Section */}
-      {data.imageUrl && (
-        <div style={styles.imageContainer}>
-          <img src={data.imageUrl} alt="Attached content" style={styles.image} />
+      {/* Lightbox for Image */}
+      {isLightboxOpen && imageUrl && (
+        <div className="lightbox-overlay" onClick={() => setIsLightboxOpen(false)}>
+          <img 
+            className="lightbox-image" 
+            src={imageUrl} 
+            alt="Expanded Attachment" 
+            onClick={(e) => e.stopPropagation()} 
+          />
         </div>
       )}
-
-      {/* Footer */}
-      <div style={styles.footer}>
-        {data.timestamp}
-      </div>
-    </div>
+    </>
   );
 };
+
+export default MessageCard;
+
