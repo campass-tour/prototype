@@ -1,69 +1,82 @@
-import MessageCard from './components/wall/MessageCard';
-import Danmaku from './components/wall/Danmaku';
-
-const sampleUserData = {
-  userName: "小明",
-  userAvatar: "https://i.pravatar.cc/150?u=xiaoming",
-  text: "这是一条测试弹幕！超长的话就会被截断哦这是超出截断截断截断...",
-  timestamp: "2小时前",
-  imageUrl: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&h=600&fit=crop",
-  likes: 42
-};
+import { useState } from 'react';
+import { MainLayout, type TabId } from './components/common/MainLayout';
+import './App.css';
 
 function App() {
+  const [activeTab, setActiveTab] = useState<TabId>('explore');
+
+  // Simple rendering logic based on state
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'explore':
+        return (
+          <div className="flex flex-col items-center justify-center h-64 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-gray-100">
+            <h2 className="text-[var(--color-primary)] font-bold text-2xl mb-2">Explore Campus</h2>
+            <p className="text-[var(--color-text-secondary)]">The interactive map will go here.</p>
+          </div>
+        );
+      case 'collection':
+        return (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map((item) => (
+              <div key={item} className="h-40 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] flex flex-col items-center justify-center border border-gray-100">
+                <div className="w-12 h-12 rounded-full bg-[var(--color-accent)]/20 mb-2"></div>
+                <span className="text-[var(--color-text-main)] font-semibold">Item {item}</span>
+              </div>
+            ))}
+          </div>
+        );
+      case 'wall':
+        return (
+          <div className="space-y-4">
+            {[1, 2, 3].map((message) => (
+              <div key={message} className="p-4 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-gray-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-gray-200"></div>
+                  <div className="font-semibold text-sm">Student {message}</div>
+                </div>
+                <p className="text-[var(--color-text-main)] text-sm">This is a great place to hang out between classes! Any other recommendations?</p>
+              </div>
+            ))}
+          </div>
+        );
+      case 'profile':
+        return (
+          <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-6 shadow-[var(--shadow-card)] border border-gray-100">
+            <div className="flex items-center gap-4 mb-6 relative">
+              <div className="w-20 h-20 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center text-[var(--color-primary)] font-bold text-2xl">
+                JD
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-[var(--color-text-main)]">John Doe</h2>
+                <p className="text-sm text-[var(--color-accent)] font-medium">Level 5 Explorer</p>
+              </div>
+            </div>
+            
+            <h3 className="font-bold text-[var(--color-text-main)] mb-3">Stats</h3>
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="bg-[var(--color-background)] p-3 rounded-lg text-center">
+                <div className="text-2xl font-bold text-[var(--color-primary)]">42</div>
+                <div className="text-xs text-[var(--color-text-secondary)]">Locations Visited</div>
+              </div>
+              <div className="bg-[var(--color-background)] p-3 rounded-lg text-center">
+                <div className="text-2xl font-bold text-[var(--color-primary)]">15</div>
+                <div className="text-xs text-[var(--color-text-secondary)]">Badges Collected</div>
+              </div>
+            </div>
+          </div>
+        );
+      default:
+        return <div>Select a tab</div>;
+    }
+  };
+
   return (
-    <div style={{ padding: 40, background: 'var(--color-primary)', minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
-      <h1 style={{ color: 'white', textAlign: 'center' }}>Danmaku & MessageCard Test</h1>
-      
-      {/* Sample Danmaku */}
-      <Danmaku 
-        id="1"
-        text={sampleUserData.text}
-        avatarUrl={sampleUserData.userAvatar}
-        top="20%"
-        animationDuration="10s"
-        delay="0s"
-        userName={sampleUserData.userName}
-        timestamp={sampleUserData.timestamp}
-        imageUrl={sampleUserData.imageUrl}
-        likes={sampleUserData.likes}
-      />
-      <Danmaku 
-        id="2"
-        text="欢迎来到这面墙～"
-        avatarUrl="https://i.pravatar.cc/150?u=xiaoqiang"
-        top="40%"
-        animationDuration="15s"
-        delay="1s"
-        userName="小强"
-        timestamp="已发布 5天前"
-        likes={120}
-      />
-      <Danmaku 
-        id="3"
-        text="只有文字的弹幕！没有任何其他的东西。也可以点击哦。"
-        top="60%"
-        animationDuration="12s"
-        delay="3s"
-        userName="匿名用户"
-        timestamp="刚刚"
-        likes={0}
-      />
-      
-      {/* Centered raw message card for previewing static view */}
-      <div style={{ marginTop: '100px', maxWidth: '400px', marginLeft: 'auto', marginRight: 'auto' }}>
-        <h2 style={{ color: 'white' }}>Standalone Message Card</h2>
-        <MessageCard 
-          userName={sampleUserData.userName}
-          userAvatar={sampleUserData.userAvatar}
-          timestamp={sampleUserData.timestamp}
-          text={sampleUserData.text}
-          imageUrl={sampleUserData.imageUrl}
-          initialLikes={sampleUserData.likes}
-        />
-      </div>
-    </div>
+    <MainLayout activeTab={activeTab} onTabChange={setActiveTab}>
+      {renderContent()}
+    </MainLayout>
   );
 }
 
 export default App;
+
