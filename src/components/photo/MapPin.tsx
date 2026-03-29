@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { Danmaku } from '../wall/Danmaku';
 
 interface MapPinProps {
   x: number; // Percentage horizontal position (0-100)
@@ -234,6 +235,7 @@ export const MapPin: React.FC<MapPinProps> = ({
         </div>,
         document.body
       )}
+      <Danmaku isActive={isOpen && status === 'unlocked'} />
     </>
   );
 };
