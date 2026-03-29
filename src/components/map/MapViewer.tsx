@@ -3,20 +3,21 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { Plus, Minus, Maximize } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import mapImage from '@/assets/map.png';
+import { UserPositionIndicator } from './UserPositionIndicator';
 
 interface MapViewerProps {
-  /**
-   * Optional class name to control the wrapper's dimensions and styling.
-   * The map will automatically scale and fit within this container.
-   */
   className?: string;
-  /**
-   * The initial zoom scale level. Defaults to 1 (fits the container).
-   */
   initialScale?: number;
 }
 
 export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
+  // Fake GPS Data
+  const userPosition = {
+    x: 23, // 23% from left
+    y: 25, // 25% from top
+    heading: 105 // test distinct heading
+  };
+
   return (
     <div className={cn("relative w-full bg-[var(--color-surface)] overflow-hidden", className)}>
       <TransformWrapper
@@ -30,7 +31,6 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
       >
         {({ zoomIn, zoomOut, resetTransform }) => (
           <>
-            {/* Floating Navigation Controls */}
             <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-2 bg-[var(--color-surface)] p-2 rounded-xl shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)]">
               <button 
                 onClick={() => zoomIn()} 
@@ -57,18 +57,20 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
               </button>
             </div>
             
-            {/* Interactive Map Area */}
             <TransformComponent 
               wrapperStyle={{ width: "100%", height: "100%" }} 
               contentStyle={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}
             >
-              {/* object-cover ensures the image maintains its aspect ratio while filling the view as best as possible bounding to limits */}
-              <img 
-                src={mapImage} 
-                alt="Interactive Campus Map" 
-                className="w-full h-full object-cover md:object-contain pointer-events-none select-none max-w-none"
-                draggable={false}
-              />
+              <div className="relative w-full h-full flex items-center justify-center">
+                <img 
+                  src={mapImage} 
+                  alt="Interactive Campus Map" 
+                  className="w-full h-full object-cover pointer-events-none select-none max-w-none"
+                  draggable={false}
+                />
+                
+                <UserPositionIndicator userPosition={userPosition} />
+              </div>
             </TransformComponent>
           </>
         )}
