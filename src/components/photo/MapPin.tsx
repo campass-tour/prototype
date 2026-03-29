@@ -66,7 +66,7 @@ export const MapPin: React.FC<MapPinProps> = ({
   return (
     <>
       <div 
-        className="absolute z-10 transition-all duration-300"
+        className="absolute z-10 transition-all duration-300 pointer-events-auto"
         style={{ 
           left: `${x}%`,
           top: `${y}%`,
