@@ -10,7 +10,7 @@ function App() {
     switch (activeTab) {
       case 'explore':
         return (
-          <div className="flex flex-col items-center justify-center flex-1 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-gray-100 min-h-[50vh]">
+          <div className="flex flex-col items-center justify-center flex-1 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)] min-h-[50vh]">
             <h2 className="text-[var(--color-primary)] font-bold text-3xl mb-4">Explore Campus</h2>
             <p className="text-[var(--color-text-secondary)] text-lg">The interactive map will go here.</p>
           </div>
@@ -19,7 +19,7 @@ function App() {
         return (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
-              <div key={item} className="h-48 md:h-56 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] flex flex-col items-center justify-center border border-gray-100 hover:shadow-lg transition-shadow">
+              <div key={item} className="h-48 md:h-56 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] flex flex-col items-center justify-center border border-[var(--color-state-disabled)] hover:shadow-lg transition-shadow">
                 <div className="w-16 h-16 rounded-full bg-[var(--color-accent)]/20 mb-3"></div>
                 <span className="text-[var(--color-text-main)] font-semibold text-lg">Item {item}</span>
               </div>
@@ -30,7 +30,7 @@ function App() {
         return (
           <div className="space-y-6 max-w-4xl mx-auto w-full">
             {[1, 2, 3, 4, 5].map((message) => (
-              <div key={message} className="p-6 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-gray-100">
+              <div key={message} className="p-6 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)]">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-full bg-gray-200"></div>
                   <div className="font-semibold text-base">Student {message}</div>
@@ -42,7 +42,7 @@ function App() {
         );
       case 'profile':
         return (
-          <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-8 shadow-[var(--shadow-card)] border border-gray-100 max-w-4xl mx-auto w-full">
+          <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-8 shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)] max-w-4xl mx-auto w-full">
             <div className="flex items-center gap-6 mb-8 relative">
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center text-[var(--color-primary)] font-bold text-3xl md:text-4xl">
                 JD

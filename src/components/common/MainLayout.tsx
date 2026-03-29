@@ -1,5 +1,5 @@
-import React from 'react';
-import { Map, Backpack, MessageSquare, User, CircleUserRound } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Map, Backpack, MessageSquare, User, CircleUserRound, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type TabId = 'explore' | 'collection' | 'wall' | 'profile';
@@ -11,6 +11,27 @@ interface MainLayoutProps {
 }
 
 export function MainLayout({ children, activeTab, onTabChange }: MainLayoutProps) {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check initial user preference
+    if (document.documentElement.classList.contains('dark')) {
+      setIsDarkMode(true);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setIsDarkMode(true);
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    if (!isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
   const tabs = [
     { id: 'explore' as TabId, label: 'Explore', icon: Map },
     { id: 'collection' as TabId, label: 'Collection', icon: Backpack },
@@ -22,17 +43,39 @@ export function MainLayout({ children, activeTab, onTabChange }: MainLayoutProps
     <div className="flex md:flex-row flex-col h-screen w-full bg-[var(--color-background)] text-[var(--color-text-main)] font-sans">
       
       {/* Mobile Header (Hidden on Desktop) */}
-      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-[var(--color-surface)] shadow-sm z-10 shrink-0 border-b border-gray-100">
-        <h1 className="text-[var(--color-primary)] font-bold text-xl tracking-tight">Campass</h1>
-        <button className="p-1 rounded-full text-[var(--color-text-secondary)] hover:bg-gray-100 transition-colors">
-          <CircleUserRound size={28} />
-        </button>
+      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-[var(--color-surface)] shadow-sm z-10 shrink-0 border-b border-[var(--color-state-disabled)]">
+        <h1 className="campass-logo font-extrabold text-xl tracking-tight flex">
+          <span className="text-[var(--color-logo-cam)]">Cam</span>
+          <span className="text-[var(--color-logo-pass)]">pass</span>
+        </h1>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={toggleDarkMode}
+            className="p-2 rounded-full text-[var(--color-text-secondary)] hover:bg-[var(--color-background)] transition-colors"
+          >
+            {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
+          </button>
+          <button className="p-1 rounded-full text-[var(--color-text-secondary)] hover:bg-[var(--color-background)] transition-colors">
+            <CircleUserRound size={28} />
+          </button>
+        </div>
       </header>
 
       {/* Desktop Sidebar (Hidden on Mobile) */}
-      <aside className="hidden md:flex flex-col w-64 bg-[var(--color-surface)] shadow-[2px_0_12px_rgba(0,0,0,0.03)] z-20 shrink-0 h-full">
-        <div className="p-8">
-          <h1 className="text-[var(--color-primary)] font-bold text-3xl tracking-tight">Campass</h1>
+      <aside className="hidden md:flex flex-col w-64 bg-[var(--color-surface)] shadow-[2px_0_12px_rgba(0,0,0,0.03)] z-20 shrink-0 h-full border-r border-[var(--color-state-disabled)] relative">
+        {/* Dark mode toggle in top left */}
+        <button 
+          onClick={toggleDarkMode}
+          className="absolute left-4 top-4 p-2 rounded-full text-[var(--color-text-secondary)] hover:bg-[var(--color-background)] transition-colors"
+          aria-label="Toggle dark mode"
+        >
+          {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
+        </button>
+        <div className="p-8 pb-4 flex items-center justify-center">
+          <h1 className="campass-logo font-extrabold text-4xl tracking-tight flex select-none">
+            <span className="text-[var(--color-logo-cam)]">Cam</span>
+            <span className="text-[var(--color-logo-pass)]">pass</span>
+          </h1>
         </div>
         
         <nav className="flex-1 px-4 space-y-3 mt-4">
