@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MainLayout, type TabId } from './components/common/MainLayout';
+import { MapViewer } from './components/map/MapViewer';
 import './App.css';
 
 function App() {
@@ -10,10 +11,7 @@ function App() {
     switch (activeTab) {
       case 'explore':
         return (
-          <div className="flex flex-col items-center justify-center flex-1 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)] min-h-[50vh]">
-            <h2 className="text-[var(--color-primary)] font-bold text-3xl mb-4">Explore Campus</h2>
-            <p className="text-[var(--color-text-secondary)] text-lg">The interactive map will go here.</p>
-          </div>
+          <MapViewer className="flex-1 rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)] min-h-[70vh] md:min-h-[calc(100vh-120px)]" initialScale={1.2} />
         );
       case 'collection':
         return (
@@ -52,9 +50,9 @@ function App() {
                 <p className="text-base md:text-lg text-[var(--color-accent)] font-medium mt-1">Level 5 Explorer</p>
               </div>
             </div>
-            
+
             <h3 className="font-bold text-[var(--color-text-main)] text-xl mb-4">Stats</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">        
               <div className="bg-[var(--color-background)] p-6 rounded-xl text-center shadow-sm">
                 <div className="text-3xl md:text-4xl font-bold text-[var(--color-primary)] mb-2">42</div>
                 <div className="text-sm md:text-base text-[var(--color-text-secondary)]">Locations Visited</div>
@@ -79,4 +77,3 @@ function App() {
 }
 
 export default App;
-
