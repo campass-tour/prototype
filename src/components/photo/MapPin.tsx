@@ -68,8 +68,8 @@ export const MapPin: React.FC<MapPinProps> = ({
       <div 
         className="absolute z-10 transition-all duration-300"
         style={{ 
-          left: `calc(50% + (${x} - 50) * var(--image-width) / 100)`,
-          top: `calc(50% + (${y} - 50) * var(--image-height) / 100)`,
+          left: `${x}%`,
+          top: `${y}%`,
           transform: "translate(-50%, -50%)"
         }}
       >

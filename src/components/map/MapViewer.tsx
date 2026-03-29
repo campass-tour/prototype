@@ -93,14 +93,28 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
               wrapperStyle={{ width: "100%", height: "100%" }} 
               contentStyle={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}
             >
-              <div className="relative w-full h-full flex items-center justify-center">
+              <div 
+                className="relative flex items-center justify-center pointer-events-none"
+              >
                 <img 
                   ref={imgRef}
                   src={mapImage} 
                   alt="Interactive Campus Map" 
-                  className="pointer-events-none select-none max-w-none max-h-none"
+                  className="pointer-events-auto select-none max-w-none max-h-none"
                   draggable={false}
+                  onLoad={() => updateCSSVars(1)}
+                  style={{
+                    width: 'var(--image-width)', 
+                    height: 'var(--image-height)' 
+                  }}
                 />
+                
+                {/* 
+                  Wrapper for pins. It absolutely covers the img 
+                  so that % left/top align perfectly with the image bounds. 
+                */}
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="relative w-full h-full">
                 
                 <UserPositionIndicator userPosition={userPosition} />
                 
@@ -127,6 +141,8 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
                   }
                   onMessageWallClick={() => alert('Entering message wall for CB!')}
                 />
+                  </div>
+                </div>
               </div>
             </TransformComponent>
           </>

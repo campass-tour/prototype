@@ -14,8 +14,8 @@ export function UserPositionIndicator({ userPosition }: UserPositionIndicatorPro
     <div 
       className="absolute z-20 pointer-events-none transition-all duration-300"
       style={{
-        left: `calc(50% + (${userPosition.x} - 50) * var(--image-width) / var(--container-width))`,
-        top: `calc(50% + (${userPosition.y} - 50) * var(--image-height) / var(--container-height))`,
+        left: `${userPosition.x}%`,
+        top: `${userPosition.y}%`,
         transform: "translate(-50%, -50%)"
       }}
     >
