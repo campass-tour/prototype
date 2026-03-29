@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { Plus, Minus, Maximize } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -11,6 +11,9 @@ interface MapViewerProps {
 }
 
 export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
   // Fake GPS Data
   const userPosition = {
     x: 23, // 23% from left
@@ -18,16 +21,44 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
     heading: 105 // test distinct heading
   };
 
+  const updateCSSVars = useCallback((scale: number) => {
+    if (imgRef.current && containerRef.current) {
+      const naturalWidth = imgRef.current.naturalWidth;
+      const naturalHeight = imgRef.current.naturalHeight;
+      const scaledWidth = naturalWidth * scale;
+      const scaledHeight = naturalHeight * scale;
+      const containerRect = containerRef.current.getBoundingClientRect();
+      containerRef.current.style.setProperty('--image-width', scaledWidth + 'px');
+      containerRef.current.style.setProperty('--image-height', scaledHeight + 'px');
+      containerRef.current.style.setProperty('--container-width', containerRect.width + 'px');
+      containerRef.current.style.setProperty('--container-height', containerRect.height + 'px');
+    }
+  }, []);
+
+  useEffect(() => {
+    const imgElement = imgRef.current;
+    const handleLoad = () => updateCSSVars(initialScale);
+    if (imgElement?.complete) {
+      handleLoad();
+    } else {
+      imgElement?.addEventListener('load', handleLoad);
+    }
+    return () => {
+      imgElement?.removeEventListener('load', handleLoad);
+    };
+  }, [initialScale, updateCSSVars]);
+
   return (
-    <div className={cn("relative w-full bg-[var(--color-surface)] overflow-hidden", className)}>
+    <div ref={containerRef} className={cn("relative w-full bg-[var(--color-surface)] overflow-hidden", className)}>
       <TransformWrapper
         initialScale={initialScale}
         minScale={1}
         maxScale={5}
         centerOnInit={true}
-        limitToBounds={true}
+        limitToBounds={false}
         pinch={{ step: 5 }}
         wheel={{ step: 0.1 }}
+        onTransformed={(_, state) => updateCSSVars(state.scale)}
       >
         {({ zoomIn, zoomOut, resetTransform }) => (
           <>
@@ -53,7 +84,7 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
                 className="p-2 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-text-main)] transition-colors focus:outline-none"
                 aria-label="Reset zoom"
               >
-                <Maximize size={20} strokeWidth={2.5} />
+                <Maximize size={22} strokeWidth={2.5} />
               </button>
             </div>
             
@@ -63,9 +94,10 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
             >
               <div className="relative w-full h-full flex items-center justify-center">
                 <img 
+                  ref={imgRef}
                   src={mapImage} 
                   alt="Interactive Campus Map" 
-                  className="w-full h-full object-cover pointer-events-none select-none max-w-none"
+                  className="pointer-events-none select-none max-w-none max-h-none"
                   draggable={false}
                 />
                 
