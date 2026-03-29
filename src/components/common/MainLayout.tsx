@@ -19,21 +19,23 @@ export function MainLayout({ children, activeTab, onTabChange }: MainLayoutProps
   ];
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[var(--color-background)] text-[var(--color-text-main)] font-sans">
+    <div className="flex md:flex-row flex-col h-screen w-full bg-[var(--color-background)] text-[var(--color-text-main)] font-sans">
       
       {/* Mobile Header (Hidden on Desktop) */}
-      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-[var(--color-surface)] shadow-sm z-10 shrink-0">
+      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-[var(--color-surface)] shadow-sm z-10 shrink-0 border-b border-gray-100">
         <h1 className="text-[var(--color-primary)] font-bold text-xl tracking-tight">Campass</h1>
         <button className="p-1 rounded-full text-[var(--color-text-secondary)] hover:bg-gray-100 transition-colors">
           <CircleUserRound size={28} />
         </button>
       </header>
 
-      {/* Desktop/Tablet Header & Navigation */}
-      <header className="hidden md:flex items-center justify-between px-8 py-4 bg-[var(--color-surface)] shadow-sm z-10 shrink-0">
-        <h1 className="text-[var(--color-primary)] font-bold text-2xl tracking-tight">Campass</h1>
+      {/* Desktop Sidebar (Hidden on Mobile) */}
+      <aside className="hidden md:flex flex-col w-64 bg-[var(--color-surface)] shadow-[2px_0_12px_rgba(0,0,0,0.03)] z-20 shrink-0 h-full">
+        <div className="p-8">
+          <h1 className="text-[var(--color-primary)] font-bold text-3xl tracking-tight">Campass</h1>
+        </div>
         
-        <nav className="flex space-x-2">
+        <nav className="flex-1 px-4 space-y-3 mt-4">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -43,27 +45,29 @@ export function MainLayout({ children, activeTab, onTabChange }: MainLayoutProps
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
                 className={cn(
-                  "flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200 font-medium text-sm",
+                  "flex items-center space-x-4 w-full px-5 py-4 rounded-xl transition-all duration-200 font-semibold text-base",
                   isActive 
-                    ? "bg-[var(--color-primary)] text-white shadow-md" 
-                    : "text-[var(--color-text-secondary)] hover:bg-gray-100"
+                    ? "bg-[var(--color-primary)] text-white shadow-md shadow-[var(--color-primary)]/20" 
+                    : "text-[var(--color-text-secondary)] hover:bg-gray-50 hover:text-[var(--color-text-main)]"
                 )}
               >
-                <Icon size={18} className={isActive ? "text-white" : ""} />
+                <Icon size={22} className={isActive ? "text-white" : ""} strokeWidth={isActive ? 2.5 : 2} />
                 <span>{tab.label}</span>
               </button>
             )
           })}
         </nav>
-      </header>
+      </aside>
 
-      {/* Main Scrollable Content Area */}
-      <main className="flex-1 overflow-y-auto overflow-x-hidden relative">
-        {/* An inner container for max-width on larger screens (optional, good for consistency) */}
-        <div className="mx-auto w-full max-w-5xl p-4 md:p-6 pb-24 md:pb-6 min-h-full">
-          {children}
-        </div>
-      </main>
+      {/* Main Content Area Wrapper */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden">
+          {/* Inner container scales to full height and width */}
+          <div className="w-full h-full p-4 md:p-8 pb-24 md:pb-8 flex flex-col">
+            {children}
+          </div>
+        </main>
+      </div>
 
       {/* Mobile Bottom Navigation (Hidden on Desktop) */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--color-surface)] shadow-[0_-4px_12px_rgba(0,0,0,0.05)] flex justify-around items-center px-2 py-2 pb-safe z-20">
