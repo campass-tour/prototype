@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { MainLayout, type TabId } from './components/common/MainLayout';
 import CheckInSuccessModal from './components/collection/CheckInSuccessModal';
 import { MapViewer } from './components/map/MapViewer';
-import MascotCard from './components/collection/MascotCard';
-import CollectionProgressBar from './components/collection/CollectionProgressBar';
+import { CollectionPage } from './components/collection/CollectionPage';
 import './App.css';
 function App() {
   const [activeTab, setActiveTab] = useState<TabId>('explore');
@@ -17,57 +16,7 @@ function App() {
           <MapViewer className="flex-1 rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)] min-h-[70vh] md:min-h-[calc(100vh-120px)]" initialScale={1.2} />
         );
       case 'collection':
-        return (
-          <div className="w-full max-w-6xl mx-auto space-y-6">
-            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-[var(--color-text-main)]">
-                  My Collection
-                </h1>
-                <p className="mt-1 text-[var(--color-text-secondary)]">
-                  Discover campus landmarks and unlock your mascot gallery.
-                </p>
-              </div>
-
-              <button
-                onClick={() => setIsCheckInModalOpen(true)}
-                className="rounded-[8px] bg-[var(--color-accent)] px-4 py-3 font-medium text-white transition hover:opacity-90"
-              >
-                Simulate NFC Check-in
-              </button>
-            </div>
-
-            <CollectionProgressBar current={3} total={12} />
-
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              <MascotCard
-                name="Hui Bar Bird"
-                location="Hui Bar"
-                status="unlocked"
-              />
-              <MascotCard
-                name="Museum Bird"
-                location="Museum"
-                status="new"
-              />
-              <MascotCard
-                name="Library Bird"
-                location="Library"
-                status="locked"
-              />
-              <MascotCard
-                name="Central Building Bird"
-                location="Central Building"
-                status="unlocked"
-              />
-              <MascotCard
-                name="South Campus Bird"
-                location="South Campus"
-                status="locked"
-              />
-            </div>
-          </div>
-        );
+        return <CollectionPage onSimulateCheckIn={() => setIsCheckInModalOpen(true)} />;
       case 'wall':
         return (
           <div className="space-y-6 max-w-4xl mx-auto w-full">

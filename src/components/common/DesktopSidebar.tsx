@@ -41,7 +41,7 @@ export function DesktopSidebar({ tabs, activeTab, onTabChange, isDarkMode, toggl
                 "flex items-center space-x-4 w-full px-5 py-4 rounded-xl transition-all duration-200 font-semibold text-base",
                 isActive 
                   ? "bg-[var(--color-primary)] text-white shadow-md shadow-[var(--color-primary)]/20" 
-                  : "text-[var(--color-text-secondary)] hover:bg-gray-50 hover:text-[var(--color-text-main)]"
+                  : "text-[var(--color-text-secondary)] hover:bg-[var(--color-background)] hover:text-[var(--color-text-main)]"
               )}
             >
               <Icon size={22} className={isActive ? "text-white" : ""} strokeWidth={isActive ? 2.5 : 2} />

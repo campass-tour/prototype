@@ -16,12 +16,12 @@ export default function MascotCard({
 
   return (
     <div
-      className={`w-[180px] rounded-[16px] bg-white p-4 shadow-md transition-all duration-300
+      className={`w-[180px] rounded-[16px] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-card)] transition-all duration-300 border border-[var(--color-state-disabled)]
         ${isLocked ? "opacity-70 grayscale" : "hover:-translate-y-1"}
-        ${isNew ? "ring-2 ring-cyan-400" : ""}
+        ${isNew ? "ring-2 ring-[var(--color-accent)]" : ""}
       `}
     >
-      <div className="relative mb-3 flex h-[120px] items-center justify-center rounded-[12px] bg-[#F5F6FA]">
+      <div className="relative mb-3 flex h-[120px] items-center justify-center rounded-[12px] bg-[var(--color-background)]">
         {image ? (
           <img
             src={image}
@@ -36,21 +36,21 @@ export default function MascotCard({
           className={`absolute right-2 top-2 rounded-full px-2 py-1 text-xs font-medium
             ${
               isLocked
-                ? "bg-gray-200 text-gray-600"
+                ? "bg-[var(--color-state-disabled)] text-[var(--color-text-secondary)]"
                 : isNew
-                ? "bg-cyan-400 text-white"
-                : "bg-[#281559] text-white"
+                ? "bg-[var(--color-accent)] text-white"
+                : "bg-[var(--color-primary)] text-white"
             }`}
         >
           {isLocked ? "Locked" : isNew ? "New" : "Unlocked"}
         </span>
       </div>
 
-      <h3 className="text-[18px] font-semibold text-[#1A1A1A]">
+      <h3 className="text-[18px] font-semibold text-[var(--color-text-main)]">
         {isLocked ? "???" : name}
       </h3>
 
-      <p className="mt-1 text-[14px] text-gray-500">
+      <p className="mt-1 text-[14px] text-[var(--color-text-secondary)]">
         {isLocked ? "Unknown location" : location}
       </p>
     </div>

@@ -93,7 +93,7 @@ export default function CheckInSuccessModal({
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
   <button
     onClick={onViewCollection || onClose}
-    className="flex-1 rounded-[8px] border border-[var(--color-state-disabled)] bg-white px-4 py-3 font-medium text-[var(--color-text-main)] transition hover:bg-[var(--color-background)]"
+    className="flex-1 rounded-[8px] border border-[var(--color-state-disabled)] bg-[var(--color-surface)] px-4 py-3 font-medium text-[var(--color-text-main)] transition hover:bg-[var(--color-background)]"
   >
     View Collection
   </button>
