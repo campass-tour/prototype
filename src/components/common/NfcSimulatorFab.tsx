@@ -10,14 +10,30 @@ export function NfcSimulatorFab() {
   const dragRef = useRef({ startX: 0, startY: 0, initialX: 0, initialY: 0, moved: false });
   const fabRef = useRef<HTMLDivElement>(null);
 
-  // Load last position if exists
+  // Load last position if exists and clamp to viewport
   useEffect(() => {
     const savedPos = localStorage.getItem('nfc_fab_pos');
     if (savedPos) {
       try {
-        setPosition(JSON.parse(savedPos));
+        const parsed = JSON.parse(savedPos);
+        
+        // Clamp position within window bounds to ensure it stays visible on screen resize/mobile
+        const clampedX = Math.max(0, Math.min(parsed.x, window.innerWidth - 60));
+        const clampedY = Math.max(0, Math.min(parsed.y, window.innerHeight - 60));
+        
+        setPosition({ x: clampedX, y: clampedY });
       } catch (e) {}
     }
+
+    // Optional: add window resize listener to keep it on screen
+    const handleResize = () => {
+      setPosition(prev => ({
+        x: Math.max(0, Math.min(prev.x, window.innerWidth - 60)),
+        y: Math.max(0, Math.min(prev.y, window.innerHeight - 60))
+      }));
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const onPointerDown = (e: React.PointerEvent) => {
@@ -42,9 +58,13 @@ export function NfcSimulatorFab() {
       dragRef.current.moved = true;
     }
 
+    // Clamp specifically so it can't be dragged off screen
+    const newX = Math.max(0, Math.min(dragRef.current.initialX + dx, window.innerWidth - 60));
+    const newY = Math.max(0, Math.min(dragRef.current.initialY + dy, window.innerHeight - 60));
+
     setPosition({
-      x: dragRef.current.initialX + dx,
-      y: dragRef.current.initialY + dy,
+      x: newX,
+      y: newY,
     });
   };
 
@@ -82,7 +102,7 @@ export function NfcSimulatorFab() {
   return (
     <div
       ref={fabRef}
-      className="fixed z-[100]"
+      className="fixed z-[9999]"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
