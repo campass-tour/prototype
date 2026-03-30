@@ -27,10 +27,10 @@ export default function CheckInSuccessModal({
   const percentage = Math.min((current / safeTotal) * 100, 100);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="relative w-full max-w-md rounded-[16px] border border-[var(--color-state-disabled)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-card)]">
+      <div className="relative w-full max-w-md rounded-[16px] border border-[var(--color-primary)]/20 bg-[var(--color-surface)]/80 p-6 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-md animate-in zoom-in-95 duration-300">
         <button
           onClick={onClose}
           className="absolute right-4 top-4 text-xl text-[var(--color-text-secondary)] hover:text-[var(--color-text-main)]"

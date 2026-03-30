@@ -1,12 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MainLayout, type TabId } from './components/common/MainLayout';
 import CheckInSuccessModal from './components/collection/CheckInSuccessModal';
 import { MapViewer } from './components/map/MapViewer';
 import { CollectionPage } from './components/collection/CollectionPage';
 import './App.css';
+
+// Mock database for location metadata based on ID
+const LOCATION_DATA: Record<string, { locationName: string; mascotName: string }> = {
+  'cb': { locationName: 'Central Building', mascotName: 'Central Building Bird' },
+  'lib': { locationName: 'Library', mascotName: 'Library Bird' },
+  'mus': { locationName: 'Museum', mascotName: 'Museum Bird' },
+  'hui': { locationName: 'Hui Bar', mascotName: 'Hui Bar Bird' }
+};
+
 function App() {
   const [activeTab, setActiveTab] = useState<TabId>('explore');
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
+  const [checkInData, setCheckInData] = useState({ locationName: '', mascotName: '' });
+
+  useEffect(() => {
+    // 1. Detection: Check if URL contains checkin parameter
+    const params = new URLSearchParams(window.location.search);
+    const checkinId = params.get('checkin');
+
+    if (checkinId && LOCATION_DATA[checkinId]) {
+      const { locationName, mascotName } = LOCATION_DATA[checkinId];
+      
+      // 2. Unlock: Update localStorage (simulated backend/persistence)
+      const unlockedCollectibles = JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}');
+      unlockedCollectibles[checkinId] = true;
+      localStorage.setItem('unlocked_collectibles', JSON.stringify(unlockedCollectibles));
+
+      // 3. Feedback: Show success modal with correct data
+      setCheckInData({ locationName, mascotName });
+      setIsCheckInModalOpen(true);
+
+      // 4. Cleanup: Remove parameter without refreshing
+      const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+      window.history.replaceState({ path: newUrl }, '', newUrl);
+    }
+  }, []);
 
   // Simple rendering logic based on state
   const renderContent = () => {
@@ -16,7 +49,7 @@ function App() {
           <MapViewer className="flex-1 rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)] min-h-[70vh] md:min-h-[calc(100vh-120px)]" initialScale={1.2} />
         );
       case 'collection':
-        return <CollectionPage onSimulateCheckIn={() => setIsCheckInModalOpen(true)} />;
+        return <CollectionPage />;
       case 'wall':
         return (
           <div className="space-y-6 max-w-4xl mx-auto w-full">
@@ -77,9 +110,9 @@ function App() {
     setIsCheckInModalOpen(false);
     alert('Enter AR capture page');
   }}
-  locationName="Museum"
-  mascotName="Museum Bird"
-  current={3}
+  locationName={checkInData.locationName}
+  mascotName={checkInData.mascotName}
+  current={Object.keys(JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}')).length || 1}
   total={12}
 />
     </MainLayout>
