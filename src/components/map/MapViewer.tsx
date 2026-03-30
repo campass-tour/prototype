@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { Plus, Minus, Maximize } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import mapImage from '@/assets/map.png';
+import mapImage from '@/assets/image/map.png';
 import { UserPositionIndicator } from './UserPositionIndicator';
 import { MapPin } from '../photo/MapPin';
 import { MapOverlayLayer } from './MapOverlayLayer';

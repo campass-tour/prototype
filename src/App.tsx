@@ -1,43 +1,41 @@
 import { useState, useEffect } from 'react';
 import { MainLayout, type TabId } from './components/common/MainLayout';
+import { NfcSimulatorFab } from './components/common/NfcSimulatorFab';
 import CheckInSuccessModal from './components/collection/CheckInSuccessModal';
 import { MapViewer } from './components/map/MapViewer';
 import { CollectionPage } from './components/collection/CollectionPage';
+import { getLocationData } from './constants/locations';
 import './App.css';
-
-// Mock database for location metadata based on ID
-const LOCATION_DATA: Record<string, { locationName: string; mascotName: string }> = {
-  'cb': { locationName: 'Central Building', mascotName: 'Central Building Bird' },
-  'lib': { locationName: 'Library', mascotName: 'Library Bird' },
-  'mus': { locationName: 'Museum', mascotName: 'Museum Bird' },
-  'hui': { locationName: 'Hui Bar', mascotName: 'Hui Bar Bird' }
-};
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabId>('explore');
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
-  const [checkInData, setCheckInData] = useState({ locationName: '', mascotName: '' });
+  const [checkInData, setCheckInData] = useState({ id: '', locationName: '', mascotName: '' });
 
   useEffect(() => {
     // 1. Detection: Check if URL contains checkin parameter
     const params = new URLSearchParams(window.location.search);
     const checkinId = params.get('checkin');
+    
+    if (checkinId) {
+      const locationInfo = getLocationData(checkinId);
 
-    if (checkinId && LOCATION_DATA[checkinId]) {
-      const { locationName, mascotName } = LOCATION_DATA[checkinId];
-      
-      // 2. Unlock: Update localStorage (simulated backend/persistence)
-      const unlockedCollectibles = JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}');
-      unlockedCollectibles[checkinId] = true;
-      localStorage.setItem('unlocked_collectibles', JSON.stringify(unlockedCollectibles));
+      if (locationInfo) {
+        const { id, locationName, mascotName } = locationInfo;
+        
+        // 2. Unlock: Update localStorage (simulated backend/persistence)
+        const unlockedCollectibles = JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}');
+        unlockedCollectibles[id] = true;
+        localStorage.setItem('unlocked_collectibles', JSON.stringify(unlockedCollectibles));
 
-      // 3. Feedback: Show success modal with correct data
-      setCheckInData({ locationName, mascotName });
-      setIsCheckInModalOpen(true);
+        // 3. Feedback: Show success modal with correct data
+        setCheckInData({ id, locationName, mascotName });
+        setIsCheckInModalOpen(true);
 
-      // 4. Cleanup: Remove parameter without refreshing
-      const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-      window.history.replaceState({ path: newUrl }, '', newUrl);
+        // 4. Cleanup: Remove parameter without refreshing
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({ path: newUrl }, '', newUrl);
+      }
     }
   }, []);
 
@@ -99,7 +97,9 @@ function App() {
     <MainLayout activeTab={activeTab} onTabChange={setActiveTab}>
       {renderContent()}
 
-    <CheckInSuccessModal
+      <NfcSimulatorFab />
+
+      <CheckInSuccessModal
   open={isCheckInModalOpen}
   onClose={() => setIsCheckInModalOpen(false)}
   onViewCollection={() => {
@@ -110,6 +110,7 @@ function App() {
     setIsCheckInModalOpen(false);
     alert('Enter AR capture page');
   }}
+  checkinId={checkInData.id}
   locationName={checkInData.locationName}
   mascotName={checkInData.mascotName}
   current={Object.keys(JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}')).length || 1}

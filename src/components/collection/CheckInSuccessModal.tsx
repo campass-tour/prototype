@@ -2,22 +2,21 @@
 import { Backpack, Map as MapIcon, Sparkles } from 'lucide-react';
 import '@google/model-viewer';
 import LottieModule from 'lottie-react';
-// @ts-ignore
-import cbBirdModel from '../../assets/model/CBbird.glb?url';
 
-// Fix for ESM/Vite interop with Lottie default exports
 const Lottie = (LottieModule as any).default || LottieModule;
-
 const ModelViewer = 'model-viewer' as any;
+
+// Dynamically load all .glb models in the assets folder
+const glbModels = import.meta.glob('../../assets/model/*.glb', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 
 type CheckInSuccessModalProps = {
   open: boolean;
   onClose: () => void;
+  checkinId: string;
   locationName: string;
   mascotName: string;
   current: number;
   total: number;
-  image?: string;
   onViewCollection?: () => void;
   onEnterAR?: () => void;
 };
@@ -25,6 +24,7 @@ type CheckInSuccessModalProps = {
 export default function CheckInSuccessModal({
   open,
   onClose,
+  checkinId,
   locationName,
   mascotName,
   current,
@@ -51,6 +51,11 @@ export default function CheckInSuccessModal({
   const safeTotal = total > 0 ? total : 1;
   const percentage = Math.min((current / safeTotal) * 100, 100);
 
+  // Determine model dynamically. Format: id-model.glb or fallback to default-model.glb
+  const targetModelPath = `../../assets/model/${checkinId}-model.glb`;
+  const defaultModelPath = '../../assets/model/default-model.glb';
+  const modelSrc = glbModels[targetModelPath] || glbModels[defaultModelPath] || '';
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-md animate-in fade-in duration-300">
       <div className="absolute inset-0" onClick={onClose} />
@@ -70,23 +75,24 @@ export default function CheckInSuccessModal({
         </button>
 
         <div className="relative mx-auto mb-6 flex h-64 w-full items-center justify-center rounded-2xl bg-[var(--color-primary)]/5 shadow-inner overflow-visible">
-          
           <div className="absolute bottom-4 left-1/2 h-8 w-3/4 -translate-x-1/2 rounded-full bg-[var(--color-primary)]/20 blur-xl animate-pulse" />
           <div className="absolute bottom-6 left-1/2 h-2 w-1/2 -translate-x-1/2 rounded-full bg-[var(--color-accent)]/30 blur-sm" />
 
-          <div className="absolute inset-0 z-10" style={{ perspective: '800px' }}>
-            <ModelViewer
-              src={cbBirdModel}
-              auto-rotate="true"
-              camera-controls="true"
-              disable-zoom="true"
-              rotation-per-second="30deg"
-              interaction-prompt="none"
-              exposure="1.2"
-              shadow-intensity="1"
-              style={{ width: '100%', height: '120%', transform: 'translateY(-10%)', outline: 'none' }}
-            />
-          </div>
+          {modelSrc && (
+            <div className="absolute inset-0 z-10" style={{ perspective: '800px' }}>
+              <ModelViewer
+                src={modelSrc}
+                auto-rotate="true"
+                camera-controls="true"
+                disable-zoom="true"
+                rotation-per-second="30deg"
+                interaction-prompt="none"
+                exposure="1.2"
+                shadow-intensity="1"
+                style={{ width: '100%', height: '120%', transform: 'translateY(-10%)', outline: 'none' }}
+              />
+            </div>
+          )}
         </div>
 
         <div className="text-center relative z-10">

@@ -1,6 +1,7 @@
 import React from 'react';
 import MascotCard from './MascotCard';
 import CollectionProgressBar from './CollectionProgressBar';
+import { LOCATIONS, getLocationData } from '../../constants/locations';
 
 export const CollectionPage: React.FC = () => {
   const unlockedData = JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}');
@@ -22,26 +23,17 @@ export const CollectionPage: React.FC = () => {
       <CollectionProgressBar current={unlockedCount || 0} total={12} />
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        <MascotCard
-          name="Hui Bar Bird"
-          location="Hui Bar"
-          status={unlockedData['hui'] ? 'unlocked' : 'locked'}
-        />
-        <MascotCard
-          name="Museum Bird"
-          location="Museum"
-          status={unlockedData['mus'] ? 'unlocked' : 'locked'}
-        />
-        <MascotCard
-          name="Library Bird"
-          location="Library"
-          status={unlockedData['lib'] ? 'unlocked' : 'locked'}
-        />
-        <MascotCard
-          name="Central Building Bird"
-          location="Central Building"
-          status={unlockedData['cb'] ? 'unlocked' : 'locked'}
-        />
+        {LOCATIONS.map((loc) => {
+          const locData = getLocationData(loc.id);
+          return (
+            <MascotCard
+              key={loc.id}
+              name={locData.mascotName}
+              location={loc.name}
+              status={unlockedData[loc.id] ? 'unlocked' : 'locked'}
+            />
+          );
+        })}
         <MascotCard
           name="South Campus Bird"
           location="South Campus"
