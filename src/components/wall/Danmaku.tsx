@@ -133,7 +133,7 @@ export const Danmaku: React.FC<{ isActive: boolean }> = ({ isActive }) => {
             <img
               src={item.rightImage}
               alt="danmaku-right"
-              className="w-8 h-8 rounded-[var(--radius-pill)] object-cover flex-shrink-0 bg-gray-200 ml-2"
+              className="w-8 h-8 rounded-lg object-cover flex-shrink-0 bg-gray-200 ml-2"
             />
           )}
         </div>
