@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { DanmakuDetailModal } from './DanmakuDetailModal';
 
-interface DanmakuItem {
+export interface DanmakuItem {
   id: number;
   text: string;
   avatar?: string;
@@ -40,6 +41,7 @@ const MOCK_RIGHT_IMAGES = [
 
 export const Danmaku: React.FC<{ isActive: boolean }> = ({ isActive }) => {
   const [items, setItems] = useState<DanmakuItem[]>([]);
+  const [selectedItem, setSelectedItem] = useState<DanmakuItem | null>(null);
 
   useEffect(() => {
     if (!isActive) {
@@ -92,26 +94,31 @@ export const Danmaku: React.FC<{ isActive: boolean }> = ({ isActive }) => {
   if (!isActive) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-40 pointer-events-none overflow-hidden">
-      <style>
-        {`
-          @keyframes slide-left {
-            from { transform: translateX(100vw); }
-            to { transform: translateX(-100%); }
-          }
-        `}
-      </style>
-      
-      {items.map(item => (
-        <div 
-          key={item.id}
-          className="absolute flex items-center pl-1 pr-[var(--spacing-3)] py-1 bg-[var(--color-surface)] shadow-[var(--shadow-card)] rounded-[var(--radius-pill)] gap-[var(--spacing-2)] whitespace-nowrap"
-          style={{ 
-            top: `${item.top}%`, 
-            left: 0,
-            animation: `slide-left ${item.duration}s linear forwards`
-          }}
-        >
+    <>
+      <div className="fixed inset-0 z-40 pointer-events-none overflow-hidden danmaku-overlay">
+        <style>
+          {`
+            @keyframes slide-left {
+              from { transform: translateX(100vw); }
+              to { transform: translateX(-100%); }
+            }
+          `}
+        </style>
+        
+        {items.map(item => (
+          <div 
+            key={item.id}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedItem(item);
+            }}
+            className="absolute flex items-center pl-1 pr-[var(--spacing-3)] py-1 bg-[var(--color-surface)] shadow-[var(--shadow-card)] rounded-[var(--radius-pill)] gap-[var(--spacing-2)] whitespace-nowrap pointer-events-auto cursor-pointer hover:bg-[var(--color-background)] transition-colors danmaku-item"
+            style={{ 
+              top: `${item.top}%`, 
+              left: 0,
+              animation: `slide-left ${item.duration}s linear forwards`
+            }}
+          >
           {/* The Circular Avatar is positioned at the leftmost end */}
           {item.avatar ? (
             <img 
@@ -138,7 +145,13 @@ export const Danmaku: React.FC<{ isActive: boolean }> = ({ isActive }) => {
           )}
         </div>
       ))}
-    </div>,
+      </div>
+      
+      <DanmakuDetailModal 
+        item={selectedItem} 
+        onClose={() => setSelectedItem(null)} 
+      />
+    </>,
     document.body
   );
 };

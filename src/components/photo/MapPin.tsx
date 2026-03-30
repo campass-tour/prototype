@@ -25,6 +25,7 @@ export const MapPin: React.FC<MapPinProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isDanmakuActive, setIsDanmakuActive] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const pinRef = useRef<HTMLDivElement>(null);
@@ -34,6 +35,13 @@ export const MapPin: React.FC<MapPinProps> = ({
   // Handle click outside to close popups/drawers
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as HTMLElement;
+      
+      // Ignore clicks on danmaku or its modal
+      if (target.closest('.danmaku-item') || target.closest('.danmaku-modal-overlay')) {
+        return;
+      }
+
       if (isOpen && 
           pinRef.current && !pinRef.current.contains(event.target as Node) &&
           popupRef.current && !popupRef.current.contains(event.target as Node)) {
@@ -61,6 +69,18 @@ export const MapPin: React.FC<MapPinProps> = ({
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Manage Danmaku delayed closing
+  useEffect(() => {
+    let timer: number;
+    if (isOpen && status === 'unlocked') {
+      setIsDanmakuActive(true);
+    } else {
+      // Delay closing danmaku by 1.5 seconds if drawer closes
+      timer = window.setTimeout(() => setIsDanmakuActive(false), 1500);
+    }
+    return () => clearTimeout(timer);
+  }, [isOpen, status]);
 
   const isLocked = status === 'locked';
 
@@ -235,7 +255,7 @@ export const MapPin: React.FC<MapPinProps> = ({
         </div>,
         document.body
       )}
-      <Danmaku isActive={isOpen && status === 'unlocked'} />
+      <Danmaku isActive={isDanmakuActive} />
     </>
   );
 };
