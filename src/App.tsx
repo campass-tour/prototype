@@ -5,8 +5,8 @@ import { NfcSimulatorFab } from './components/common/NfcSimulatorFab';
 import CheckInSuccessModal from './components/collection/CheckInSuccessModal';
 import { MapViewer } from './components/map/MapViewer';
 import { CollectionPage } from './components/collection/CollectionPage';
-import { getLocationData } from './constants/locations';
-import { unlockCollectible } from './lib/storage';
+import { getLocationData, LOCATIONS } from './constants/locations';
+import { unlockCollectible, getUnlockedCount } from './lib/storage';
 import './App.css';
 
 function App() {
@@ -132,8 +132,8 @@ function App() {
         checkinId={checkInData.id}
         locationName={checkInData.locationName}
         mascotName={checkInData.mascotName}
-        current={Object.keys(JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}')).length || 1}
-        total={12}
+        current={getUnlockedCount()}
+        total={LOCATIONS.length}
       />
     </MainLayout>
   );

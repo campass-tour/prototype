@@ -2,6 +2,7 @@
 import { Backpack, Map as MapIcon, Sparkles } from 'lucide-react';
 import '@google/model-viewer';
 import LottieModule from 'lottie-react';
+import defaultModelUrl from '../../assets/model/default-model.glb?url';
 
 const Lottie = (LottieModule as any).default || LottieModule;
 const ModelViewer = 'model-viewer' as any;
@@ -53,8 +54,7 @@ export default function CheckInSuccessModal({
 
   // Determine model dynamically. Format: id-model.glb or fallback to default-model.glb
   const targetModelPath = `../../assets/model/${checkinId}-model.glb`;
-  const defaultModelPath = '../../assets/model/default-model.glb';
-  const modelSrc = glbModels[targetModelPath] || glbModels[defaultModelPath] || '';
+  const modelSrc = glbModels[targetModelPath] || defaultModelUrl;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-md animate-in fade-in duration-300">
