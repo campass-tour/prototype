@@ -4,6 +4,9 @@ import CollectionProgressBar from './CollectionProgressBar';
 import CollectionSwiperModal from './CollectionSwiperModal';
 import { LOCATIONS, getLocationData } from '../../constants/locations';
 import { getUnlockedCollectibles, getUnlockedCount } from '../../lib/storage';
+import defaultImageUrl from '../../assets/image/default-image.png';
+
+const imageFiles = import.meta.glob('../../assets/image/*-image.{png,jpg,jpeg,webp}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 
 export const CollectionPage: React.FC = () => {
   const unlockedData = getUnlockedCollectibles();
@@ -35,12 +38,27 @@ export const CollectionPage: React.FC = () => {
         {LOCATIONS.map((loc) => {
           const locData = getLocationData(loc.id);
           const isUnlocked = !!unlockedData[loc.id];
+          
+          // Determine image dynamically. Format: id-image.png/jpg or fallback to default-image.png
+          let imageSrc = defaultImageUrl;
+          
+          const pngPath = `../../assets/image/${loc.id}-image.png`;
+          const jpgPath = `../../assets/image/${loc.id}-image.jpg`;
+          const jpegPath = `../../assets/image/${loc.id}-image.jpeg`;
+          const webpPath = `../../assets/image/${loc.id}-image.webp`;
+
+          if (imageFiles[pngPath]) imageSrc = imageFiles[pngPath];
+          else if (imageFiles[jpgPath]) imageSrc = imageFiles[jpgPath];
+          else if (imageFiles[jpegPath]) imageSrc = imageFiles[jpegPath];
+          else if (imageFiles[webpPath]) imageSrc = imageFiles[webpPath];
+
           return (
             <div key={loc.id} onClick={() => handleMascotClick(loc.id, isUnlocked)} className={isUnlocked ? "cursor-pointer" : ""}>
               <MascotCard
                 name={locData?.mascotName || loc.name}
                 location={loc.name}
                 status={isUnlocked ? 'unlocked' : 'locked'}
+                image={isUnlocked ? imageSrc : undefined}
               />
             </div>
           );
