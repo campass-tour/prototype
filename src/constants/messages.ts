@@ -22,6 +22,7 @@ export const MESSAGES: Message[] = [
     },
     likes: 24,
     timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 mins ago
+    imageUrl: "https://wallpaperaccess.com/full/8975119.jpg",
   },
   {
     id: "msg_2",
@@ -64,6 +65,7 @@ export const MESSAGES: Message[] = [
     },
     likes: 89,
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(), // 3 hours ago
+    imageUrl: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: "msg_6",

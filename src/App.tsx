@@ -5,6 +5,7 @@ import { NfcSimulatorFab } from './components/common/NfcSimulatorFab';
 import CheckInSuccessModal from './components/collection/CheckInSuccessModal';
 import { MapViewer } from './components/map/MapViewer';
 import { CollectionPage } from './components/collection/CollectionPage';
+import { WallPage } from './pages/WallPage';
 import { getLocationData, LOCATIONS } from './constants/locations';
 import { unlockCollectible, getUnlockedCount } from './lib/storage';
 import './App.css';
@@ -68,19 +69,7 @@ function App() {
       case 'collection':
         return <CollectionPage />;
       case 'wall':
-        return (
-          <div className="space-y-6 max-w-4xl mx-auto w-full">
-            {[1, 2, 3, 4, 5].map((message) => (
-              <div key={message} className="p-6 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)]">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-                  <div className="font-semibold text-base">Student {message}</div>
-                </div>
-                <p className="text-[var(--color-text-main)] text-base md:text-lg">This is a great place to hang out between classes! Any other recommendations?</p>
-              </div>
-            ))}
-          </div>
-        );
+        return <WallPage />;
       case 'profile':
         return (
           <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-8 shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)] max-w-4xl mx-auto w-full">
