@@ -6,11 +6,31 @@ import CheckInSuccessModal from './components/collection/CheckInSuccessModal';
 import { MapViewer } from './components/map/MapViewer';
 import { CollectionPage } from './components/collection/CollectionPage';
 import { getLocationData } from './constants/locations';
+import { unlockCollectible } from './lib/storage';
 import './App.css';
 
 function App() {
-  const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
-  const [checkInData, setCheckInData] = useState({ id: '', locationName: '', mascotName: '' });
+  const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const checkinId = params.get('checkin');
+    if (checkinId) {
+      const locationInfo = getLocationData(checkinId);
+      return !!locationInfo;
+    }
+    return false;
+  });
+
+  const [checkInData, setCheckInData] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const checkinId = params.get('checkin');
+    if (checkinId) {
+      const locationInfo = getLocationData(checkinId);
+      if (locationInfo) {
+        return { id: locationInfo.id, locationName: locationInfo.locationName, mascotName: locationInfo.mascotName };
+      }
+    }
+    return { id: '', locationName: '', mascotName: '' };
+  });
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,18 +46,12 @@ function App() {
       const locationInfo = getLocationData(checkinId);
 
       if (locationInfo) {
-        const { id, locationName, mascotName } = locationInfo;
+        const { id } = locationInfo;
         
         // 2. Unlock: Update localStorage (simulated backend/persistence)
-        const unlockedCollectibles = JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}');
-        unlockedCollectibles[id] = true;
-        localStorage.setItem('unlocked_collectibles', JSON.stringify(unlockedCollectibles));
+        unlockCollectible(id);
 
-        // 3. Feedback: Show success modal with correct data
-        setCheckInData({ id, locationName, mascotName });
-        setIsCheckInModalOpen(true);
-
-        // 4. Cleanup: Remove parameter without refreshing
+        // 3. Cleanup: Remove parameter without refreshing
         const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
         window.history.replaceState({ path: newUrl }, '', newUrl);
       }

@@ -2,10 +2,11 @@ import React from 'react';
 import MascotCard from './MascotCard';
 import CollectionProgressBar from './CollectionProgressBar';
 import { LOCATIONS, getLocationData } from '../../constants/locations';
+import { getUnlockedCollectibles, getUnlockedCount } from '../../lib/storage';
 
 export const CollectionPage: React.FC = () => {
-  const unlockedData = JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}');
-  const unlockedCount = Object.keys(unlockedData).length;
+  const unlockedData = getUnlockedCollectibles();
+  const unlockedCount = getUnlockedCount();
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
