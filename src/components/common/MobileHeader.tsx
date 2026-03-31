@@ -1,4 +1,3 @@
-import React from 'react';
 import { Sun, Moon, CircleUserRound } from 'lucide-react';
 
 interface MobileHeaderProps {

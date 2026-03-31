@@ -49,15 +49,15 @@ export const DanmakuDetailModal: React.FC<DanmakuDetailModalProps> = ({ item, on
             />
           ) : (
             <div className="w-12 h-12 rounded-[var(--radius-pill)] bg-[var(--color-primary)] flex flex-shrink-0 items-center justify-center text-white font-[var(--font-weight-bold)] text-[16px]">
-              Anon
+              {item.originalMessage.author.username?.substring(0, 1).toUpperCase() || 'A'}
             </div>
           )}
           <div className="flex flex-col">
             <span className="font-[var(--font-weight-bold)] text-[var(--color-text-main)] text-[var(--font-size-body)]">
-              {item.avatar ? "Random Visitor" : "Anonymous"}
+              {item.originalMessage.author.username || (item.avatar ? "Random Visitor" : "Anonymous")}
             </span>
             <span className="text-[var(--color-text-secondary)] text-[var(--font-size-caption)]">
-              Just now
+              {new Date(item.originalMessage.timestamp).toLocaleString()}
             </span>
           </div>
         </div>
@@ -65,6 +65,16 @@ export const DanmakuDetailModal: React.FC<DanmakuDetailModalProps> = ({ item, on
         {/* Text Payload */}
         <div className="text-[var(--color-text-main)] font-[var(--font-weight-regular)] text-[var(--font-size-body)] whitespace-pre-wrap leading-relaxed py-2">
           {item.text}
+        </div>
+
+        {/* Likes */}
+        <div className="flex items-center gap-2 mt-2">
+          <button className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-background)] rounded-full text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+            </svg>
+            <span className="text-sm font-medium">{item.originalMessage.likes}</span>
+          </button>
         </div>
 
         {/* Optional Image */}

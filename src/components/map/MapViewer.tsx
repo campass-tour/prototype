@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { Plus, Minus, Maximize } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -116,6 +116,7 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
                   
                   {/* Demo MapPins */}
                   <MapPin
+                    id="mystery_building"
                     x={25}
                     y={35}
                     status="locked"
@@ -123,6 +124,7 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
                     hintText="Find this building to unlock its secrets!"
                   />
                   <MapPin
+                    id="cb" // Central Building
                     x={35}
                     y={50}
                     status="unlocked"

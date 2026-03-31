@@ -1,73 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { DanmakuDetailModal } from './DanmakuDetailModal';
+import { getMessagesByLocation, type Message } from '../../constants/messages';
 
 export interface DanmakuItem {
-  id: number;
+  id: string; // use message id
   text: string;
   avatar?: string;
   rightImage?: string;
   top: number;
   duration: number;
+  originalMessage: Message;
 }
 
-const MOCK_MESSAGES = [
-  "This architecture is amazing! 🏛️",
-  "Wow, I never knew this place existed 😊",
-  "Great study spot.",
-  "Love the lighting here ✨",
-  "Where is this exactly?",
-  "Found it! Such a beautiful design.",
-  "Let's meet here tomorrow.",
-  "A masterpiece of campus design!",
-  "Can't wait to see this in person."
-];
-
-const MOCK_AVATARS = [
-  "https://i.pravatar.cc/100?img=1",
-  "https://i.pravatar.cc/100?img=2",
-  "https://i.pravatar.cc/100?img=3",
-  "https://i.pravatar.cc/100?img=4",
-  undefined // occasionally no avatar provided
-];
-
-const MOCK_RIGHT_IMAGES = [
-  undefined,
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=64&h=64&q=80",
-  "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=64&h=64&q=80",
-  undefined,
-  undefined
-];
-
-export const Danmaku: React.FC<{ isActive: boolean }> = ({ isActive }) => {
+export const Danmaku: React.FC<{ isActive: boolean; locationId: string }> = ({ isActive, locationId }) => {
   const [items, setItems] = useState<DanmakuItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<DanmakuItem | null>(null);
 
   useEffect(() => {
-    if (!isActive) {
+    if (!isActive || !locationId) {
       setItems([]);
       return;
     }
 
-    let nextId = 0;
+    const messages = getMessagesByLocation(locationId);
+    if (messages.length === 0) return;
+
+    let messageIndex = 0;
     
     // Play danmaku occasionally
     const spawnDanmaku = () => {
-      const text = MOCK_MESSAGES[Math.floor(Math.random() * MOCK_MESSAGES.length)];
-      const avatar = MOCK_AVATARS[Math.floor(Math.random() * MOCK_AVATARS.length)];
-      const rightImage = MOCK_RIGHT_IMAGES[Math.floor(Math.random() * MOCK_RIGHT_IMAGES.length)];
+      if (messages.length === 0) return;
+      
+      const message = messages[messageIndex % messages.length];
+      messageIndex++;
+
+      const text = message.content;
+      const avatar = message.author.avatarUrl;
+      const rightImage = message.imageUrl;
       
       const top = 10 + Math.random() * 30; 
       
       const duration = 6 + Math.random() * 4;
 
       const newItem: DanmakuItem = {
-        id: nextId++,
+        id: message.id + '_' + Date.now(), // Ensure unique ID even when looping
         text,
         avatar,
         rightImage,
         top,
-        duration
+        duration,
+        originalMessage: message
       };
 
       setItems(prev => [...prev, newItem]);
@@ -89,7 +72,7 @@ export const Danmaku: React.FC<{ isActive: boolean }> = ({ isActive }) => {
       clearInterval(interval);
       setItems([]);
     };
-  }, [isActive]);
+  }, [isActive, locationId]);
 
   if (!isActive) return null;
 
@@ -128,7 +111,7 @@ export const Danmaku: React.FC<{ isActive: boolean }> = ({ isActive }) => {
             />
           ) : (
             <div className="w-8 h-8 rounded-[var(--radius-pill)] bg-[var(--color-primary)] flex items-center justify-center flex-shrink-0 text-white font-[var(--font-weight-bold)] text-[12px]">
-              Anon
+              {item.originalMessage?.author?.username?.substring(0, 1).toUpperCase() || 'A'}
             </div>
           )}
           {/* Constrain length with truncation to force a single line display */}

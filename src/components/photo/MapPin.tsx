@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Danmaku } from '../wall/Danmaku';
 
 interface MapPinProps {
+  id: string; // The location ID for fetching messages
   x: number; // Percentage horizontal position (0-100)
   y: number; // Percentage vertical position (0-100)
   status: 'locked' | 'unlocked';
@@ -14,6 +15,7 @@ interface MapPinProps {
 }
 
 export const MapPin: React.FC<MapPinProps> = ({ 
+  id,
   x, 
   y, 
   status, 
@@ -255,7 +257,7 @@ export const MapPin: React.FC<MapPinProps> = ({
         </div>,
         document.body
       )}
-      <Danmaku isActive={isDanmakuActive} />
+      <Danmaku isActive={isDanmakuActive} locationId={id} />
     </>
   );
 };

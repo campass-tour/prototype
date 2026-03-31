@@ -20,7 +20,7 @@ function App() {
     return false;
   });
 
-  const [checkInData, setCheckInData] = useState(() => {
+  const [checkInData] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     const checkinId = params.get('checkin');
     if (checkinId) {
