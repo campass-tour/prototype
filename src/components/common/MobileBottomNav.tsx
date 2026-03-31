@@ -1,14 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import type { TabId } from './MainLayout';
 
 interface MobileBottomNavProps {
   tabs: { id: TabId; label: string; icon: React.ElementType }[];
   activeTab: TabId;
-  onTabChange: (tab: TabId) => void;
 }
 
-export function MobileBottomNav({ tabs, activeTab, onTabChange }: MobileBottomNavProps) {
+export function MobileBottomNav({ tabs, activeTab }: MobileBottomNavProps) {
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--color-surface)] shadow-[0_-4px_20px_rgba(0,0,0,0.1)] flex justify-between items-center px-6 py-3 pb-safe z-20 rounded-t-3xl">
       {tabs.map((tab) => {
@@ -16,9 +16,9 @@ export function MobileBottomNav({ tabs, activeTab, onTabChange }: MobileBottomNa
         const isActive = activeTab === tab.id;
         
         return (
-          <button
+          <Link
             key={tab.id}
-            onClick={() => onTabChange(tab.id)}
+            to={`/${tab.id}`}
             className={cn(
               "flex items-center justify-center rounded-full cursor-pointer transition-all duration-300 ease-in-out focus:outline-none",
               isActive ? "px-5 py-2.5 mx-1" : "px-3 py-2.5 mx-1 bg-transparent"
@@ -42,7 +42,7 @@ export function MobileBottomNav({ tabs, activeTab, onTabChange }: MobileBottomNa
             >
               {tab.label}
             </span>
-          </button>
+          </Link>
         )
       })}
     </nav>

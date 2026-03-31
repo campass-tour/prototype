@@ -28,7 +28,7 @@ export const CollectionPage: React.FC = () => {
           return (
             <MascotCard
               key={loc.id}
-              name={locData.mascotName}
+              name={locData?.mascotName || loc.name}
               location={loc.name}
               status={unlockedData[loc.id] ? 'unlocked' : 'locked'}
             />

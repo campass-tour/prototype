@@ -1,17 +1,17 @@
 import React from 'react';
 import { Sun, Moon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import type { TabId } from './MainLayout';
 
 interface DesktopSidebarProps {
   tabs: { id: TabId; label: string; icon: React.ElementType }[];
   activeTab: TabId;
-  onTabChange: (tab: TabId) => void;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
 }
 
-export function DesktopSidebar({ tabs, activeTab, onTabChange, isDarkMode, toggleDarkMode }: DesktopSidebarProps) {
+export function DesktopSidebar({ tabs, activeTab, isDarkMode, toggleDarkMode }: DesktopSidebarProps) {
   return (
     <aside className="hidden md:flex flex-col w-64 bg-[var(--color-surface)] shadow-[2px_0_12px_rgba(0,0,0,0.03)] z-20 shrink-0 h-full border-r border-[var(--color-state-disabled)] relative">
       <button 
@@ -34,9 +34,9 @@ export function DesktopSidebar({ tabs, activeTab, onTabChange, isDarkMode, toggl
           const isActive = activeTab === tab.id;
           
           return (
-            <button
+            <Link
               key={tab.id}
-              onClick={() => onTabChange(tab.id)}
+              to={`/${tab.id}`}
               className={cn(
                 "flex items-center space-x-4 w-full px-5 py-4 rounded-xl transition-all duration-200 font-semibold text-base",
                 isActive 
@@ -46,7 +46,7 @@ export function DesktopSidebar({ tabs, activeTab, onTabChange, isDarkMode, toggl
             >
               <Icon size={22} className={isActive ? "text-white" : ""} strokeWidth={isActive ? 2.5 : 2} />
               <span>{tab.label}</span>
-            </button>
+            </Link>
           )
         })}
       </nav>

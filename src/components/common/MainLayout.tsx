@@ -9,10 +9,9 @@ export type TabId = 'explore' | 'collection' | 'wall' | 'profile';
 interface MainLayoutProps {
   children: React.ReactNode;
   activeTab: TabId;
-  onTabChange: (tab: TabId) => void;
 }
 
-export function MainLayout({ children, activeTab, onTabChange }: MainLayoutProps) {
+export function MainLayout({ children, activeTab }: MainLayoutProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -49,7 +48,6 @@ export function MainLayout({ children, activeTab, onTabChange }: MainLayoutProps
       <DesktopSidebar
         tabs={tabs}
         activeTab={activeTab}
-        onTabChange={onTabChange}
         isDarkMode={isDarkMode}
         toggleDarkMode={toggleDarkMode}
       />
@@ -64,7 +62,7 @@ export function MainLayout({ children, activeTab, onTabChange }: MainLayoutProps
         </main>
       </div>
 
-      <MobileBottomNav tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
+      <MobileBottomNav tabs={tabs} activeTab={activeTab} />
 
     </div>
   );

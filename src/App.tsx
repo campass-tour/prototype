@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { MainLayout, type TabId } from './components/common/MainLayout';
 import { NfcSimulatorFab } from './components/common/NfcSimulatorFab';
 import CheckInSuccessModal from './components/collection/CheckInSuccessModal';
@@ -8,9 +9,13 @@ import { getLocationData } from './constants/locations';
 import './App.css';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<TabId>('explore');
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
   const [checkInData, setCheckInData] = useState({ id: '', locationName: '', mascotName: '' });
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const path = location.pathname.substring(1);
+  const activeTab = ['explore', 'collection', 'wall', 'profile'].includes(path) ? path as TabId : 'explore';
 
   useEffect(() => {
     // 1. Detection: Check if URL contains checkin parameter
@@ -93,29 +98,29 @@ function App() {
     }
   };
 
-    return (
-    <MainLayout activeTab={activeTab} onTabChange={setActiveTab}>
+  return (
+    <MainLayout activeTab={activeTab}>
       {renderContent()}
 
       <NfcSimulatorFab />
 
       <CheckInSuccessModal
-  open={isCheckInModalOpen}
-  onClose={() => setIsCheckInModalOpen(false)}
-  onViewCollection={() => {
-    setActiveTab('collection');
-    setIsCheckInModalOpen(false);
-  }}
-  onEnterAR={() => {
-    setIsCheckInModalOpen(false);
-    alert('Enter AR capture page');
-  }}
-  checkinId={checkInData.id}
-  locationName={checkInData.locationName}
-  mascotName={checkInData.mascotName}
-  current={Object.keys(JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}')).length || 1}
-  total={12}
-/>
+        open={isCheckInModalOpen}
+        onClose={() => setIsCheckInModalOpen(false)}
+        onViewCollection={() => {
+          navigate('/collection');
+          setIsCheckInModalOpen(false);
+        }}
+        onEnterAR={() => {
+          setIsCheckInModalOpen(false);
+          alert('Enter AR capture page');
+        }}
+        checkinId={checkInData.id}
+        locationName={checkInData.locationName}
+        mascotName={checkInData.mascotName}
+        current={Object.keys(JSON.parse(localStorage.getItem('unlocked_collectibles') || '{}')).length || 1}
+        total={12}
+      />
     </MainLayout>
   );
 }
