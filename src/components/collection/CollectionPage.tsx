@@ -21,7 +21,7 @@ export const CollectionPage: React.FC = () => {
         </div>
       </div>
 
-      <CollectionProgressBar current={unlockedCount || 0} total={12} />
+      <CollectionProgressBar current={unlockedCount || 0} total={LOCATIONS.length} />
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {LOCATIONS.map((loc) => {
@@ -35,11 +35,6 @@ export const CollectionPage: React.FC = () => {
             />
           );
         })}
-        <MascotCard
-          name="South Campus Bird"
-          location="South Campus"
-          status="locked"
-        />
       </div>
     </div>
   );
