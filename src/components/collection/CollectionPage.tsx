@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MascotCard from './MascotCard';
 import CollectionProgressBar from './CollectionProgressBar';
+import CollectionSwiperModal from './CollectionSwiperModal';
 import { LOCATIONS, getLocationData } from '../../constants/locations';
 import { getUnlockedCollectibles, getUnlockedCount } from '../../lib/storage';
 
 export const CollectionPage: React.FC = () => {
   const unlockedData = getUnlockedCollectibles();
   const unlockedCount = getUnlockedCount();
+  const [selectedMascotId, setSelectedMascotId] = useState<string | null>(null);
+
+  const handleMascotClick = (id: string, isUnlocked: boolean) => {
+    if (isUnlocked) {
+      setSelectedMascotId(id);
+    }
+  };
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
@@ -26,16 +34,29 @@ export const CollectionPage: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {LOCATIONS.map((loc) => {
           const locData = getLocationData(loc.id);
+          const isUnlocked = !!unlockedData[loc.id];
           return (
-            <MascotCard
-              key={loc.id}
-              name={locData?.mascotName || loc.name}
-              location={loc.name}
-              status={unlockedData[loc.id] ? 'unlocked' : 'locked'}
-            />
+            <div key={loc.id} onClick={() => handleMascotClick(loc.id, isUnlocked)} className={isUnlocked ? "cursor-pointer" : ""}>
+              <MascotCard
+                name={locData?.mascotName || loc.name}
+                location={loc.name}
+                status={isUnlocked ? 'unlocked' : 'locked'}
+              />
+            </div>
           );
         })}
       </div>
+
+      <CollectionSwiperModal 
+        open={!!selectedMascotId}
+        onClose={() => setSelectedMascotId(null)}
+        initialCheckinId={selectedMascotId || ''}
+        onViewCollection={() => setSelectedMascotId(null)}
+        onEnterAR={() => {
+          setSelectedMascotId(null);
+          alert('Opening AR mode for this mascot!');
+        }}
+      />
     </div>
   );
 };
