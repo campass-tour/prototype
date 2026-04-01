@@ -16,6 +16,7 @@ interface MapViewerProps {
 export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+  const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
 
   // Fake GPS Data
   const userPosition = {
@@ -51,26 +52,18 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
     };
   }, [initialScale, updateCSSVars]);
 
-  const handleInit = useCallback((ref: ReactZoomPanPinchRef) => {
-    // initial centering on user position marker
-    if (ref.zoomToElement) {
-      setTimeout(() => {
-        ref.zoomToElement('#user-position-marker', initialScale, 500, "easeOut");
-      }, 100);
-    }
-  }, [initialScale]);
-
   const centerOnUserMarker = useCallback((
     positionX: number,
     positionY: number,
     scale: number,
     setTransform: ReactZoomPanPinchContentRef['setTransform'],
+    animationTime = 500,
   ) => {
     const marker = document.getElementById('user-position-marker');
     const container = containerRef.current;
 
     if (!marker || !container) {
-      return;
+      return false;
     }
 
     const markerRect = marker.getBoundingClientRect();
@@ -83,12 +76,47 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
     const deltaX = containerCenterX - markerCenterX;
     const deltaY = containerCenterY - markerCenterY;
 
-    setTransform(positionX + deltaX, positionY + deltaY, scale, 500, 'easeOut');
+    setTransform(positionX + deltaX, positionY + deltaY, scale, animationTime, 'easeOut');
+
+    return true;
   }, []);
+
+  const centerUsingTransformRef = useCallback((animationTime = 500) => {
+    const ref = transformRef.current;
+
+    if (!ref) {
+      return false;
+    }
+
+    return centerOnUserMarker(
+      ref.state.positionX,
+      ref.state.positionY,
+      ref.state.scale,
+      ref.setTransform,
+      animationTime,
+    );
+  }, [centerOnUserMarker]);
+
+  const handleInit = useCallback((ref: ReactZoomPanPinchRef) => {
+    transformRef.current = ref;
+
+    let attempts = 0;
+    const maxAttempts = 10;
+    const tryCenter = () => {
+      const centered = centerUsingTransformRef(500);
+      if (!centered && attempts < maxAttempts) {
+        attempts += 1;
+        setTimeout(tryCenter, 60);
+      }
+    };
+
+    setTimeout(tryCenter, 0);
+  }, [centerUsingTransformRef]);
 
   return (
     <div ref={containerRef} className={cn("relative w-full bg-[var(--color-surface)] overflow-hidden", className)}>
       <TransformWrapper
+        ref={transformRef}
         initialScale={initialScale}
         minScale={1}
         maxScale={5}
@@ -152,7 +180,13 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
                   alt="Interactive Campus Map" 
                   className="pointer-events-auto select-none max-w-none max-h-none"
                   draggable={false}
-                  onLoad={() => updateCSSVars(1)}
+                  onLoad={() => {
+                    const scale = transformRef.current?.state.scale ?? initialScale;
+                    updateCSSVars(scale);
+                    setTimeout(() => {
+                      centerUsingTransformRef(0);
+                    }, 0);
+                  }}
                   style={{
                     width: 'var(--image-width)', 
                     height: 'var(--image-height)' 
