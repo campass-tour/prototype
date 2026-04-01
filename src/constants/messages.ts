@@ -77,6 +77,80 @@ export const MESSAGES: Message[] = [
     likes: 12,
     timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(), // 15 mins ago
   },
+  {
+    id: "msg_7",
+    locationId: "sb",
+    content: "Found a quiet spot in Science Building B for reading. Highly recommend!",
+    author: {
+      username: "Bookworm",
+      avatarUrl: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+    },
+    likes: 21,
+    timestamp: new Date(Date.now() - 1000 * 60 * 90).toISOString(), // 1.5 hours ago
+    imageUrl: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    id: "msg_8",
+    locationId: "mus",
+    content: "The art gallery is a hidden gem. The lighting is perfect for photos!",
+    author: {
+      username: "ArtLover",
+      avatarUrl: "https://i.pravatar.cc/150?u=a042581f4e29026704e",
+    },
+    likes: 33,
+    timestamp: new Date(Date.now() - 1000 * 60 * 120).toISOString(), // 2 hours ago
+    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    id: "msg_9",
+    locationId: "hui",
+    content: "Live music at Hui Bar tonight! Who's coming?",
+    author: {
+      username: "MusicFan",
+    },
+    likes: 47,
+    timestamp: new Date(Date.now() - 1000 * 60 * 200).toISOString(), // 3.3 hours ago
+  },
+  {
+    id: "msg_10",
+    locationId: "cb",
+    content: "Lost my water bottle near the entrance. Please DM if found!",
+    author: {
+      username: "HydratedHuman",
+    },
+    likes: 2,
+    timestamp: new Date(Date.now() - 1000 * 60 * 10).toISOString(), // 10 mins ago
+  },
+  {
+    id: "msg_11",
+    locationId: "sb",
+    content: "The vending machine finally has my favorite snacks again!",
+    author: {
+      username: "SnackSeeker",
+    },
+    likes: 15,
+    timestamp: new Date(Date.now() - 1000 * 60 * 70).toISOString(), // 1.1 hours ago
+  },
+  {
+    id: "msg_12",
+    locationId: "mus",
+    content: "Attended a great workshop on ancient pottery. Learned so much!",
+    author: {
+      username: "HistoryBuff",
+    },
+    likes: 28,
+    timestamp: new Date(Date.now() - 1000 * 60 * 180).toISOString(), // 3 hours ago
+  },
+  {
+    id: "msg_13",
+    locationId: "hui",
+    content: "Try the cheesecake at Hui Bar, it's delicious!",
+    author: {
+      username: "SweetTooth",
+    },
+    likes: 36,
+    timestamp: new Date(Date.now() - 1000 * 60 * 250).toISOString(), // 4.1 hours ago
+  },
 ];
 
 export const getMessagesByLocation = (locationId: string): Message[] => {
