@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import type { ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
+import type { ReactZoomPanPinchContentRef, ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
 import { Plus, Minus, Maximize, LocateFixed } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import mapImage from '@/assets/image/map.png';
@@ -16,7 +16,6 @@ interface MapViewerProps {
 export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const transformRef = useRef<ReactZoomPanPinchRef>(null);
 
   // Fake GPS Data
   const userPosition = {
@@ -56,15 +55,40 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
     // initial centering on user position marker
     if (ref.zoomToElement) {
       setTimeout(() => {
-        ref.zoomToElement('user-position-marker', initialScale, 500, "easeOut");
+        ref.zoomToElement('#user-position-marker', initialScale, 500, "easeOut");
       }, 100);
     }
   }, [initialScale]);
 
+  const centerOnUserMarker = useCallback((
+    positionX: number,
+    positionY: number,
+    scale: number,
+    setTransform: ReactZoomPanPinchContentRef['setTransform'],
+  ) => {
+    const marker = document.getElementById('user-position-marker');
+    const container = containerRef.current;
+
+    if (!marker || !container) {
+      return;
+    }
+
+    const markerRect = marker.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const markerCenterX = markerRect.left + markerRect.width / 2;
+    const markerCenterY = markerRect.top + markerRect.height / 2;
+    const containerCenterX = containerRect.left + containerRect.width / 2;
+    const containerCenterY = containerRect.top + containerRect.height / 2;
+
+    const deltaX = containerCenterX - markerCenterX;
+    const deltaY = containerCenterY - markerCenterY;
+
+    setTransform(positionX + deltaX, positionY + deltaY, scale, 500, 'easeOut');
+  }, []);
+
   return (
     <div ref={containerRef} className={cn("relative w-full bg-[var(--color-surface)] overflow-hidden", className)}>
       <TransformWrapper
-        ref={transformRef}
         initialScale={initialScale}
         minScale={1}
         maxScale={5}
@@ -75,11 +99,16 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
         onInit={handleInit}
         onTransformed={(_, state) => updateCSSVars(state.scale)}
       >
-        {({ zoomIn, zoomOut, resetTransform, zoomToElement }) => (
+        {({ zoomIn, zoomOut, resetTransform, setTransform, instance }) => (
           <>
             <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-2 bg-[var(--color-surface)] p-2 rounded-xl shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)]">
               <button 
-                onClick={() => zoomToElement('user-position-marker', transformRef.current?.state.scale || initialScale)} 
+                onClick={() => centerOnUserMarker(
+                  instance.transformState.positionX,
+                  instance.transformState.positionY,
+                  instance.transformState.scale,
+                  setTransform,
+                )} 
                 className="p-2 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-primary)] bg-[var(--color-primary)]/10 transition-colors focus:outline-none"
                 aria-label="Locate me"
               >
