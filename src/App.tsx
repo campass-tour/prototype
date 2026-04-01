@@ -117,7 +117,7 @@ function App() {
           navigate('/collection');
           setIsCheckInModalOpen(false);
         }}
-        onEnterAR={(id, mascotName) => {
+        onEnterAR={() => {
           setIsCheckInModalOpen(false);
           setIsARViewerOpen(true);
         }}

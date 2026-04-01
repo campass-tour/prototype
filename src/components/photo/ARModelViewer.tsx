@@ -78,7 +78,7 @@ export default function ARModelViewer({
         <ARUnsupportedPrompt />
       ) : (
         <div className="relative w-full h-full flex-1">
-          {/* @ts-ignore - model-viewer is a web component */}
+          {/* @ts-expect-error: model-viewer is a custom web component not recognized by TypeScript */}
           <model-viewer
             ref={modelViewerRef}
             src={modelSrc}
@@ -98,7 +98,7 @@ export default function ARModelViewer({
               <Camera className="h-5 w-5 text-[var(--color-accent)]" />
               <span>Start AR</span>
             </button>
-          {/* @ts-ignore */}
+          {/* @ts-expect-error: model-viewer is a custom web component not recognized by TypeScript */}
           </model-viewer>
         </div>
       )}
