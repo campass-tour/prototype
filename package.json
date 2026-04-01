@@ -2,10 +2,11 @@
   "name": "prototype",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://campass-tour.github.io/prototype/",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build --base=/prototype/",
     "lint": "eslint .",
     "preview": "vite preview"
   },
