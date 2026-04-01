@@ -160,9 +160,7 @@ export const WallPage: React.FC = () => {
       {/* Location Filter */}
       {unlockedLocations.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-lg font-semibold text-[var(--color-text-main)] mb-3">
-            Filter by Location
-          </h2>
+
           <div className="flex flex-wrap gap-2">
             <Button
               variant={selectedLocationFilter === null ? "default" : "outline"}
