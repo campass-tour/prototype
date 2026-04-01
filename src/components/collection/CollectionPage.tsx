@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import MascotCard from './MascotCard';
 import CollectionProgressBar from './CollectionProgressBar';
 import CollectionSwiperModal from './CollectionSwiperModal';
+import ARModelViewer from '../photo/ARModelViewer';
 import { LOCATIONS, getLocationData } from '../../constants/locations';
 import { getUnlockedCollectibles, getUnlockedCount } from '../../lib/storage';
 import defaultImageUrl from '../../assets/image/default-image.png';
@@ -12,6 +13,8 @@ export const CollectionPage: React.FC = () => {
   const unlockedData = getUnlockedCollectibles();
   const unlockedCount = getUnlockedCount();
   const [selectedMascotId, setSelectedMascotId] = useState<string | null>(null);
+  const [arTargetId, setArTargetId] = useState<string | null>(null);
+  const [arTargetName, setArTargetName] = useState<string>('');
 
   const handleMascotClick = (id: string, isUnlocked: boolean) => {
     if (isUnlocked) {
@@ -70,10 +73,18 @@ export const CollectionPage: React.FC = () => {
         onClose={() => setSelectedMascotId(null)}
         initialCheckinId={selectedMascotId || ''}
         onViewCollection={() => setSelectedMascotId(null)}
-        onEnterAR={() => {
+        onEnterAR={(mascotId, mascotName) => {
           setSelectedMascotId(null);
-          alert('Opening AR mode for this mascot!');
+          setArTargetId(mascotId);
+          setArTargetName(mascotName);
         }}
+      />
+
+      <ARModelViewer
+        open={!!arTargetId}
+        onClose={() => setArTargetId(null)}
+        checkinId={arTargetId || undefined}
+        mascotName={arTargetName}
       />
     </div>
   );

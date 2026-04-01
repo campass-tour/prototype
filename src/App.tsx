@@ -8,6 +8,7 @@ import { CollectionPage } from './components/collection/CollectionPage';
 import { WallPage } from './pages/WallPage';
 import { getLocationData, LOCATIONS } from './constants/locations';
 import { unlockCollectible, getUnlockedCount } from './lib/storage';
+import ARModelViewer from './components/photo/ARModelViewer';
 import './App.css';
 
 function App() {
@@ -32,6 +33,8 @@ function App() {
     }
     return { id: '', locationName: '', mascotName: '' };
   });
+
+  const [isARViewerOpen, setIsARViewerOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -114,15 +117,22 @@ function App() {
           navigate('/collection');
           setIsCheckInModalOpen(false);
         }}
-        onEnterAR={() => {
+        onEnterAR={(id, mascotName) => {
           setIsCheckInModalOpen(false);
-          alert('Enter AR capture page');
+          setIsARViewerOpen(true);
         }}
         checkinId={checkInData.id}
         locationName={checkInData.locationName}
         mascotName={checkInData.mascotName}
         current={getUnlockedCount()}
         total={LOCATIONS.length}
+      />
+
+      <ARModelViewer
+        open={isARViewerOpen}
+        onClose={() => setIsARViewerOpen(false)}
+        checkinId={checkInData.id}
+        mascotName={checkInData.mascotName}
       />
     </MainLayout>
   );
