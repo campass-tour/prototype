@@ -83,7 +83,7 @@ export function NfcSimulatorFab() {
 
   const simulateCheckIn = (id: string) => {
     setIsOpen(false);
-    window.location.href = `/?checkin=${id}`;
+    window.location.href = `${import.meta.env.BASE_URL}?checkin=${id}`;
   };
 
   // Close menu if click outside when open
