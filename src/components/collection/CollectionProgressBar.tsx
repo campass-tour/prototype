@@ -24,7 +24,7 @@ export default function CollectionProgressBar({
           </p>
         </div>
 
-        <div className="rounded-full bg-[var(--color-primary)] px-3 py-1 text-sm font-medium text-white">
+        <div className="rounded-full bg-[var(--color-primary)] px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-white whitespace-nowrap">
           {current} / {total}
         </div>
       </div>
