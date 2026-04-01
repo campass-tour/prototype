@@ -126,7 +126,7 @@ export default function CollectionSwiperModal({
 
                     <div className="mt-4 flex flex-col gap-3 pb-2 z-10">
                       <button
-                        onClick={(e) => { e.stopPropagation(); onEnterAR && onEnterAR(item.id, item.mascotName); }}
+                        onClick={(e) => { e.stopPropagation(); onEnterAR?.(item.id, item.mascotName); }}
                         className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-[14px] bg-[var(--color-primary)] px-4 py-3 font-bold text-white shadow-[var(--shadow-card)] transition-all hover:scale-[1.02] hover:opacity-90 cursor-pointer"
                       >
                         <Sparkles className="h-5 w-5 text-[var(--color-accent)]" />
@@ -135,7 +135,7 @@ export default function CollectionSwiperModal({
 
                       <div className="flex flex-row gap-3">
                         <button
-                          onClick={(e) => { e.stopPropagation(); onViewCollection && onViewCollection(); }}
+                          onClick={(e) => { e.stopPropagation(); onViewCollection?.(); }}
                           className="flex flex-1 items-center justify-center gap-2 rounded-[12px] border border-[var(--color-state-disabled)] bg-[var(--color-surface)] px-2 py-2 font-semibold text-[var(--color-text-main)] transition hover:bg-[var(--color-background)] hover:shadow-sm cursor-pointer"
                         >
                           <Backpack className="h-4 w-4 text-[var(--color-primary)]" />

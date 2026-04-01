@@ -1,6 +1,7 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { Plus, Minus, Maximize } from 'lucide-react';
+import type { ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
+import { Plus, Minus, Maximize, LocateFixed } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import mapImage from '@/assets/image/map.png';
 import { UserPositionIndicator } from './UserPositionIndicator';
@@ -15,6 +16,7 @@ interface MapViewerProps {
 export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+  const transformRef = useRef<ReactZoomPanPinchRef>(null);
 
   // Fake GPS Data
   const userPosition = {
@@ -50,9 +52,19 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
     };
   }, [initialScale, updateCSSVars]);
 
+  const handleInit = useCallback((ref: ReactZoomPanPinchRef) => {
+    // initial centering on user position marker
+    if (ref.zoomToElement) {
+      setTimeout(() => {
+        ref.zoomToElement('user-position-marker', initialScale, 500, "easeOut");
+      }, 100);
+    }
+  }, [initialScale]);
+
   return (
     <div ref={containerRef} className={cn("relative w-full bg-[var(--color-surface)] overflow-hidden", className)}>
       <TransformWrapper
+        ref={transformRef}
         initialScale={initialScale}
         minScale={1}
         maxScale={5}
@@ -60,11 +72,19 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
         limitToBounds={false}
         pinch={{ step: 5 }}
         wheel={{ step: 0.1 }}
+        onInit={handleInit}
         onTransformed={(_, state) => updateCSSVars(state.scale)}
       >
-        {({ zoomIn, zoomOut, resetTransform }) => (
+        {({ zoomIn, zoomOut, resetTransform, zoomToElement }) => (
           <>
             <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-2 bg-[var(--color-surface)] p-2 rounded-xl shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)]">
+              <button 
+                onClick={() => zoomToElement('user-position-marker', transformRef.current?.state.scale || initialScale)} 
+                className="p-2 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-primary)] bg-[var(--color-primary)]/10 transition-colors focus:outline-none"
+                aria-label="Locate me"
+              >
+                <LocateFixed size={22} strokeWidth={2.5} />
+              </button>
               <button 
                 onClick={() => zoomIn()} 
                 className="p-2 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-text-main)] transition-colors focus:outline-none"

@@ -11,6 +11,7 @@ interface UserPositionIndicatorProps {
 export function UserPositionIndicator({ userPosition }: UserPositionIndicatorProps) {
   return (
     <div 
+      id="user-position-marker"
       className="absolute z-20 pointer-events-none transition-all duration-300"
       style={{
         left: `${userPosition.x}%`,
