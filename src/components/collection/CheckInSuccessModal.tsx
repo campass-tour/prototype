@@ -57,7 +57,7 @@ export default function CheckInSuccessModal({
   const modelSrc = glbModels[targetModelPath] || defaultModelUrl;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-md animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-2 sm:p-4 backdrop-blur-md animate-in fade-in duration-300">
       <div className="absolute inset-0" onClick={onClose} />
 
       {lottieData && (
@@ -66,15 +66,17 @@ export default function CheckInSuccessModal({
         </div>
       )}
 
-      <div className="relative z-10 w-full max-w-sm overflow-hidden rounded-[24px] border border-[var(--color-primary)]/30 bg-[var(--color-surface)]/85 p-6 shadow-[var(--shadow-card)] backdrop-blur-xl animate-in zoom-in-95 duration-500">
+      <div className="relative z-10 w-full max-w-[95vw] sm:max-w-sm overflow-hidden rounded-[18px] sm:rounded-[24px] border border-[var(--color-primary)]/30 bg-[var(--color-surface)]/85 p-3 sm:p-6 shadow-[var(--shadow-card)] backdrop-blur-xl animate-in zoom-in-95 duration-500">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-text-main)]/5 text-xl text-[var(--color-text-secondary)] transition hover:bg-[var(--color-text-main)]/10 hover:text-[var(--color-text-main)]"
+          className="absolute right-2 top-2 sm:right-4 sm:top-4 z-20 flex h-10 w-10 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-[var(--color-text-main)]/5 text-2xl sm:text-xl text-[var(--color-text-secondary)] transition hover:bg-[var(--color-text-main)]/10 hover:text-[var(--color-text-main)]"
+          style={{ touchAction: 'manipulation' }}
+          aria-label="Close"
         >
           ×
         </button>
 
-        <div className="relative mx-auto mb-6 flex h-64 w-full items-center justify-center rounded-2xl bg-[var(--color-primary)]/5 shadow-inner overflow-visible">
+        <div className="relative mx-auto mb-4 sm:mb-6 flex h-40 sm:h-64 w-full items-center justify-center rounded-xl sm:rounded-2xl bg-[var(--color-primary)]/5 shadow-inner overflow-visible">
           <div className="absolute bottom-4 left-1/2 h-8 w-3/4 -translate-x-1/2 rounded-full bg-[var(--color-primary)]/20 blur-xl animate-pulse" />
           <div className="absolute bottom-6 left-1/2 h-2 w-1/2 -translate-x-1/2 rounded-full bg-[var(--color-accent)]/30 blur-sm" />
 
