@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X } from 'lucide-react';
+import { X, MapPin } from 'lucide-react';
 import type { DanmakuItem } from './Danmaku';
+import { getLocationData } from '../../constants/locations';
+import { isCollectibleUnlocked } from '../../lib/storage';
 
 interface DanmakuDetailModalProps {
   item: DanmakuItem | null;
@@ -22,6 +24,10 @@ export const DanmakuDetailModal: React.FC<DanmakuDetailModalProps> = ({ item, on
   }, [item]);
 
   if (!item) return null;
+
+  const locationData = getLocationData(item.originalMessage.locationId);
+  const isUnlocked = isCollectibleUnlocked(item.originalMessage.locationId);
+  const locationName = isUnlocked && locationData ? locationData.locationName : 'Mysterious Location';
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 danmaku-modal-overlay">
@@ -65,6 +71,12 @@ export const DanmakuDetailModal: React.FC<DanmakuDetailModalProps> = ({ item, on
         {/* Text Payload */}
         <div className="text-[var(--color-text-main)] font-[var(--font-weight-regular)] text-[var(--font-size-body)] whitespace-pre-wrap leading-relaxed py-2">
           {item.text}
+        </div>
+
+        {/* Location Badge */}
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full px-2 py-1 w-max">
+          <MapPin className="w-3 h-3 text-[var(--color-primary)]" />
+          {locationName}
         </div>
 
         {/* Likes */}

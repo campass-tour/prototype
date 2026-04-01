@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { MESSAGES, type Message } from '../constants/messages';
-import { Heart } from 'lucide-react';
+import { Heart, MapPin } from 'lucide-react';
 import { DanmakuDetailModal } from '../components/wall/DanmakuDetailModal';
 import type { DanmakuItem } from '../components/wall/Danmaku';
+import { getLocationData } from '../constants/locations';
+import { isCollectibleUnlocked } from '../lib/storage';
 
 const formatTimeAgo = (isoString: string) => {
   const date = new Date(isoString);
@@ -22,9 +24,13 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
     return rotations[index % rotations.length];
   }, [index]);
 
+  const locationData = getLocationData(message.locationId);
+  const isUnlocked = isCollectibleUnlocked(message.locationId);
+  const locationName = isUnlocked && locationData ? locationData.locationName : 'Mysterious Location';
+
   return (
     <div
-      className="group break-inside-avoid mb-6 transition-all duration-300 hover:scale-105 cursor-pointer"
+      className="group break-inside-avoid mb-6 transition-all duration-300 hover:scale-105 cursor-pointer flex flex-col"
       onClick={onClick}
       style={{
         '--hover-rotate': hoverRotation,
@@ -80,6 +86,11 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
               </div>
             )}
             <span className="text-gray-600 text-sm font-medium">{message.author.username}</span>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full px-2 py-1 w-max">
+            <MapPin className="w-3 h-3 text-[var(--color-primary)]" />
+            {locationName}
           </div>
 
           <div className="flex items-center justify-between text-gray-500 text-sm mt-2">
