@@ -5,6 +5,8 @@ import { DanmakuDetailModal } from '../components/wall/DanmakuDetailModal';
 import type { DanmakuItem } from '../components/wall/Danmaku';
 import { getLocationData } from '../constants/locations';
 import { isCollectibleUnlocked } from '../lib/storage';
+import { LOCATIONS } from '../constants/locations';
+import { Button } from '../components/ui/button';
 
 const formatTimeAgo = (isoString: string) => {
   const date = new Date(isoString);
@@ -116,6 +118,18 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
 
 export const WallPage: React.FC = () => {
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+  const [selectedLocationFilter, setSelectedLocationFilter] = useState<string | null>(null);
+
+  // Get unlocked locations
+  const unlockedLocations = useMemo(() => {
+    return LOCATIONS.filter(loc => isCollectibleUnlocked(loc.id));
+  }, []);
+
+  // Filter messages based on selected location
+  const filteredMessages = useMemo(() => {
+    if (!selectedLocationFilter) return MESSAGES;
+    return MESSAGES.filter(msg => msg.locationId === selectedLocationFilter);
+  }, [selectedLocationFilter]);
 
   const selectedDanmakuItem: DanmakuItem | null = useMemo(() => {
     if (!selectedMessage) return null;
@@ -143,12 +157,41 @@ export const WallPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Location Filter */}
+      {unlockedLocations.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-[var(--color-text-main)] mb-3">
+            Filter by Location
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant={selectedLocationFilter === null ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedLocationFilter(null)}
+            >
+              All Locations
+            </Button>
+            {unlockedLocations.map((location) => (
+              <Button
+                key={location.id}
+                variant={selectedLocationFilter === location.id ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedLocationFilter(location.id)}
+              >
+                <MapPin className="w-3 h-3 mr-1" />
+                {location.name}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* 
         Mobile: single column (columns-1) with gap.
         Desktop: multi-column (columns-2/3/4) for masonry layout.
       */}
       <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6">
-        {MESSAGES.map((msg, idx) => (
+        {filteredMessages.map((msg, idx) => (
           <PolaroidCard 
             key={msg.id} 
             message={msg} 
