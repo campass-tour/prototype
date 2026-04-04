@@ -15,7 +15,7 @@ export default function MascotCard({
 }: MascotCardProps) {
   const isLocked = status === "locked";
   const isNew = status === "new";
-  const [tiltAngle, setTiltAngle] = useState({ x: 50, y: 50 });
+  const [tiltAngle, setTiltAngle] = useState(0);
 
   useEffect(() => {
     if (isLocked || typeof window === 'undefined') return;
@@ -31,12 +31,11 @@ export default function MascotCard({
       }
 
       const handleOrientation = (event: DeviceOrientationEvent) => {
-        const beta = event.beta || 0; // 前后倾斜 (-180 到 180)
-        const gamma = event.gamma || 0; // 左右倾斜 (-90 到 90)
-        // 计算光泽位置，基于倾斜角度
-        const x = (gamma / 90) * 50 + 50; // 0-100%
-        const y = (beta / 180) * 50 + 50; // 0-100%
-        setTiltAngle({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) });
+        const beta = event.beta || 0; // 前后倾斜
+        const gamma = event.gamma || 0; // 左右倾斜
+        // 计算角度，限制在 -45 到 45 度之间
+        const angle = Math.max(-45, Math.min(45, Math.atan2(gamma, beta) * 180 / Math.PI));
+        setTiltAngle(angle);
       };
 
       window.addEventListener('deviceorientation', handleOrientation);
@@ -88,12 +87,13 @@ export default function MascotCard({
         {/* Rainbow laser sheen for unlocked cards on mobile */}
         {!isLocked && (
           <div
-            className="absolute w-32 h-32 opacity-40 pointer-events-none transition-all duration-200 rounded-full blur-sm"
+            className="absolute -inset-[100%] opacity-30 pointer-events-none transition-transform duration-200"
             style={{
-              background: 'radial-gradient(circle, rgba(255,0,255,0.6) 0%, rgba(0,255,255,0.6) 30%, rgba(255,255,0,0.6) 60%, transparent 100%)',
-              left: `${tiltAngle.x}%`,
-              top: `${tiltAngle.y}%`,
-              transform: 'translate(-50%, -50%)',
+              background: 'conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,0,255,0.4) 60deg, rgba(0,255,255,0.4) 120deg, rgba(255,255,0,0.4) 180deg, rgba(255,0,255,0.4) 240deg, transparent 300deg)',
+              transform: `rotate(${tiltAngle}deg)`,
+              transformOrigin: 'center',
+              filter: 'blur(8px)',
+              mixBlendMode: 'color-dodge',
             }}
           />
         )}
