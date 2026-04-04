@@ -37,7 +37,7 @@ export const CollectionPage: React.FC = () => {
 
       <CollectionProgressBar current={unlockedCount || 0} total={LOCATIONS.length} />
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
         {LOCATIONS.map((loc) => {
           const locData = getLocationData(loc.id);
           const isUnlocked = !!unlockedData[loc.id];

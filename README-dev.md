@@ -5,7 +5,7 @@
 ## 目录
 
 1. [技术栈](#1-技术栈)
-2. [核心数据与常量配置](#2-核心数据与常量配置)
+2. [数据与常量配置](#2-数据与常量配置)
 3. [如何添加新资产 (Model & Image)](#3-如何添加新资产-model--image)
 4. [本地存储 (Local Storage) 可复用逻辑](#4-本地存储-local-storage-可复用逻辑)
 5. [TypeScript 接口](#5-typescript-接口)
@@ -28,7 +28,7 @@
 
 ---
 
-## 2. 核心数据与常量配置
+## 2. 数据与常量配置
 
 项目中所有的“数据驱动”都依赖于 `src/constants/` 下的核心常量配置。所有的地点、鸟类对应关系、初始留言都尽量避免硬编码在组件中。
 
@@ -57,7 +57,7 @@ export interface Location {
 
 ###  新增吉祥物的展示图 (Image)
 当用户进入 My Collection 页面时，展示的解锁鸟类图片位于：
-📂 `src/assets/image/`
+ `src/assets/image/`
 
 - **命名规范**: 必须与 `locations.ts` 中的 `id` 相同，再拼上 `-image`。
 - **扩展名**: 支持 `png`, `jpg`, `jpeg`, `webp`。
