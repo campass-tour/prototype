@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+
 type MascotCardProps = {
   name: string;
   location: string;
@@ -13,6 +15,35 @@ export default function MascotCard({
 }: MascotCardProps) {
   const isLocked = status === "locked";
   const isNew = status === "new";
+  const [tiltAngle, setTiltAngle] = useState(0);
+
+  useEffect(() => {
+    if (isLocked || typeof window === 'undefined') return;
+
+    const requestPermission = async () => {
+      if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+        try {
+          const permission = await (DeviceOrientationEvent as any).requestPermission();
+          if (permission !== 'granted') return;
+        } catch (error) {
+          return;
+        }
+      }
+
+      const handleOrientation = (event: DeviceOrientationEvent) => {
+        const beta = event.beta || 0; // 前后倾斜
+        const gamma = event.gamma || 0; // 左右倾斜
+        // 计算角度，限制在 -45 到 45 度之间
+        const angle = Math.max(-45, Math.min(45, Math.atan2(gamma, beta) * 180 / Math.PI));
+        setTiltAngle(angle);
+      };
+
+      window.addEventListener('deviceorientation', handleOrientation);
+      return () => window.removeEventListener('deviceorientation', handleOrientation);
+    };
+
+    requestPermission();
+  }, [isLocked]);
 
   return (
     <div
@@ -51,6 +82,19 @@ export default function MascotCard({
         {/* Subtle overlay gradient on hover */}
         {!isLocked && (
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        )}
+
+        {/* Rainbow laser sheen for unlocked cards on mobile */}
+        {!isLocked && (
+          <div
+            className="absolute inset-0 opacity-20 pointer-events-none transition-transform duration-200"
+            style={{
+              background: 'conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,0,255,0.4) 60deg, rgba(0,255,255,0.4) 120deg, rgba(255,255,0,0.4) 180deg, rgba(255,0,255,0.4) 240deg, transparent 300deg)',
+              transform: `rotate(${tiltAngle}deg)`,
+              transformOrigin: 'center',
+              filter: 'blur(1px)',
+            }}
+          />
         )}
       </div>
 
