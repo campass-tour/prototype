@@ -26,10 +26,6 @@ export const UnlockedContent: React.FC<UnlockedContentProps> = ({
 
   return (
     <>
-      <h2 className={`font-bold mb-[var(--spacing-3)] text-xl leading-tight text-[var(--color-text-main)]`}>
-        {realBuildingName}
-      </h2>
-
       <div className="flex flex-col gap-4">
         {/* Visual Center: Mascot Preview */}
         <div className="flex items-center gap-4 bg-[var(--color-background)] p-3 rounded-xl border border-[var(--border)]">
@@ -39,7 +35,7 @@ export const UnlockedContent: React.FC<UnlockedContentProps> = ({
           <div className="flex flex-col">
             <span className="text-xs font-semibold text-[var(--color-accent)] tracking-wider uppercase mb-1">Mascot Found</span>
             <p className="text-sm text-[var(--color-text-secondary)] leading-snug">
-              This spirited companion calls the <strong>{realBuildingName}</strong> its home.
+              This spirited companion calls its home.
             </p>
           </div>
         </div>
