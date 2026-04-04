@@ -1,0 +1,54 @@
+:root {
+  /* Font Families */
+  --font-family-en: 'Inter', sans-serif;
+  --font-family-zh: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'Heiti SC', 'WenQuanYi Micro Hei', sans-serif;
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  /* Font Sizes */
+  --font-size-h1: 24px;
+  --font-size-h2: 18px;
+  --font-size-body: 14px;
+  --font-size-caption: 12px;
+
+  /* Font Weights */
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-weight-regular: 400;
+
+  /* Colors */
+  --color-logo-cam: #1A1A1A;
+  --color-logo-pass: #9c7dd9;
+  --color-primary: #281559;
+  --color-background: #F5F6FA;
+  --color-surface: #FFFFFF;
+  --color-accent: #00C4CC;
+  --color-text-main: #1A1A1A;
+  --color-text-secondary: #888888;
+  --color-state-disabled: #E0E0E0;
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: oklch(0.922 0 0);
+  --code-bg: #f4f3ec;
+  --accent-base: oklch(0.97 0 0);
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  /* Spacing */
+  --spacing-2: 8px;
+  --spacing-3: 16px;
+  --spacing-4: 24px;
+  --spacing-5: 32px;
+
+  /* Radius */
+  --radius-card: 16px;
+  --radius-button: 8px;
+  --radius-pill: 100px;
+
+  /* Shadows */
+  --shadow-card: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
