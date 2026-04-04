@@ -24,12 +24,25 @@ export const CollectionPage: React.FC = () => {
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-[var(--color-text-main)]">
+      {/* Card-style header */}
+      <div
+        className="w-full bg-[var(--color-surface)] shadow-[var(--shadow-card)] rounded-[var(--radius-card)] px-0 py-0 mb-2 flex flex-col relative overflow-hidden border border-[var(--border)]"
+        style={{
+          background: 'linear-gradient(135deg, var(--color-surface) 80%, var(--accent-bg) 100%)',
+        }}
+      >
+        {/* Accent gradient bar */}
+        <div
+          className="absolute left-0 top-0 w-full h-1.5 rounded-t-[var(--radius-card)]"
+          style={{
+            background: 'linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%)',
+          }}
+        />
+        <div className="px-6 pt-6 pb-3 flex flex-col gap-1 z-10">
+          <h1 className="text-2xl md:text-3xl font-bold text-[var(--color-text-main)]">
             My Collection
           </h1>
-          <p className="mt-1 text-[var(--color-text-secondary)]">
+          <p className="text-[var(--color-text-secondary)] text-base md:text-lg">
             Discover campus landmarks and unlock your mascot gallery.
           </p>
         </div>
