@@ -25,8 +25,8 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
 
   // Fake GPS Data
   const userPosition = {
-    x: 23, // 23% from left
-    y: 25, // 25% from top
+    x: 45, // from left
+    y: 50, // from top
     heading: 105 // test distinct heading
   };
 

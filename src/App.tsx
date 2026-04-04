@@ -34,6 +34,7 @@ function App() {
     return { id: '', locationName: '', mascotName: '' };
   });
 
+  const [unlockedCount, setUnlockedCount] = useState(() => getUnlockedCount());
   const [isARViewerOpen, setIsARViewerOpen] = useState(false);
 
   const location = useLocation();
@@ -51,10 +52,9 @@ function App() {
 
       if (locationInfo) {
         const { id } = locationInfo;
-        
         // 2. Unlock: Update localStorage (simulated backend/persistence)
         unlockCollectible(id);
-
+        setUnlockedCount(getUnlockedCount()); // 立即刷新进度
         // 3. Cleanup: Remove parameter without refreshing
         const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
         window.history.replaceState({ path: newUrl }, '', newUrl);
@@ -124,7 +124,7 @@ function App() {
         checkinId={checkInData.id}
         locationName={checkInData.locationName}
         mascotName={checkInData.mascotName}
-        current={getUnlockedCount()}
+        current={unlockedCount}
         total={LOCATIONS.length}
       />
 
