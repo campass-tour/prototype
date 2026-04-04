@@ -87,13 +87,13 @@ export default function MascotCard({
         {/* Rainbow laser sheen for unlocked cards on mobile */}
         {!isLocked && (
           <div
-            className="absolute -inset-[100%] opacity-30 pointer-events-none transition-transform duration-200"
+            className="absolute -inset-[100%] opacity-60 pointer-events-none transition-transform duration-200"
             style={{
-              background: 'conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,0,255,0.4) 60deg, rgba(0,255,255,0.4) 120deg, rgba(255,255,0,0.4) 180deg, rgba(255,0,255,0.4) 240deg, transparent 300deg)',
+              background: 'conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,0,255,0.6) 60deg, rgba(0,255,255,0.6) 120deg, rgba(255,255,0,0.6) 180deg, rgba(255,0,255,0.6) 240deg, transparent 300deg)',
               transform: `rotate(${tiltAngle}deg)`,
               transformOrigin: 'center',
-              filter: 'blur(8px)',
-              mixBlendMode: 'color-dodge',
+              filter: 'blur(12px)',
+              mixBlendMode: 'screen',
             }}
           />
         )}
