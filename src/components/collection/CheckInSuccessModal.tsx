@@ -1,8 +1,9 @@
 ﻿import { useEffect, useState } from 'react';
-import { Backpack, Map as MapIcon, Sparkles } from 'lucide-react';
+import { Backpack, Map as MapIcon } from 'lucide-react';
 import '@google/model-viewer';
 import LottieModule from 'lottie-react';
 import defaultModelUrl from '../../assets/model/default-model.glb?url';
+import { SummonARButton } from '../photo/SummonARButton';
 
 const Lottie = (LottieModule as any).default || LottieModule;
 const ModelViewer = 'model-viewer' as any;
@@ -130,14 +131,7 @@ export default function CheckInSuccessModal({
         </div>
 
         <div className="mt-8 flex flex-col gap-3">
-          <button
-            onClick={() => onEnterAR ? onEnterAR(checkinId, mascotName) : onClose()}
-            className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-[14px] bg-[var(--color-primary)] px-4 py-4 font-bold text-white shadow-[var(--shadow-card)] transition-all hover:scale-[1.02] hover:opacity-90 cursor-pointer"
-          >
-            <div className="absolute inset-0 bg-white/20 blur-md pointer-events-none rounded-full top-0 scale-x-150 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Sparkles className="h-5 w-5 animate-pulse text-[var(--color-accent)]" />
-            <span className="tracking-wide">Summon in AR</span>
-          </button>
+          <SummonARButton onClick={() => onEnterAR ? onEnterAR(checkinId, mascotName) : onClose()} />
 
           <div className="flex flex-row gap-3">
             <button

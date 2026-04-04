@@ -3,7 +3,43 @@ name: campass-react-best-practices
 description: Defines and enforces best practices, coding standards, and component structure for the Campass React project. This Skill must be followed for all new features and refactoring.
 ---
 
+
 # Campass React Project Skill
+
+## Project Structure Example
+
+Below is a simplified project structure to help AI agents and developers quickly locate files and understand where to add or modify code:
+
+```
+src/
+  components/
+    collection/
+      CollectionPage.tsx
+      MascotCard.tsx
+      ...
+    wall/
+      WallPage.tsx
+      Danmaku.tsx
+      MessageCard.tsx
+      ...
+    ui/
+      button.tsx
+      ...
+  constants/
+    locations.ts
+    messages.ts
+  lib/
+    storage.ts
+    utils.ts
+  pages/
+    WallPage.tsx
+  styles/
+    style.css
+  types/
+    index.ts
+```
+
+> Use this structure as a reference to find the correct file locations for new features, refactors, or bug fixes.
 
 ## Purpose
 This Skill defines best practices and mandatory requirements for developing features in the Campass project, a gamified campus exploration web app built with React, TypeScript, Tailwind CSS, and shadcn/ui.

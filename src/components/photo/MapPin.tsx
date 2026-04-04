@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Danmaku } from '../wall/Danmaku';
+import { getLoreById } from '../../constants/lores';
+import { getLocationData } from '../../constants/locations';
+import { MESSAGES } from '../../constants/messages';
+import defaultImageUrl from '../../assets/image/default-image.png';
+import { SummonARButton } from './SummonARButton';
+
+const imageFiles = import.meta.glob('../../assets/image/*-image.{png,jpg,jpeg,webp}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 
 interface MapPinProps {
   id: string; // The location ID for fetching messages
@@ -12,6 +19,7 @@ interface MapPinProps {
   hintImage?: string;
   hintText?: string;
   onMessageWallClick?: () => void;
+  onEnterAR?: (id: string, name: string) => void;
 }
 
 export const MapPin: React.FC<MapPinProps> = ({ 
@@ -23,10 +31,14 @@ export const MapPin: React.FC<MapPinProps> = ({
   buildingName, 
   hintImage, 
   hintText, 
-  onMessageWallClick 
+  onMessageWallClick,
+  onEnterAR
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isDesktopUA] = useState(() => 
+    typeof navigator !== 'undefined' ? !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) : false
+  );
   const [isDanmakuActive, setIsDanmakuActive] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -84,7 +96,148 @@ export const MapPin: React.FC<MapPinProps> = ({
     return () => clearTimeout(timer);
   }, [isOpen, status]);
 
+  const [isLoreExpanded, setIsLoreExpanded] = useState(false);
   const isLocked = status === 'locked';
+
+  const lore = getLoreById(id);
+  const locationData = getLocationData(id);
+  const realBuildingName = locationData?.locationName || buildingName || 'Mysterious Spot';
+
+  // Get image src
+  let imageSrc = defaultImageUrl;
+  const pngPath = `../../assets/image/${id}-image.png`;
+  const jpgPath = `../../assets/image/${id}-image.jpg`;
+  const jpegPath = `../../assets/image/${id}-image.jpeg`;
+  const webpPath = `../../assets/image/${id}-image.webp`;
+
+  if (imageFiles[pngPath]) imageSrc = imageFiles[pngPath];
+  else if (imageFiles[jpgPath]) imageSrc = imageFiles[jpgPath];
+  else if (imageFiles[jpegPath]) imageSrc = imageFiles[jpegPath];
+  else if (imageFiles[webpPath]) imageSrc = imageFiles[webpPath];
+
+  // Calculate actual message count for this location
+  const whisperCount = MESSAGES.filter(msg => msg.locationId === id).length;
+
+  const renderContent = () => (
+    <>
+      <h2 className={`font-bold mb-[var(--spacing-3)] ${!isMobile ? 'text-xl' : 'text-2xl'} leading-tight text-[var(--color-text-main)]`}>
+        {realBuildingName}
+      </h2>
+      
+      {isLocked ? (
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
+            {hintText || 'Find this exact spot to unlock its secrets.'}
+          </p>
+          <div className="relative w-full aspect-4/3 rounded-[var(--radius-card)] overflow-hidden bg-gray-200 shadow-inner">
+            {hintImage ? (
+              <img 
+                src={hintImage} 
+                alt="Location Clue" 
+                className="w-full h-full object-cover blur-[6px] scale-110"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center text-[var(--color-text-secondary)] bg-[var(--color-state-disabled)] blur-sm">
+                <svg className="w-12 h-12 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <span>Blurred Clue Image</span>
+              </div>
+            )}
+            {/* Overlay text for extra mystery */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <span className="text-white font-bold text-sm tracking-wide">
+                  Clue Hidden
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {/* Visual Center: Mascot Preview */}
+          <div className="flex items-center gap-4 bg-[var(--color-background)] p-3 rounded-xl border border-[var(--border)]">
+            <div className="w-20 h-20 shrink-0 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center overflow-hidden">
+              <img src={imageSrc} alt="Mascot Preview" className="w-[85%] h-[85%] object-contain drop-shadow-sm" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs font-semibold text-[var(--color-accent)] tracking-wider uppercase mb-1">Mascot Found</span>
+              <p className="text-sm text-[var(--color-text-secondary)] leading-snug">
+                This spirited companion calls the <strong>{realBuildingName}</strong> its home.
+              </p>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col gap-2 mt-1">
+            <SummonARButton 
+              onClick={() => onEnterAR?.(id, realBuildingName)} 
+              label="Summon in AR" 
+              className="py-3 px-4" 
+            />
+            
+            <button 
+              onClick={onMessageWallClick}
+              className="w-full bg-[var(--color-surface)] border-2 border-[var(--color-primary)] text-[var(--color-primary)] font-bold py-[10px] px-4 rounded-xl hover:bg-[var(--color-primary)] hover:text-white active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            >
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <span>View Campus Whispers <span className="text-[0.9em] opacity-90">({whisperCount})</span> </span>
+            </button>
+          </div>
+
+          {/* Cultural Lore Section (Expandable/Flippable) */}
+          {lore && (
+            <div 
+              className="group w-full mt-2 border border-[#eaeaea] rounded-xl overflow-hidden cursor-pointer"
+              onClick={() => setIsLoreExpanded(!isLoreExpanded)}
+            >
+              <div className="bg-[#fdfaf5] px-4 py-3 flex items-center justify-between shadow-sm relative overflow-hidden">
+                <div className="flex gap-2 items-center flex-1 relative z-10">
+                  <span className="text-xl">📜</span>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-orange-800/60 font-bold uppercase tracking-widest leading-none mb-0.5">Location Lore</span>
+                    <span className="text-sm font-semibold text-orange-950 truncate max-w-[200px]" style={{ fontFamily: '"Caveat", "Comic Sans MS", cursive, sans-serif' }}>
+                      {lore.title}
+                    </span>
+                  </div>
+                </div>
+                <svg 
+                  className={`w-5 h-5 text-orange-950/50 transition-transform duration-300 relative z-10 ${isLoreExpanded ? 'rotate-180' : ''}`}
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+                {/* Vintage overlay artifact */}
+                <div className="absolute top-0 right-0 w-24 h-full bg-gradient-to-l from-orange-100/50 to-transparent pointer-events-none" />
+              </div>
+              <div 
+                className={`transition-all duration-300 ease-in-out bg-white text-orange-950/80 px-4 leading-relaxed ${isLoreExpanded ? 'py-4 opacity-100' : 'max-h-0 py-0 opacity-0 overflow-hidden'}`}
+                style={{ fontFamily: '"Caveat", "Comic Sans MS", cursive, sans-serif' }}
+              >
+                <p className="text-sm sm:text-base m-0 italic">"{lore.content}"</p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Desktop user agent tip */}
+      {isDesktopUA && (
+        <div className="mt-4 pt-3 border-t border-[var(--border)] border-dashed">
+          <p className="text-[11px] text-[var(--color-primary)] text-center font-medium opacity-80 leading-tight">
+             💡 Switch to a mobile device to use the AR camera and discover secrets!
+          </p>
+        </div>
+      )}
+    </>
+  );
 
   return (
     <>
@@ -137,17 +290,14 @@ export const MapPin: React.FC<MapPinProps> = ({
         {isOpen && !isMobile && (
           <div 
             ref={popupRef}
-            className="absolute left-1/2 bottom-full mb-4 -translate-x-1/2 w-64 bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] p-[var(--spacing-4)] z-50 animate-in fade-in zoom-in-95"
+            className="absolute left-1/2 bottom-full mb-4 -translate-x-1/2 w-[340px] bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] p-[var(--spacing-4)] z-50 animate-in fade-in zoom-in-95 border border-[var(--border)]"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-[var(--font-size-h2)] font-[var(--font-weight-bold)] text-[var(--color-text-main)] mb-[var(--spacing-2)] leading-tight">
-              {buildingName || 'Location Information'}
-            </h3>
-            <p className="text-[var(--font-size-body)] text-[var(--color-text-secondary)] mb-0">
-              Please use your mobile device to experience drawing features and unlock secrets.
-            </p>
+            {renderContent()}
             {/* Popover Arrow */}
-            <div className="absolute left-1/2 top-full -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-[var(--color-surface)]"></div>
+            <div className="absolute left-1/2 top-full -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[12px] border-transparent border-t-[var(--border)]">
+              <div className="absolute left-1/2 -top-[13px] -translate-x-1/2 w-0 h-0 border-l-[9px] border-r-[9px] border-t-[11px] border-transparent border-t-[var(--color-surface)]"></div>
+            </div>
           </div>
         )}
       </div>
@@ -206,53 +356,7 @@ export const MapPin: React.FC<MapPinProps> = ({
           </div>
           
           <div className="p-[var(--spacing-4)] pt-0 pb-[calc(var(--spacing-5)+var(--spacing-3))] overflow-y-auto max-h-[85vh]">
-            <h2 className="text-[var(--font-size-h1)] font-[var(--font-weight-bold)] mb-[var(--spacing-4)]">
-              {buildingName || 'Mysterious Spot'}
-            </h2>
-            
-            {isLocked ? (
-              <div className="flex flex-col gap-[var(--spacing-3)]">
-                <p className="text-[var(--font-size-body)] text-[var(--color-text-secondary)]">
-                  {hintText || 'Find this exact spot to unlock its secrets.'}
-                </p>
-                <div className="relative w-full aspect-[4/3] rounded-[var(--radius-card)] overflow-hidden bg-gray-200">
-                  {hintImage ? (
-                    <img 
-                      src={hintImage} 
-                      alt="Location Clue" 
-                      className="w-full h-full object-cover blur-md scale-110"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-[var(--color-text-secondary)] bg-[var(--color-state-disabled)] blur-sm">
-                      <svg className="w-12 h-12 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                        <polyline points="21 15 16 10 5 21"></polyline>
-                      </svg>
-                      <span>Blurred Clue Image</span>
-                    </div>
-                  )}
-                  {/* Overlay text for extra mystery */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <span className="text-white font-[var(--font-weight-bold)] text-[var(--font-size-h2)] drop-shadow-md">
-                      Clue Hidden
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center gap-[var(--spacing-4)] mt-[var(--spacing-2)]">
-                <p className="text-[var(--font-size-body)] text-[var(--color-text-secondary)] text-center">
-                  You have successfully unlocked this architecture! Tap the button below to see the messages left by others.
-                </p>
-                <button 
-                  onClick={onMessageWallClick}
-                  className="w-full bg-[var(--color-primary)] text-white font-[var(--font-weight-bold)] py-[var(--spacing-3)] px-[var(--spacing-4)] rounded-[var(--radius-button)] shadow-[var(--shadow-card)] active:scale-95 transition-transform"
-                >
-                  Enter Message Wall Space
-                </button>
-              </div>
-            )}
+            {renderContent()}
           </div>
         </div>,
         document.body

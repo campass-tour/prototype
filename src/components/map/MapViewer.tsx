@@ -1,4 +1,5 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import type { ReactZoomPanPinchContentRef, ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
 import { Plus, Minus, Maximize, LocateFixed } from 'lucide-react';
@@ -7,6 +8,7 @@ import mapImage from '@/assets/image/map.png';
 import { UserPositionIndicator } from './UserPositionIndicator';
 import { MapPin } from '../photo/MapPin';
 import { MapOverlayLayer } from './MapOverlayLayer';
+import ARModelViewer from '../photo/ARModelViewer';
 
 interface MapViewerProps {
   className?: string;
@@ -17,6 +19,9 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
+  const navigate = useNavigate();
+
+  const [arTarget, setArTarget] = useState<{ id: string, name: string } | null>(null);
 
   // Fake GPS Data
   const userPosition = {
@@ -220,7 +225,8 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
                         <path d="M3 10h18"/>
                       </svg>
                     }
-                    onMessageWallClick={() => alert('Entering message wall for CB!')}
+                    onMessageWallClick={() => navigate('/wall?location=cb')}
+                    onEnterAR={(id, name) => setArTarget({ id, name })}
                   />
                 </MapOverlayLayer>
               </div>
@@ -228,6 +234,13 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
           </>
         )}
       </TransformWrapper>
+      
+      <ARModelViewer
+        open={!!arTarget}
+        onClose={() => setArTarget(null)}
+        checkinId={arTarget?.id}
+        mascotName={arTarget?.name || 'Mascot'}
+      />
     </div>
   );
 }

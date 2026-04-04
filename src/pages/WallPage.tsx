@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { MESSAGES, type Message } from '../constants/messages';
 import { Heart, MapPin } from 'lucide-react';
 import { DanmakuDetailModal } from '../components/wall/DanmakuDetailModal';
@@ -117,8 +118,17 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
 };
 
 export const WallPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const locationQuery = searchParams.get('location');
+  
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
-  const [selectedLocationFilter, setSelectedLocationFilter] = useState<string | null>(null);
+  const [selectedLocationFilter, setSelectedLocationFilter] = useState<string | null>(locationQuery || null);
+
+  useEffect(() => {
+    if (locationQuery) {
+      setSelectedLocationFilter(locationQuery);
+    }
+  }, [locationQuery]);
 
   // Get unlocked locations
   const unlockedLocations = useMemo(() => {
