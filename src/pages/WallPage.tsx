@@ -156,7 +156,7 @@ export const WallPage: React.FC = () => {
   }, [selectedMessage]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-2 md:px-6">
+    <div className="w-full max-w-7xl mx-auto px-2 md:px-6 pb-32">
       {/* Card-style header */}
       <div
         className="w-full bg-[var(--color-surface)] shadow-[var(--shadow-card)] rounded-[var(--radius-card)] px-0 py-0 mb-2 flex flex-col relative overflow-hidden border border-[var(--border)]"

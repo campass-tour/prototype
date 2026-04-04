@@ -56,7 +56,7 @@ export function MainLayout({ children, activeTab }: MainLayoutProps) {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         <main className="flex-1 overflow-y-auto overflow-x-hidden">
           {/* Inner container scales to full height and width */}
-          <div className="w-full h-full p-4 md:p-8 pb-24 md:pb-8 flex flex-col">
+          <div className="w-full h-full p-4 md:p-8 pb-[max(6rem,env(safe-area-inset-bottom))] md:pb-8 flex flex-col">
             {children}
           </div>
         </main>

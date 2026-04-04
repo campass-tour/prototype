@@ -31,8 +31,8 @@ export const DanmakuDetailModal: React.FC<DanmakuDetailModalProps> = ({ item, on
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 danmaku-modal-overlay">
-      {/* Click outside to close */}
-      <div className="absolute inset-0" onClick={onClose} />
+      {/* 遮罩不再可点击关闭，仅作遮罩用 */}
+      <div className="absolute inset-0 cursor-default select-none" />
       
       <div 
         className="w-full max-w-sm bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] p-5 relative flex flex-col gap-4 animate-in zoom-in-95 duration-200 cursor-default"
