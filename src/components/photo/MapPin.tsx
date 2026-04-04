@@ -250,14 +250,21 @@ export const MapPin: React.FC<MapPinProps> = ({
           {/* Drag handle identifier */}
           <div 
             className="w-full flex justify-center pt-[var(--spacing-2)] pb-[var(--spacing-2)] cursor-grab active:cursor-grabbing"
+            style={{ touchAction: 'none' }}
             onTouchStart={(e) => {
+              if (e.touches.length > 1) return; // 只允许单指
               setIsDragging(true);
               startY.current = e.touches[0].clientY;
             }}
             onTouchMove={(e) => {
               if (!isDragging) return;
+              if (e.touches.length > 1) return; // 只允许单指
+              e.preventDefault(); // 阻止页面滚动
               const deltaY = e.touches[0].clientY - startY.current;
-              setDragOffset(Math.max(0, deltaY));
+              // 用 requestAnimationFrame 优化
+              requestAnimationFrame(() => {
+                setDragOffset(Math.max(0, deltaY));
+              });
             }}
             onTouchEnd={() => {
               if (dragOffset > 100) {
@@ -273,7 +280,9 @@ export const MapPin: React.FC<MapPinProps> = ({
             onMouseMove={(e) => {
               if (!isDragging) return;
               const deltaY = e.clientY - startY.current;
-              setDragOffset(Math.max(0, deltaY));
+              requestAnimationFrame(() => {
+                setDragOffset(Math.max(0, deltaY));
+              });
             }}
             onMouseUp={() => {
               if (dragOffset > 100) {
