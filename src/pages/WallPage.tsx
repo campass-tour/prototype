@@ -41,13 +41,11 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
       } as React.CSSProperties}
     >
       <div 
-        className="bg-white p-3 pb-6 md:p-4 md:pb-8 shadow-[var(--shadow-card)] rounded-sm border border-gray-200/50"
+        className="bg-white p-3 pb-6 md:p-4 md:pb-8 shadow-(--shadow-card) rounded-sm border border-gray-200/50"
         style={{
           transform: 'rotate(var(--tw-rotate, 0))',
           transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
-        // Add a class that applies rotation strictly on hover by using a tailwind utility combined with our custom variable,
-        // or just apply it in the inline style class
       >
         <style>{`
           @media (min-width: 768px) {
@@ -93,7 +91,7 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
           </div>
 
           <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full px-2 py-1 w-max">
-            <MapPin className="w-3 h-3 text-[var(--color-primary)]" />
+            <MapPin className="w-3 h-3 text-(--color-primary)" />
             {locationName}
           </div>
 
@@ -127,10 +125,11 @@ export const WallPage: React.FC = () => {
   const [isComposeOpen, setIsComposeOpen] = useState(false);
 
   useEffect(() => {
-    if (locationQuery) {
-      setSelectedLocationFilter(locationQuery);
+    // Only update if different to avoid cascading renders
+    if (locationQuery && selectedLocationFilter !== locationQuery) {
+      setTimeout(() => setSelectedLocationFilter(locationQuery), 0);
     }
-  }, [locationQuery]);
+  }, [locationQuery, selectedLocationFilter]);
 
   // Get unlocked locations
   const unlockedLocations = useMemo(() => {
@@ -160,34 +159,37 @@ export const WallPage: React.FC = () => {
     <div className="w-full max-w-7xl mx-auto px-2 md:px-6">
       {/* Card-style header */}
       <div
-        className="w-full bg-[var(--color-surface)] shadow-[var(--shadow-card)] rounded-[var(--radius-card)] px-0 py-0 mb-6 flex flex-col relative overflow-hidden border border-[var(--border)]"
+        className="w-full bg-(--color-surface) shadow-(--shadow-card) rounded-(--radius-card) px-0 py-0 mb-6 flex flex-col relative overflow-hidden border-border"
         style={{
           background: 'linear-gradient(135deg, var(--color-surface) 80%, var(--accent-bg) 100%)',
         }}
       >
         {/* Accent gradient bar */}
         <div
-          className="absolute left-0 top-0 w-full h-1.5 rounded-t-[var(--radius-card)]"
+          className="absolute left-0 top-0 w-full h-1.5 rounded-t-(--radius-card)"
           style={{
             background: 'linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%)',
           }}
         />
-        <div className="px-6 pt-6 pb-3 flex flex-col gap-1 z-10">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl md:text-3xl font-bold text-[var(--color-text-main)]">
-              Message Wall
-            </h1>
-            <Button 
-              className="hidden md:flex gap-2 bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/90 rounded-[var(--radius-button)] shadow-sm font-semibold"
-              onClick={() => setIsComposeOpen(true)}
-            >
-              <Plus className="w-5 h-5" />
-              Write Whisper
-            </Button>
-          </div>
-          <p className="text-[var(--color-text-secondary)] text-base md:text-lg">
+        <div className="px-6 pt-6 pb-3 flex flex-col gap-1 z-10 relative">
+          <h1 className="text-2xl md:text-3xl font-bold text-(--color-text-main) text-center w-full">
+            Message Wall
+          </h1>
+          {/* 按钮已移至卡片下方 */}
+          <p className="text-(--color-text-secondary) text-base md:text-lg mt-2">
             Discover memories, photos, and tips from other explorers.
           </p>
+        </div>
+        {/* 卡片下方右下角小按钮 */}
+        <div className="w-full flex justify-end pr-6 pb-4">
+          <Button 
+            className="hidden md:flex gap-1 wall-compose-btn-advanced font-semibold text-sm px-3 py-1.5 h-8 min-h-0"
+            style={{ fontSize: '0.95rem' }}
+            onClick={() => setIsComposeOpen(true)}
+          >
+            <Plus className="w-4 h-4 relative z-10" />
+            <span className="relative z-10">Write Whisper</span>
+          </Button>
         </div>
       </div>
 
@@ -240,7 +242,7 @@ export const WallPage: React.FC = () => {
 
       {/* Mobile Compose FAB */}
       <button 
-        className="md:hidden fixed bottom-[90px] right-6 w-14 h-14 bg-[var(--color-primary)] text-white rounded-full shadow-[0_4px_14px_rgba(0,0,0,0.25)] flex items-center justify-center z-40 active:scale-95 transition-transform"
+        className="md:hidden fixed bottom-22.5 right-6 w-14 h-14 bg-(--color-primary) text-white rounded-full shadow-[0_4px_14px_rgba(0,0,0,0.25)] flex items-center justify-center z-40 active:scale-95 transition-transform"
         onClick={() => setIsComposeOpen(true)}
       >
         <Plus className="w-6 h-6" />
