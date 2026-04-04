@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { MESSAGES, type Message } from '../constants/messages';
-import { Heart, MapPin } from 'lucide-react';
+import { Heart, MapPin, Plus } from 'lucide-react';
 import { DanmakuDetailModal } from '../components/wall/DanmakuDetailModal';
+import { ComposeMessageModal } from '../components/wall/ComposeMessageModal';
 import type { DanmakuItem } from '../components/wall/Danmaku';
 import { getLocationData } from '../constants/locations';
 import { isCollectibleUnlocked } from '../lib/storage';
@@ -123,6 +124,7 @@ export const WallPage: React.FC = () => {
   
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [selectedLocationFilter, setSelectedLocationFilter] = useState<string | null>(locationQuery || null);
+  const [isComposeOpen, setIsComposeOpen] = useState(false);
 
   useEffect(() => {
     if (locationQuery) {
@@ -171,9 +173,18 @@ export const WallPage: React.FC = () => {
           }}
         />
         <div className="px-6 pt-6 pb-3 flex flex-col gap-1 z-10">
-          <h1 className="text-2xl md:text-3xl font-bold text-[var(--color-text-main)]">
-            Message Wall
-          </h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl md:text-3xl font-bold text-[var(--color-text-main)]">
+              Message Wall
+            </h1>
+            <Button 
+              className="hidden md:flex gap-2 bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/90 rounded-[var(--radius-button)] shadow-sm font-semibold"
+              onClick={() => setIsComposeOpen(true)}
+            >
+              <Plus className="w-5 h-5" />
+              Write Whisper
+            </Button>
+          </div>
           <p className="text-[var(--color-text-secondary)] text-base md:text-lg">
             Discover memories, photos, and tips from other explorers.
           </p>
@@ -225,6 +236,19 @@ export const WallPage: React.FC = () => {
       <DanmakuDetailModal 
         item={selectedDanmakuItem} 
         onClose={() => setSelectedMessage(null)} 
+      />
+
+      {/* Mobile Compose FAB */}
+      <button 
+        className="md:hidden fixed bottom-[90px] right-6 w-14 h-14 bg-[var(--color-primary)] text-white rounded-full shadow-[0_4px_14px_rgba(0,0,0,0.25)] flex items-center justify-center z-40 active:scale-95 transition-transform"
+        onClick={() => setIsComposeOpen(true)}
+      >
+        <Plus className="w-6 h-6" />
+      </button>
+
+      <ComposeMessageModal 
+        isOpen={isComposeOpen} 
+        onClose={() => setIsComposeOpen(false)} 
       />
     </div>
   );

@@ -35,7 +35,7 @@ export const UnlockedContent: React.FC<UnlockedContentProps> = ({
           <div className="flex flex-col">
             <span className="text-xs font-semibold text-[var(--color-accent)] tracking-wider uppercase mb-1">Mascot Found</span>
             <p className="text-sm text-[var(--color-text-secondary)] leading-snug">
-              This spirited companion calls its home.
+              This bird lives in {realBuildingName}.
             </p>
           </div>
         </div>
