@@ -1,8 +1,8 @@
 export const LOCATIONS = [
-  { id: 'cb', name: 'Central Building' },
-  { id: 'sb', name: 'Science Building B' },
-  { id: 'mus', name: 'Museum' },
-  { id: 'hui', name: 'Hui Bar' },
+  { id: 'cb', name: 'Central Building', x: 31.5, y: 50 },
+  { id: 'sb', name: 'Science Building B', x: 45, y: 35 },
+  { id: 'mus', name: 'Museum', x: 29, y: 54 },
+  { id: 'hui', name: 'Hui Bar', x: 50, y: 90 },
 ];
 
 export const getLocationData = (id: string) => {

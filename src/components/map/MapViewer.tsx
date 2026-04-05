@@ -9,9 +9,10 @@ import { UserPositionIndicator } from './UserPositionIndicator';
 import { MapPin } from './MapPin';
 import { MapOverlayLayer } from './MapOverlayLayer';
 import ARModelViewer from '../photo/ARModelViewer';
-import { mapPinsData } from '../../constants/mapPinsData';
+import { LOCATIONS } from '../../constants/locations';
 import { userPosition } from '../../constants/userPositionData';
 import { getMarkerAndContainerCenters } from './getMarkerAndContainerCenters';
+import { isCollectibleUnlocked } from '../../lib/storage';
 
 interface MapViewerProps {
   className?: string;
@@ -191,24 +192,32 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                 {/* Render pins and markers onto an exact proportional overlay */}
                 <MapOverlayLayer>
                   <UserPositionIndicator userPosition={userPosition} />
-                  {mapPinsData.map(pin => (
-                    <MapPin
-                      key={pin.id}
-                      {...pin}
-                      buildingIcon={
-                        pin.id === 'cb' ? (
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-                            <rect x="3" y="4" width="18" height="16" rx="2"/>
-                            <path d="M16 2v4"/>
-                            <path d="M8 2v4"/>
-                            <path d="M3 10h18"/>
-                          </svg>
-                        ) : pin.buildingIcon
-                      }
-                      onMessageWallClick={pin.id === 'cb' ? () => navigate('/wall?location=cb') : undefined}
-                      onEnterAR={pin.id === 'cb' ? (id, name) => setArTarget({ id, name }) : undefined}
-                    />
-                  ))}
+                  {LOCATIONS.map(location => {
+                    const isUnlocked = isCollectibleUnlocked(location.id);
+                    return (
+                      <MapPin
+                        key={location.id}
+                        id={location.id}
+                        x={location.x}
+                        y={location.y}
+                        status={isUnlocked ? 'unlocked' : 'locked'}
+                        buildingName={location.name}
+                        buildingIcon={
+                          location.id === 'cb' ? (
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                              <rect x="3" y="4" width="18" height="16" rx="2"/>
+                              <path d="M16 2v4"/>
+                              <path d="M8 2v4"/>
+                              <path d="M3 10h18"/>
+                            </svg>
+                          ) : undefined
+                        }
+                        hintText={isUnlocked ? undefined : `Find this ${location.name} to unlock its secrets!`}
+                        onMessageWallClick={location.id === 'cb' ? () => navigate('/wall?location=cb') : undefined}
+                        onEnterAR={location.id === 'cb' ? (id, name) => setArTarget({ id, name }) : undefined}
+                      />
+                    );
+                  })}
                 </MapOverlayLayer>
               </div>
             </TransformComponent>
