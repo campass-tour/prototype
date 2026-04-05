@@ -11,6 +11,8 @@ interface DanmakuDetailModalProps {
 }
 
 export const DanmakuDetailModal: React.FC<DanmakuDetailModalProps> = ({ item, onClose }) => {
+  // 判断是否为移动端
+  const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
   // Prevent scrolling when modal is open
   useEffect(() => {
     if (item) {
@@ -30,12 +32,16 @@ export const DanmakuDetailModal: React.FC<DanmakuDetailModalProps> = ({ item, on
   const locationName = isUnlocked && locationData ? locationData.locationName : 'Mysterious Location';
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 danmaku-modal-overlay">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 danmaku-modal-overlay"
+      style={isMobile ? { pointerEvents: 'none' } : {}}
+    >
       {/* 遮罩不再可点击关闭，仅作遮罩用 */}
       <div className="absolute inset-0 cursor-default select-none" />
-      
-      <div 
+
+      <div
         className="w-full max-w-sm bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] p-5 relative flex flex-col gap-4 animate-in zoom-in-95 duration-200 cursor-default"
+        style={isMobile ? { pointerEvents: 'auto' } : {}}
       >
         {/* Close button */}
         <button 

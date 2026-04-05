@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import bubblesUrl from '../../assets/image/bubbles.svg';
 
 type MascotCardProps = {
   name: string;
@@ -20,6 +21,13 @@ export default function MascotCard({
   useEffect(() => {
     if (isLocked || typeof window === 'undefined') return;
 
+    // 只在移动端开启陀螺仪效果
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    if (!isMobile) {
+      setParallax({ x: 0, y: 0 });
+      return;
+    }
+
     const requestPermission = async () => {
       if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
         try {
@@ -33,11 +41,9 @@ export default function MascotCard({
       const handleOrientation = (event: DeviceOrientationEvent) => {
         const beta = event.beta || 0; // 前后倾斜
         const gamma = event.gamma || 0; // 左右倾斜
-        
         // 限制移动范围并增加平滑度
         const y = Math.max(-20, Math.min(20, (beta - 45) / 2));
         const x = Math.max(-20, Math.min(20, gamma / 2));
-        
         setParallax({ x, y });
       };
 
@@ -66,23 +72,28 @@ export default function MascotCard({
             backgroundPosition: `calc(50% + ${parallax.x * 0.7}px) calc(50% + ${parallax.y * 0.7}px)`
           }}
         />
-        {/* Texture Overlay: scanlines or bubbles */}
+        {/* Texture Overlay: bubbles only, above gradient, below mascot */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
-            backgroundImage: `url('/src/assets/image/scanlines.svg'), url('/src/assets/image/bubbles.svg')`,
+            backgroundImage: `url(${bubblesUrl})`,
             backgroundRepeat: 'repeat',
-            opacity: 0.18
+            opacity: 0.4
           }}
+          
         />
 
         {/* Mascot / Image with Parallax Depth Effect */}
-        <div 
-          className="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-75 ease-out will-change-transform"
-          style={{ 
-            transform: !isLocked 
-              ? `translate3d(${parallax.x}px, calc(${parallax.y}px + 24px), 0) scale(1.1)` 
-              : 'translateY(24px) scale(1)',
+        <div
+          className="relative z-20 w-full h-full flex items-center justify-center transition-transform duration-100 ease-out will-change-transform"
+          style={{
+            perspective: '800px',
+            transform: !isLocked
+              ? `rotateX(${-parallax.y * 1.5}deg) rotateY(${parallax.x * 1.5}deg) translateZ(40px) scale(1.05)`
+              : 'translateY(10px) scale(1)',
+            filter: !isLocked
+              ? `drop-shadow(${parallax.x * -0.5}px ${parallax.y * 0.5 + 10}px 15px rgba(0,0,0,0.3))`
+              : 'drop-shadow(0px 5px 5px rgba(0,0,0,0.1))'
           }}
         >
           {image ? (
