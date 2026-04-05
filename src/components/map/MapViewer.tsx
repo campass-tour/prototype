@@ -6,9 +6,11 @@ import { Plus, Minus, Maximize, LocateFixed } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import mapImage from '@/assets/image/map.svg';
 import { UserPositionIndicator } from './UserPositionIndicator';
-import { MapPin } from '../photo/MapPin';
+import { MapPin } from './MapPin';
 import { MapOverlayLayer } from './MapOverlayLayer';
 import ARModelViewer from '../photo/ARModelViewer';
+import { mapPinsData } from '../../constants/mapPinsData';
+import { userPosition } from '../../constants/userPositionData';
 
 interface MapViewerProps {
   className?: string;
@@ -23,12 +25,7 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
 
   const [arTarget, setArTarget] = useState<{ id: string, name: string } | null>(null);
 
-  // Fake GPS Data
-  const userPosition = {
-    x: 45, // from left
-    y: 50, // from top
-    heading: 105 // test distinct heading
-  };
+  // 用户位置和Pin点数据已提取到独立文件
 
   const updateCSSVars = useCallback((scale: number) => {
     if (imgRef.current && containerRef.current) {
@@ -176,64 +173,47 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
               </button>
             </div>
             
-            <TransformComponent 
-              wrapperStyle={{ width: "100%", height: "100%" }} 
-              contentStyle={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}
+            <TransformComponent
+              wrapperStyle={{ width: '100%', height: '100%' }}
+              contentStyle={{ width: '100%', height: '100%', position: 'relative' }}
             >
-              <div 
-                className="relative flex items-center justify-center pointer-events-none"
-              >
-                <img 
-                  ref={imgRef}
-                  src={mapImage} 
-                  alt="Interactive Campus Map" 
-                  className="pointer-events-auto select-none max-w-none max-h-none"
-                  draggable={false}
-                  onLoad={() => {
-                    const scale = transformRef.current?.state.scale ?? initialScale;
-                    updateCSSVars(scale);
-                    setTimeout(() => {
-                      centerUsingTransformRef(0);
-                    }, 0);
-                  }}
-                  style={{
-                    width: 'var(--image-width)', 
-                    height: 'var(--image-height)' 
-                  }}
-                />
-                
-                {/* Render pins and markers onto an exact proportional overlay */}
-                <MapOverlayLayer>
-                  <UserPositionIndicator userPosition={userPosition} />
-                  
-                  {/* Demo MapPins */}
+              <img
+                ref={imgRef}
+                src={mapImage}
+                alt="Interactive Campus Map"
+                className="pointer-events-auto select-none"
+                draggable={false}
+                onLoad={() => {
+                  const scale = transformRef.current?.state.scale ?? initialScale;
+                  updateCSSVars(scale);
+                  setTimeout(() => {
+                    centerUsingTransformRef(0);
+                  }, 0);
+                }}
+                style={{ width: '100%', height: '100%', display: 'block', willChange: 'transform' }}
+              />
+              {/* Render pins and markers onto an exact proportional overlay */}
+              <MapOverlayLayer>
+                <UserPositionIndicator userPosition={userPosition} />
+                {mapPinsData.map(pin => (
                   <MapPin
-                    id="mystery_building"
-                    x={25}
-                    y={35}
-                    status="locked"
-                    buildingName="Mystery Building"
-                    hintText="Find this building to unlock its secrets!"
-                  />
-                  <MapPin
-                    id="cb" // Central Building
-                    x={35}
-                    y={50}
-                    status="unlocked"
-                    buildingName="CB"
+                    key={pin.id}
+                    {...pin}
                     buildingIcon={
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-                        <rect x="3" y="4" width="18" height="16" rx="2"/>
-                        <path d="M16 2v4"/>
-                        <path d="M8 2v4"/>
-                        <path d="M3 10h18"/>
-                      </svg>
+                      pin.id === 'cb' ? (
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                          <rect x="3" y="4" width="18" height="16" rx="2"/>
+                          <path d="M16 2v4"/>
+                          <path d="M8 2v4"/>
+                          <path d="M3 10h18"/>
+                        </svg>
+                      ) : pin.buildingIcon
                     }
-                    onMessageWallClick={() => navigate('/wall?location=cb')}
-                    onEnterAR={(id, name) => setArTarget({ id, name })}
+                    onMessageWallClick={pin.id === 'cb' ? () => navigate('/wall?location=cb') : undefined}
+                    onEnterAR={pin.id === 'cb' ? (id, name) => setArTarget({ id, name }) : undefined}
                   />
-                </MapOverlayLayer>
-              </div>
+                ))}
+              </MapOverlayLayer>
             </TransformComponent>
           </>
         )}

@@ -12,7 +12,7 @@ interface MapOverlayLayerProps {
  */
 export const MapOverlayLayer: React.FC<MapOverlayLayerProps> = ({ children }) => {
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute inset-0" style={{ pointerEvents: 'none' }}>
       <div className="relative w-full h-full">
         {children}
       </div>

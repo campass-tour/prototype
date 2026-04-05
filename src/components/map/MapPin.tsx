@@ -306,4 +306,3 @@ export const MapPin: React.FC<MapPinProps> = ({
     </>
   );
 };
-
