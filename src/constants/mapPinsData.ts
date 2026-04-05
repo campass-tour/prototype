@@ -20,7 +20,7 @@ export const mapPinsData: MapPinData[] = [
   },
   {
     id: 'cb',
-    x: 38,
+    x: 31.5,
     y: 50,
     status: 'unlocked',
     buildingName: 'Central Building',

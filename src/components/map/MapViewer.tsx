@@ -176,45 +176,47 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
             
             <TransformComponent
               wrapperStyle={{ width: '100%', height: '100%' }}
-              contentStyle={{ width: '100%', height: '100%', position: 'relative' }}
+              contentStyle={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
             >
-              <img
-                ref={imgRef}
-                src={mapImage}
-                alt="Interactive Campus Map"
-                className="pointer-events-auto select-none"
-                draggable={false}
-                onLoad={() => {
-                  const scale = transformRef.current?.state.scale ?? initialScale;
-                  updateCSSVars(scale);
-                  setTimeout(() => {
-                    centerUsingTransformRef(0);
-                  }, 0);
-                }}
-                style={{ width: '100%', height: '100%', display: 'block', willChange: 'transform' }}
-              />
-              {/* Render pins and markers onto an exact proportional overlay */}
-              <MapOverlayLayer>
-                <UserPositionIndicator userPosition={userPosition} />
-                {mapPinsData.map(pin => (
-                  <MapPin
-                    key={pin.id}
-                    {...pin}
-                    buildingIcon={
-                      pin.id === 'cb' ? (
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-                          <rect x="3" y="4" width="18" height="16" rx="2"/>
-                          <path d="M16 2v4"/>
-                          <path d="M8 2v4"/>
-                          <path d="M3 10h18"/>
-                        </svg>
-                      ) : pin.buildingIcon
-                    }
-                    onMessageWallClick={pin.id === 'cb' ? () => navigate('/wall?location=cb') : undefined}
-                    onEnterAR={pin.id === 'cb' ? (id, name) => setArTarget({ id, name }) : undefined}
-                  />
-                ))}
-              </MapOverlayLayer>
+              <div className="relative pointer-events-none" style={{ display: 'inline-flex' }}>
+                <img
+                  ref={imgRef}
+                  src={mapImage}
+                  alt="Interactive Campus Map"
+                  className="pointer-events-auto select-none max-w-none"
+                  draggable={false}
+                  onLoad={() => {
+                    const scale = transformRef.current?.state.scale ?? initialScale;
+                    updateCSSVars(scale);
+                    setTimeout(() => {
+                      centerUsingTransformRef(0);
+                    }, 0);
+                  }}
+                  style={{ display: 'block', willChange: 'transform' }}
+                />
+                {/* Render pins and markers onto an exact proportional overlay */}
+                <MapOverlayLayer>
+                  <UserPositionIndicator userPosition={userPosition} />
+                  {mapPinsData.map(pin => (
+                    <MapPin
+                      key={pin.id}
+                      {...pin}
+                      buildingIcon={
+                        pin.id === 'cb' ? (
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                            <rect x="3" y="4" width="18" height="16" rx="2"/>
+                            <path d="M16 2v4"/>
+                            <path d="M8 2v4"/>
+                            <path d="M3 10h18"/>
+                          </svg>
+                        ) : pin.buildingIcon
+                      }
+                      onMessageWallClick={pin.id === 'cb' ? () => navigate('/wall?location=cb') : undefined}
+                      onEnterAR={pin.id === 'cb' ? (id, name) => setArTarget({ id, name }) : undefined}
+                    />
+                  ))}
+                </MapOverlayLayer>
+              </div>
             </TransformComponent>
           </>
         )}
