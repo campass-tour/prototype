@@ -49,6 +49,9 @@
   --color-logo-cam: #1A1A1A;
   --color-logo-pass: #9c7dd9;
 
+  /* Map background color */
+  --color-map-bg: #fef8e9;
+
   /* Application Colors */
   --color-primary: #281559;
   --color-background: #F5F6FA;

@@ -40,11 +40,12 @@ export const MapPin: React.FC<MapPinProps> = ({
     typeof navigator !== 'undefined' ? !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) : false
   );
   const [isDanmakuActive, setIsDanmakuActive] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0);
+  const [drawerOffset, setDrawerOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const pinRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const startY = useRef(0);
+  const startOffset = useRef(0);
 
   // Handle click outside to close popups/drawers
   useEffect(() => {
@@ -186,6 +187,9 @@ export const MapPin: React.FC<MapPinProps> = ({
           onClick={(e) => {
             e.stopPropagation();
             setIsOpen(!isOpen);
+            if (!isOpen) {
+              setDrawerOffset(0);
+            }
           }}
           className={`
             cursor-pointer flex items-center justify-center rounded-[var(--radius-pill)] 
@@ -242,7 +246,7 @@ export const MapPin: React.FC<MapPinProps> = ({
             borderTopLeftRadius: 'var(--radius-card)', 
             borderTopRightRadius: 'var(--radius-card)',
             boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.15)',
-            transform: `translateY(${dragOffset}px)`,
+            transform: `translateY(${drawerOffset}px)`,
             transition: isDragging ? 'none' : 'transform 0.3s ease-out'
           }}
           onClick={(e) => e.stopPropagation()}
@@ -255,40 +259,37 @@ export const MapPin: React.FC<MapPinProps> = ({
               if (e.touches.length > 1) return; // 只允许单指
               setIsDragging(true);
               startY.current = e.touches[0].clientY;
+              startOffset.current = drawerOffset;
             }}
             onTouchMove={(e) => {
               if (!isDragging) return;
               if (e.touches.length > 1) return; // 只允许单指
               e.preventDefault(); // 阻止页面滚动
               const deltaY = e.touches[0].clientY - startY.current;
-              // 用 requestAnimationFrame 优化
-              requestAnimationFrame(() => {
-                setDragOffset(Math.max(0, deltaY));
-              });
+              const newOffset = Math.max(0, startOffset.current + deltaY);
+              setDrawerOffset(newOffset);
             }}
             onTouchEnd={() => {
-              if (dragOffset > 100) {
+              if (drawerOffset > window.innerHeight * 0.8) {
                 setIsOpen(false);
               }
-              setDragOffset(0);
               setIsDragging(false);
             }}
             onMouseDown={(e) => {
               setIsDragging(true);
               startY.current = e.clientY;
+              startOffset.current = drawerOffset;
             }}
             onMouseMove={(e) => {
               if (!isDragging) return;
               const deltaY = e.clientY - startY.current;
-              requestAnimationFrame(() => {
-                setDragOffset(Math.max(0, deltaY));
-              });
+              const newOffset = Math.max(0, startOffset.current + deltaY);
+              setDrawerOffset(newOffset);
             }}
             onMouseUp={() => {
-              if (dragOffset > 100) {
+              if (drawerOffset > window.innerHeight * 0.8) {
                 setIsOpen(false);
               }
-              setDragOffset(0);
               setIsDragging(false);
             }}
           >

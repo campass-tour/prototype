@@ -4,7 +4,7 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import type { ReactZoomPanPinchContentRef, ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
 import { Plus, Minus, Maximize, LocateFixed } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import mapImage from '@/assets/image/map.png';
+import mapImage from '@/assets/image/map.svg';
 import { UserPositionIndicator } from './UserPositionIndicator';
 import { MapPin } from '../photo/MapPin';
 import { MapOverlayLayer } from './MapOverlayLayer';
@@ -119,7 +119,11 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
   }, [centerUsingTransformRef]);
 
   return (
-    <div ref={containerRef} className={cn("relative w-full bg-[var(--color-surface)] overflow-hidden", className)}>
+    <div
+      ref={containerRef}
+      className={cn("relative w-full overflow-hidden", className)}
+      style={{ background: 'var(--color-map-bg)' }}
+    >
       <TransformWrapper
         ref={transformRef}
         initialScale={initialScale}
