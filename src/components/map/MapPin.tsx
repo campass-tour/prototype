@@ -8,6 +8,7 @@ import defaultImageUrl from '../../assets/image/default-image.png';
 import { UnlockedContent } from './UnlockedContent';
 
 const imageFiles = import.meta.glob('../../assets/image/*-image.{png,jpg,jpeg,webp}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+const iconFiles = import.meta.glob('../../assets/icon/*.ico', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 
 interface MapPinProps {
   id: string; // The location ID for fetching messages
@@ -118,6 +119,12 @@ export const MapPin: React.FC<MapPinProps> = ({
   // Calculate actual message count for this location
   const whisperCount = MESSAGES.filter(msg => msg.locationId === id).length;
 
+  // Get icon src for unlocked pins
+  const getIconSrc = () => {
+    const iconPath = `../../assets/icon/${id}-icon.ico`;
+    return iconFiles[iconPath] || null;
+  };
+
   const renderContent = () => (
     <>
       <h2 className={`font-bold mb-[var(--spacing-3)] ${!isMobile ? 'text-xl' : 'text-2xl'} leading-tight text-[var(--color-text-main)]`}>
@@ -174,11 +181,12 @@ export const MapPin: React.FC<MapPinProps> = ({
   return (
     <>
       <div 
-        className="absolute z-10 transition-all duration-300 pointer-events-auto"
+        className="absolute z-10 pointer-events-auto"
         style={{ 
           left: `${x}%`,
           top: `${y}%`,
-          transform: "translate(-50%, -50%)"
+          transform: "translate(-50%, -50%) scale(var(--map-inv-scale, 1))",
+          transition: "left 300ms ease-out, top 300ms ease-out"
         }}
       >
         {/* The Map Pin Indicator */}
@@ -204,19 +212,24 @@ export const MapPin: React.FC<MapPinProps> = ({
             <span className="text-[var(--font-size-h2)] font-[var(--font-weight-bold)]">?</span>
           ) : (
             <span className="w-6 h-6 flex items-center justify-center">
-              {/* Fallback to default building shape if no special building icon provided */}
-              {buildingIcon || (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 21h18"></path>
-                  <path d="M9 8h1"></path>
-                  <path d="M9 12h1"></path>
-                  <path d="M9 16h1"></path>
-                  <path d="M14 8h1"></path>
-                  <path d="M14 12h1"></path>
-                  <path d="M14 16h1"></path>
-                  <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
-                </svg>
-              )}
+              {(() => {
+                const customIconSrc = getIconSrc();
+                if (customIconSrc) {
+                  return <img src={customIconSrc} alt={`${realBuildingName} icon`} className="w-full h-full object-contain" />;
+                }
+                return buildingIcon || (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 21h18"></path>
+                    <path d="M9 8h1"></path>
+                    <path d="M9 12h1"></path>
+                    <path d="M9 16h1"></path>
+                    <path d="M14 8h1"></path>
+                    <path d="M14 12h1"></path>
+                    <path d="M14 16h1"></path>
+                    <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
+                  </svg>
+                );
+              })()}
             </span>
           )}
         </div>

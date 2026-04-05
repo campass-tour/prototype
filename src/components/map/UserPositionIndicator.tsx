@@ -12,11 +12,12 @@ export function UserPositionIndicator({ userPosition }: UserPositionIndicatorPro
   return (
     <div 
       id="user-position-marker"
-      className="absolute z-20 pointer-events-none transition-all duration-300"
+      className="absolute z-20 pointer-events-none"
       style={{
         left: `${userPosition.x}%`,
         top: `${userPosition.y}%`,
-        transform: "translate(-50%, -50%)"
+        transform: "translate(-50%, -50%) scale(var(--map-inv-scale, 1))",
+        transition: "left 300ms ease-out, top 300ms ease-out"
       }}
     >
       <div className="relative flex items-center justify-center w-8 h-8">

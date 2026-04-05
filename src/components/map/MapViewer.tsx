@@ -38,6 +38,7 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
       containerRef.current.style.setProperty('--image-height', scaledHeight + 'px');
       containerRef.current.style.setProperty('--container-width', containerRect.width + 'px');
       containerRef.current.style.setProperty('--container-height', containerRect.height + 'px');
+      containerRef.current.style.setProperty('--map-inv-scale', String(1 / scale));
     }
   }, []);
 
