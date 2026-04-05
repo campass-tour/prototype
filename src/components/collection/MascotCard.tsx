@@ -15,7 +15,7 @@ export default function MascotCard({
 }: MascotCardProps) {
   const isLocked = status === "locked";
   const isNew = status === "new";
-  const [tiltAngle, setTiltAngle] = useState(0);
+  const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     if (isLocked || typeof window === 'undefined') return;
@@ -33,9 +33,12 @@ export default function MascotCard({
       const handleOrientation = (event: DeviceOrientationEvent) => {
         const beta = event.beta || 0; // 前后倾斜
         const gamma = event.gamma || 0; // 左右倾斜
-        // 计算角度，限制在 -45 到 45 度之间
-        const angle = Math.max(-45, Math.min(45, Math.atan2(gamma, beta) * 180 / Math.PI));
-        setTiltAngle(angle);
+        
+        // 限制移动范围并增加平滑度
+        const y = Math.max(-20, Math.min(20, (beta - 45) / 2));
+        const x = Math.max(-20, Math.min(20, gamma / 2));
+        
+        setParallax({ x, y });
       };
 
       window.addEventListener('deviceorientation', handleOrientation);
@@ -52,22 +55,52 @@ export default function MascotCard({
         ${isNew ? "ring-2 ring-[var(--color-accent)]" : ""}
       `}
     >
-      <div className="relative mb-4 flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-xl bg-[var(--color-background)]">
-        {image ? (
-          <img
-            src={image}
-            alt={name}
-            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          />
-        ) : (
-          <div className="text-5xl transition-transform duration-500 group-hover:scale-110">
-            {isLocked ? "🔒" : "🐦"}
-          </div>
-        )}
+      <div className="relative mb-4 flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-xl" style={{background: 'none'}}>
+        {/* Parallax Gradient + Texture Background */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            background: `linear-gradient(135deg, rgba(168,192,255,0.18) 0%, rgba(211,184,255,0.16) 100%)`,
+            transition: 'background-position 0.3s cubic-bezier(.4,2,.6,1)',
+            backgroundSize: '200% 200%',
+            backgroundPosition: `calc(50% + ${parallax.x * 0.7}px) calc(50% + ${parallax.y * 0.7}px)`
+          }}
+        />
+        {/* Texture Overlay: scanlines or bubbles */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            backgroundImage: `url('/src/assets/image/scanlines.svg'), url('/src/assets/image/bubbles.svg')`,
+            backgroundRepeat: 'repeat',
+            opacity: 0.18
+          }}
+        />
+
+        {/* Mascot / Image with Parallax Depth Effect */}
+        <div 
+          className="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-75 ease-out will-change-transform"
+          style={{ 
+            transform: !isLocked 
+              ? `translate3d(${parallax.x}px, calc(${parallax.y}px + 24px), 0) scale(1.1)` 
+              : 'translateY(24px) scale(1)',
+          }}
+        >
+          {image ? (
+            <img
+              src={image}
+              alt={name}
+              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+          ) : (
+            <div className="text-7xl transition-transform duration-500 group-hover:scale-110 drop-shadow-xl">
+              {isLocked ? "🔒" : "🐦"}
+            </div>
+          )}
+        </div>
 
         {/* Status Badge */}
         <span
-          className={`absolute right-3 top-3 z-10 rounded-full px-3 py-1 text-xs font-semibold tracking-wide backdrop-blur-md shadow-sm transition-colors duration-300
+          className={`absolute right-3 top-3 z-20 rounded-full px-3 py-1 text-xs font-semibold tracking-wide backdrop-blur-md shadow-sm transition-colors duration-300
             ${
               isLocked
                 ? "bg-black/40 text-white/90"
@@ -81,21 +114,7 @@ export default function MascotCard({
         
         {/* Subtle overlay gradient on hover */}
         {!isLocked && (
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-        )}
-
-        {/* Rainbow laser sheen for unlocked cards on mobile */}
-        {!isLocked && (
-          <div
-            className="absolute -inset-[100%] opacity-60 pointer-events-none transition-transform duration-200"
-            style={{
-              background: 'conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,0,255,0.6) 60deg, rgba(0,255,255,0.6) 120deg, rgba(255,255,0,0.6) 180deg, rgba(255,0,255,0.6) 240deg, transparent 300deg)',
-              transform: `rotate(${tiltAngle}deg)`,
-              transformOrigin: 'center',
-              filter: 'blur(12px)',
-              mixBlendMode: 'screen',
-            }}
-          />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
         )}
       </div>
 

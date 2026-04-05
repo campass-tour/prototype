@@ -35,6 +35,8 @@ export default function CheckInSuccessModal({
   onEnterAR,
 }: CheckInSuccessModalProps) {
   const [lottieData, setLottieData] = useState<any>(null);
+  // For progress bar animation
+  const [displayedCurrent, setDisplayedCurrent] = useState(current - 1 >= 0 ? current - 1 : 0);
 
   useEffect(() => {
     if (open) {
@@ -48,10 +50,21 @@ export default function CheckInSuccessModal({
     }
   }, [open]);
 
+  // Animate progress bar: show old value, then after short delay, animate to new value
+  useEffect(() => {
+    if (open) {
+      setDisplayedCurrent(current - 1 >= 0 ? current - 1 : 0);
+      const timer = setTimeout(() => {
+        setDisplayedCurrent(current);
+      }, 400); // 400ms delay before animating up
+      return () => clearTimeout(timer);
+    }
+  }, [open, current]);
+
   if (!open) return null;
 
   const safeTotal = total > 0 ? total : 1;
-  const percentage = Math.min((current / safeTotal) * 100, 100);
+  const percentage = Math.min((displayedCurrent / safeTotal) * 100, 100);
 
   // Determine model dynamically. Format: id-model.glb or fallback to default-model.glb
   const targetModelPath = `../../assets/model/${checkinId}-model.glb`;
@@ -118,7 +131,7 @@ export default function CheckInSuccessModal({
               Collection Progress
             </span>
             <span className="rounded-full bg-[var(--color-primary)] px-3 py-1 text-xs font-bold text-white shadow-sm">
-              {current} / {total}
+              {displayedCurrent} / {total}
             </span>
           </div>
 
