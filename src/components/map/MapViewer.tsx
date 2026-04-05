@@ -1,7 +1,7 @@
 import { useRef, useEffect, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import type { ReactZoomPanPinchContentRef, ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
+import type { ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
 import { Plus, Minus, Maximize, LocateFixed } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import mapImage from '@/assets/image/map.svg';
@@ -11,13 +11,14 @@ import { MapOverlayLayer } from './MapOverlayLayer';
 import ARModelViewer from '../photo/ARModelViewer';
 import { mapPinsData } from '../../constants/mapPinsData';
 import { userPosition } from '../../constants/userPositionData';
+import { getMarkerAndContainerCenters } from './getMarkerAndContainerCenters';
 
 interface MapViewerProps {
   className?: string;
   initialScale?: number;
 }
 
-export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
+export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
@@ -55,34 +56,24 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
     };
   }, [initialScale, updateCSSVars]);
 
-  const centerOnUserMarker = useCallback((
-    positionX: number,
-    positionY: number,
-    scale: number,
-    setTransform: ReactZoomPanPinchContentRef['setTransform'],
-    animationTime = 500,
-  ) => {
-    const marker = document.getElementById('user-position-marker');
-    const container = containerRef.current;
-
-    if (!marker || !container) {
-      return false;
-    }
-
-    const markerRect = marker.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    const markerCenterX = markerRect.left + markerRect.width / 2;
-    const markerCenterY = markerRect.top + markerRect.height / 2;
-    const containerCenterX = containerRect.left + containerRect.width / 2;
-    const containerCenterY = containerRect.top + containerRect.height / 2;
-
-    const deltaX = containerCenterX - markerCenterX;
-    const deltaY = containerCenterY - markerCenterY;
-
-    setTransform(positionX + deltaX, positionY + deltaY, scale, animationTime, 'easeOut');
-
-    return true;
-  }, []);
+  const centerOnUserMarker = useCallback(
+    (
+      positionX: number,
+      positionY: number,
+      scale: number,
+      setTransform: (x: number, y: number, scale: number, animationTime?: number, animationType?: "linear" | "easeOut" | "easeInQuad" | "easeOutQuad" | "easeInOutQuad" | "easeInCubic" | "easeOutCubic" | "easeInOutCubic" | "easeInQuart" | "easeOutQuart" | "easeInOutQuart" | "easeInQuint" | "easeOutQuint" | "easeInOutQuint") => void,
+      animationTime = 500
+    ) => {
+      const centers = getMarkerAndContainerCenters('user-position-marker', containerRef.current);
+      if (!centers) return false;
+      const { markerCenterX, markerCenterY, containerCenterX, containerCenterY } = centers;
+      const deltaX = containerCenterX - markerCenterX;
+      const deltaY = containerCenterY - markerCenterY;
+      setTransform(positionX + deltaX, positionY + deltaY, scale, animationTime, 'easeOut');
+      return true;
+    },
+    []
+  );
 
   const centerUsingTransformRef = useCallback((animationTime = 500) => {
     const ref = transformRef.current;
@@ -91,16 +82,18 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
       return false;
     }
 
+    const { positionX, positionY, scale } = ref.state;
+
     return centerOnUserMarker(
-      ref.state.positionX,
-      ref.state.positionY,
-      ref.state.scale,
+      positionX,
+      positionY,
+      scale,
       ref.setTransform,
       animationTime,
     );
   }, [centerOnUserMarker]);
 
-  const handleInit = useCallback((ref: ReactZoomPanPinchRef) => {
+  const handleTransformInit = useCallback((ref: ReactZoomPanPinchRef) => {
     transformRef.current = ref;
 
     let attempts = 0;
@@ -125,49 +118,49 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
       <TransformWrapper
         ref={transformRef}
         initialScale={initialScale}
-        minScale={1}
+        minScale={0.15}
         maxScale={5}
         centerOnInit={true}
         limitToBounds={false}
         pinch={{ step: 5 }}
         wheel={{ step: 0.1 }}
-        onInit={handleInit}
+        onInit={handleTransformInit}
         onTransformed={(_, state) => updateCSSVars(state.scale)}
       >
-        {({ zoomIn, zoomOut, resetTransform, setTransform, instance }) => (
+        {({ zoomIn, zoomOut, resetTransform, setTransform }) => (
           <>
-            <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-2 bg-[var(--color-surface)] p-2 rounded-xl shadow-[var(--shadow-card)] border border-[var(--color-state-disabled)]">
+            <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-2 bg-(--color-surface) p-2 rounded-xl shadow-(--shadow-card) border border-(--color-state-disabled)">
               <button 
                 onClick={() => centerOnUserMarker(
-                  instance.transformState.positionX,
-                  instance.transformState.positionY,
-                  instance.transformState.scale,
+                  transformRef.current?.state.positionX ?? 0,
+                  transformRef.current?.state.positionY ?? 0,
+                  transformRef.current?.state.scale ?? initialScale,
                   setTransform,
                 )} 
-                className="p-2 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-primary)] bg-[var(--color-primary)]/10 transition-colors focus:outline-none"
+                className="p-2 rounded-lg hover:bg-(--color-background) text-(--color-primary) bg-primary/10 transition-colors focus:outline-none"
                 aria-label="Locate me"
               >
                 <LocateFixed size={22} strokeWidth={2.5} />
               </button>
               <button 
                 onClick={() => zoomIn()} 
-                className="p-2 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-text-main)] transition-colors focus:outline-none"
+                className="p-2 rounded-lg hover:bg-(--color-background) text-(--color-text-main) transition-colors focus:outline-none"
                 aria-label="Zoom in"
               >
                 <Plus size={22} strokeWidth={2.5} />
               </button>
-              <div className="w-full h-px bg-[var(--color-state-disabled)]" />
+              <div className="w-full h-px bg-(--color-state-disabled)" />
               <button 
                 onClick={() => zoomOut()} 
-                className="p-2 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-text-main)] transition-colors focus:outline-none"
+                className="p-2 rounded-lg hover:bg-(--color-background) text-(--color-text-main) transition-colors focus:outline-none"
                 aria-label="Zoom out"
               >
                 <Minus size={22} strokeWidth={2.5} />
               </button>
-              <div className="w-full h-px bg-[var(--color-state-disabled)]" />
+              <div className="w-full h-px bg-(--color-state-disabled)" />
               <button 
                 onClick={() => resetTransform()} 
-                className="p-2 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-text-main)] transition-colors focus:outline-none"
+                className="p-2 rounded-lg hover:bg-(--color-background) text-(--color-text-main) transition-colors focus:outline-none"
                 aria-label="Reset zoom"
               >
                 <Maximize size={22} strokeWidth={2.5} />
@@ -188,8 +181,9 @@ export function MapViewer({ className, initialScale = 1.2 }: MapViewerProps) {
                   onLoad={() => {
                     const scale = transformRef.current?.state.scale ?? initialScale;
                     updateCSSVars(scale);
+                    // 先居中用户箭头，再做其它逻辑
                     setTimeout(() => {
-                      centerUsingTransformRef(0);
+                      centerUsingTransformRef(500);
                     }, 0);
                   }}
                   style={{ display: 'block', willChange: 'transform' }}
