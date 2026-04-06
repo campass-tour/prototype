@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import MascotCard from './MascotCard';
-import CollectionProgressBar from './CollectionProgressBar';
-import CollectionSwiperModal from './CollectionSwiperModal';
-import ARModelViewer from '../photo/ARModelViewer';
-import { LOCATIONS, getLocationData } from '../../constants/locations';
-import { getUnlockedCollectibles, getUnlockedCount } from '../../lib/storage';
-import defaultImageUrl from '../../assets/image/default-image.png';
+import MascotCard from '../components/collection/MascotCard';
+import CollectionProgressBar from '../components/collection/CollectionProgressBar';
+import CollectionSwiperModal from '../components/collection/CollectionSwiperModal';
+import ARModelViewer from '../components/photo/ARModelViewer';
+import { LOCATIONS, getLocationData } from '../constants/locations';
+import { getUnlockedCollectibles, getUnlockedCount } from '../lib/storage';
+import defaultImageUrl from '../assets/image/default-image.png';
 
-const imageFiles = import.meta.glob('../../assets/image/*-image.{png,jpg,jpeg,webp}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+const imageFiles = import.meta.glob('../assets/image/*-image.{png,jpg,jpeg,webp}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 
 export const CollectionPage: React.FC = () => {
   const unlockedData = getUnlockedCollectibles();
@@ -58,10 +58,10 @@ export const CollectionPage: React.FC = () => {
           // Determine image dynamically. Format: id-image.png/jpg or fallback to default-image.png
           let imageSrc = defaultImageUrl;
           
-          const pngPath = `../../assets/image/${loc.id}-image.png`;
-          const jpgPath = `../../assets/image/${loc.id}-image.jpg`;
-          const jpegPath = `../../assets/image/${loc.id}-image.jpeg`;
-          const webpPath = `../../assets/image/${loc.id}-image.webp`;
+          const pngPath = `../assets/image/${loc.id}-image.png`;
+          const jpgPath = `../assets/image/${loc.id}-image.jpg`;
+          const jpegPath = `../assets/image/${loc.id}-image.jpeg`;
+          const webpPath = `../assets/image/${loc.id}-image.webp`;
 
           if (imageFiles[pngPath]) imageSrc = imageFiles[pngPath];
           else if (imageFiles[jpgPath]) imageSrc = imageFiles[jpgPath];
@@ -102,3 +102,5 @@ export const CollectionPage: React.FC = () => {
     </div>
   );
 };
+
+export default CollectionPage;
