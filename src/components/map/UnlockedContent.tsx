@@ -26,6 +26,9 @@ export const UnlockedContent: React.FC<UnlockedContentProps> = ({
 
   return (
     <>
+      <h2 className="font-bold mb-[var(--spacing-3)] text-2xl leading-tight text-[var(--color-text-main)]">
+        {realBuildingName}
+      </h2>
       <div className="flex flex-col gap-4">
         {/* Visual Center: Mascot Preview */}
         <div className="flex items-center gap-4 bg-[var(--color-background)] p-3 rounded-xl border border-[var(--border)]">

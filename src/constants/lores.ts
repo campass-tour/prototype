@@ -1,32 +1,3 @@
-export interface LocationLore {
-  id: string; // matches location ID
-  title: string;
-  content: string;
-}
+import { getLoreById as _getLoreById } from '../lib/dataSources';
 
-export const LOCATION_LORES: LocationLore[] = [
-  {
-    id: 'cb',
-    title: 'The Heart of XJTLU',
-    content: 'The Central Building isn\'t just our administrative core; it\'s a living symbol of XJTLU\'s "Student-Centered" philosophy. With its flexible learning spaces and open-access library, this is where ideas are born, collaborations spark, and your academic adventure truly begins. Find a quiet corner by the window—inspiration is waiting.'
-  },
-  {
-    id: 'sb',
-    title: 'Where Innovation Takes Shape',
-    content: 'Science Building B is home to cutting-edge laboratories and collaborative research spaces. The modern architecture reflects the forward-thinking minds of our students and researchers. It\'s not just a place to study; it\'s where you build the future.'
-  },
-  {
-    id: 'mus',
-    title: 'Preserving History, Inspiring Tomorrow',
-    content: 'The Museum offers a glimpse into the rich history and cultural heritage of our campus. Every exhibit tells a story of perseverance and discovery. Take a moment to wander through the halls and connect with the legacy that shapes our present.'
-  },
-  {
-    id: 'hui',
-    title: 'Connecting Minds, One Cup at a Time',
-    content: 'Hui Bar is the vibrant social hub where students gather to unwind, debate, and share ideas over a cup of coffee. It\'s more than a café—it\'s the heart of our student community where lifelong friendships are forged.'
-  }
-];
-
-export const getLoreById = (id: string): LocationLore | undefined => {
-  return LOCATION_LORES.find(lore => lore.id === id);
-};
+export const getLoreById = _getLoreById;
