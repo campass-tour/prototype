@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MESSAGES, type Message } from '../constants/messages';
+import { MESSAGES } from '../constants/messages';
+import type { Message } from '../types';
 import { Heart, MapPin, Plus } from 'lucide-react';
 import { DanmakuDetailModal } from '../components/wall/DanmakuDetailModal';
 import { ComposeMessageModal } from '../components/wall/ComposeMessageModal';

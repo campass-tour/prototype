@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { DanmakuDetailModal } from './DanmakuDetailModal';
-import { getMessagesByLocation, type Message } from '../../constants/messages';
+import { getMessagesByLocation } from '../../constants/messages';
+import type { Message } from '../../types';
 
 export interface DanmakuItem {
   id: string; // use message id
