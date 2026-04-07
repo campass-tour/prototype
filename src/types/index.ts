@@ -8,6 +8,8 @@ export interface Message {
   locationId: string;
   content: string;
   author: MessageAuthor;
+  /** Optional reference to a user record in `src/data/users.json` */
+  authorId?: number;
   likes: number;
   timestamp: string; // ISO
   imageUrl?: string;
