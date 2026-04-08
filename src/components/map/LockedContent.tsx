@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import cluesDataRaw from '../../data/clues.json';
 
 const ALL_CLUES = cluesDataRaw as any[];
@@ -35,11 +35,27 @@ export const LockedContent: React.FC<LockedContentProps> = ({
   hintImage,
   hintText
 }) => {
+  // Preload all clue images under src/assets/clues and map filenames to resolved URLs.
+  // Uses Vite's import.meta.glob with eager + as:'url' to produce usable URLs at runtime.
+  const clueImageModules = import.meta.glob('../../assets/clues/*', { eager: true, as: 'url' }) as Record<string, string>;
+  const resolveImageUrl = (path?: string | null) => {
+    if (!path) return null;
+    // If it's already a full URL (http/https) or data URI, return as-is
+    if (/^(https?:|data:)/.test(path)) return path;
+    // Normalize to filename and try to match against the globbed modules
+    const fileName = path.replace(/^.*\//, '');
+    const matchKey = Object.keys(clueImageModules).find(k => k.endsWith(fileName));
+    if (matchKey) return clueImageModules[matchKey];
+    // If JSON provided a leading-root path like /assets/clues/foo.png, try to use it as-is
+    return path;
+  };
   const [unlockedLevel, setUnlockedLevel] = useState(1);
   const [expandedPanel, setExpandedPanel] = useState(1);
   const [activeQuiz, setActiveQuiz] = useState<any>(null);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [quizFeedback, setQuizFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const [card3Index, setCard3Index] = useState(0);
+  const touchStartXRef = useRef<number | null>(null);
 
   const locationData = ALL_CLUES.find(c => c.locationId === id);
 
@@ -55,8 +71,9 @@ export const LockedContent: React.FC<LockedContentProps> = ({
         <div className="relative w-full aspect-4/3 rounded-[var(--radius-card)] overflow-hidden bg-gray-200 shadow-inner">
           {hintImage ? (
             <img 
-              src={hintImage} 
+              src={resolveImageUrl(hintImage) || undefined} 
               alt="Location Clue" 
+              onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
               className="w-full h-full object-cover blur-[6px] scale-110"
             />
           ) : (
@@ -153,16 +170,12 @@ export const LockedContent: React.FC<LockedContentProps> = ({
           <>
             <div className="relative w-full aspect-video rounded-md overflow-hidden bg-gray-200 mb-3 shadow-inner">
               <img 
-                src={hintImage || clues.card1.image_placeholder}
-                onError={(e) => { e.currentTarget.src = hintImage || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
+                src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'}
+                onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
                 alt="Ambience Clue" 
                 className={`w-full h-full object-cover transition-all duration-500 blur-[8px] scale-110 opacity-70`}
               />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="bg-black/60 px-3 py-1.5 rounded-full text-white font-bold text-xs tracking-wide backdrop-blur-md">
-                  Heavily Blurred
-                </span>
-              </div>
+              <div className="absolute inset-0 pointer-events-none bg-white/10 backdrop-blur-sm" />
             </div>
             <p className="mb-4 italic">"{clues.card1.lv1_text}"</p>
             
@@ -191,16 +204,12 @@ export const LockedContent: React.FC<LockedContentProps> = ({
           <>
             <div className="relative w-full aspect-[2/1] rounded-md overflow-hidden bg-gray-100 mb-3 shadow-inner">
               <img 
-                src={hintImage || clues.card1.image_placeholder}
-                onError={(e) => { e.currentTarget.src = hintImage || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'; }}
+                src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'}
+                onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'; }}
                 alt="Zone Clue" 
-                className={`w-full h-full object-cover transition-all duration-500 blur-[2px] scale-105 opacity-90`}
+                className={`w-full h-full object-cover transition-all duration-500 scale-105 opacity-90`}
               />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="bg-[var(--color-primary)]/80 px-2 py-1 rounded text-white font-bold text-xs tracking-wide">
-                  Clearer Vision
-                </span>
-              </div>
+              {/* removed textual badge - left subtle overlay only if desired via CSS */}
             </div>
             <p className="mb-4 font-medium text-[var(--color-text-main)]">{clues.card1.lv2_text}</p>
             
@@ -227,17 +236,67 @@ export const LockedContent: React.FC<LockedContentProps> = ({
           unlockedLevel < 3, 
           expandedPanel === 3,
           <>
+            {/* Final Coordinates: support multiple images with simple carousel/swipe */}
             <div className="relative w-full aspect-video rounded-md overflow-hidden bg-gray-100 mb-3 shadow-[var(--shadow-card)]">
-              <img 
-                src={hintImage || clues.card2.image_placeholder}
-                onError={(e) => { e.currentTarget.src = hintImage || 'https://via.placeholder.com/400x300?text=Target+Located'; }}
-                alt="Exact NFC Location" 
-                className={`w-full h-full object-cover`}
-              />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-12 h-12 border-4 border-red-500 rounded-full animate-ping opacity-50 absolute"></div>
-                <div className="w-[8px] h-[8px] bg-red-600 rounded-full"></div>
-              </div>
+              {(() => {
+                const raw = clues.card2.image_placeholder;
+                const imgs = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+                const current = imgs.length ? imgs[card3Index % imgs.length] : null;
+                return (
+                  <div
+                    className="w-full h-full relative"
+                    onTouchStart={(e) => { touchStartXRef.current = e.touches?.[0]?.clientX ?? null; }}
+                    onTouchEnd={(e) => {
+                      const endX = e.changedTouches?.[0]?.clientX ?? null;
+                      if (touchStartXRef.current !== null && endX !== null) {
+                        const delta = endX - touchStartXRef.current;
+                        if (Math.abs(delta) > 40) {
+                          if (delta < 0) setCard3Index((s) => (imgs.length ? (s + 1) % imgs.length : s));
+                          else setCard3Index((s) => (imgs.length ? (s - 1 + imgs.length) % imgs.length : s));
+                        }
+                      }
+                      touchStartXRef.current = null;
+                    }}
+                  >
+                    {current ? (
+                      <img
+                        src={resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'}
+                        onError={(e) => { e.currentTarget.src = resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'; }}
+                        alt={`Exact NFC Location ${card3Index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[var(--color-text-secondary)]">
+                        No image
+                      </div>
+                    )}
+
+                    {imgs.length > 1 && (
+                      <>
+                        <button
+                          onClick={() => setCard3Index((s) => (s - 1 + imgs.length) % imgs.length)}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
+                          aria-label="Previous image"
+                        >
+                          ‹
+                        </button>
+                        <button
+                          onClick={() => setCard3Index((s) => (s + 1) % imgs.length)}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
+                          aria-label="Next image"
+                        >
+                          ›
+                        </button>
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+                          {imgs.map((_, i) => (
+                            <button key={i} onClick={() => setCard3Index(i)} className={`w-2 h-2 rounded-full ${i === card3Index ? 'bg-white' : 'bg-white/40'}`} aria-label={`Go to image ${i+1}`} />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
             <p className="mb-3 font-medium text-[var(--color-text-main)] bg-[var(--color-warning)]/10 p-3 rounded-md border border-[var(--color-warning)]/30">
               {clues.card2.lv3_text}

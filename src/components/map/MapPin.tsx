@@ -130,7 +130,7 @@ export const MapPin: React.FC<MapPinProps> = ({
     isLocked ? (
       <LockedContent
         id={id}
-        realBuildingName={realBuildingName}
+        realBuildingName={isLocked ? 'Mysterious Spot' : realBuildingName}
         hintImage={hintImage}
         hintText={hintText}
       />
@@ -208,7 +208,7 @@ export const MapPin: React.FC<MapPinProps> = ({
         {isOpen && !isMobile && (
           <div 
             ref={popupRef}
-            className="absolute left-1/2 bottom-full mb-4 -translate-x-1/2 w-[340px] bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] p-[var(--spacing-4)] z-50 animate-in fade-in zoom-in-95 border border-[var(--border)]"
+            className="absolute left-1/2 bottom-full mb-4 -translate-x-1/2 w-[420px] bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] p-[var(--spacing-4)] z-50 animate-in fade-in zoom-in-95 border border-[var(--border)]"
             onClick={(e) => e.stopPropagation()}
           >
             {renderContent()}
