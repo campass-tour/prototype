@@ -56,7 +56,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
     lastPos.current = { x: e.clientX, y: e.clientY };
     setTranslate(t => ({ x: t.x + dx, y: t.y + dy }));
   };
-  const onPointerUp = (e: React.PointerEvent) => {
+  const onPointerUp = () => {
     dragging.current = false;
     lastPos.current = null;
   };
@@ -68,9 +68,6 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
       className="image-viewer-overlay fixed inset-0 z-[100] flex items-center justify-center animate-in fade-in duration-300 backdrop-blur-sm"
       style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
       onWheel={onWheel}
-      onMouseDown={(e) => e.stopPropagation()} // Stop bubbling up
-      onTouchStart={(e) => e.stopPropagation()} 
-      onClick={(e) => e.stopPropagation()}
       role="dialog"
       aria-modal="true"
     >
