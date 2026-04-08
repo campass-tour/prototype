@@ -35,8 +35,8 @@ export function MainLayout({ children, activeTab }: MainLayoutProps) {
 
   const tabs = [
     { id: 'explore' as TabId, label: 'Explore', icon: Map },
-    { id: 'collection' as TabId, label: 'Collection', icon: Backpack },
     { id: 'wall' as TabId, label: 'Wall', icon: MessageSquare },
+    { id: 'collection' as TabId, label: 'Collection', icon: Backpack },
     { id: 'profile' as TabId, label: 'Profile', icon: User },
   ];
 

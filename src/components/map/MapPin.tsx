@@ -129,6 +129,7 @@ export const MapPin: React.FC<MapPinProps> = ({
   const renderContent = () => (
     isLocked ? (
       <LockedContent
+        id={id}
         realBuildingName={realBuildingName}
         hintImage={hintImage}
         hintText={hintText}

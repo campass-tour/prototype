@@ -100,8 +100,8 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
             <span style={{ fontFamily: '"Caveat", "Comic Sans MS", cursive, sans-serif', fontSize: '1.1rem' }}>
               {formatTimeAgo(message.timestamp)}
             </span>
-            <div 
-              className="flex items-center gap-1 p-1 -mr-1 rounded-md transition-colors hover:bg-gray-100 group/like"
+              <div 
+                className="flex items-center gap-1 p-1 -mr-1 rounded-md transition-colors hover:bg-[var(--color-background)] group/like"
               onClick={(e) => {
                 e.stopPropagation(); // prevent card click
                 // In a real app we would call a like hook here

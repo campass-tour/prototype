@@ -36,7 +36,7 @@ const EditProfileDrawer: React.FC<EditProfileDrawerProps> = ({ isOpen, onClose }
           <h2 className="text-xl font-bold text-[var(--color-text-main)] m-0">Edit Profile</h2>
           <button 
             onClick={onClose}
-            className="p-2 -mr-2 rounded-full hover:bg-gray-100 text-[var(--color-text-secondary)] transition-colors"
+            className="p-2 -mr-2 rounded-full hover:bg-[var(--color-background)] text-[var(--color-text-secondary)] transition-colors"
             aria-label="Close drawer"
           >
             <X size={20} />
