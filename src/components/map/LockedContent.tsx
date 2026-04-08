@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import cluesDataRaw from '../../data/clues.json';
+import ImageViewer from '../common/ImageViewer';
 
 const ALL_CLUES = cluesDataRaw as any[];
 
@@ -55,6 +56,9 @@ export const LockedContent: React.FC<LockedContentProps> = ({
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [quizFeedback, setQuizFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
   const [card3Index, setCard3Index] = useState(0);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
+  const [viewerImages, setViewerImages] = useState<string[]>([]);
   const touchStartXRef = useRef<number | null>(null);
 
   const locationData = ALL_CLUES.find(c => c.locationId === id);
@@ -70,12 +74,17 @@ export const LockedContent: React.FC<LockedContentProps> = ({
         </p>
         <div className="relative w-full aspect-4/3 rounded-[var(--radius-card)] overflow-hidden bg-gray-200 shadow-inner">
           {hintImage ? (
-            <img 
-              src={resolveImageUrl(hintImage) || undefined} 
-              alt="Location Clue" 
-              onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
-              className="w-full h-full object-cover blur-[6px] scale-110"
-            />
+            <button className="w-full h-full" onClick={() => {
+              const url = resolveImageUrl(hintImage) || undefined;
+              if (url) { setViewerImages([url]); setViewerIndex(0); setViewerOpen(true); }
+            }}>
+              <img 
+                src={resolveImageUrl(hintImage) || undefined} 
+                alt="Location Clue" 
+                onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
+                className="w-full h-full object-cover blur-[6px] scale-110"
+              />
+            </button>
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center text-[var(--color-text-secondary)] bg-[var(--color-state-disabled)] blur-sm">
               <svg className="w-12 h-12 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -87,6 +96,7 @@ export const LockedContent: React.FC<LockedContentProps> = ({
             </div>
           )}
         </div>
+        <ImageViewer images={viewerImages} initialIndex={viewerIndex} isOpen={viewerOpen} onClose={() => setViewerOpen(false)} />
       </div>
     );
   }
@@ -169,12 +179,19 @@ export const LockedContent: React.FC<LockedContentProps> = ({
           expandedPanel === 1,
           <>
             <div className="relative w-full aspect-video rounded-md overflow-hidden bg-gray-200 mb-3 shadow-inner">
-              <img 
-                src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'}
-                onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
-                alt="Ambience Clue" 
-                className={`w-full h-full object-cover transition-all duration-500 blur-[8px] scale-110 opacity-70`}
-              />
+              <button className="w-full h-full" onClick={() => {
+                const raw = hintImage ?? clues.card1.image_placeholder;
+                const imgs = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+                const urls = imgs.map((p: string) => resolveImageUrl(p) || p).filter(Boolean) as string[];
+                if (urls.length) { setViewerImages(urls); setViewerIndex(0); setViewerOpen(true); }
+              }}>
+                <img 
+                  src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'}
+                  onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
+                  alt="Ambience Clue" 
+                  className={`w-full h-full object-cover transition-all duration-500 blur-[8px] scale-110 opacity-70`}
+                />
+              </button>
               <div className="absolute inset-0 pointer-events-none bg-white/10 backdrop-blur-sm" />
             </div>
             <p className="mb-4 italic">"{clues.card1.lv1_text}"</p>
@@ -203,12 +220,19 @@ export const LockedContent: React.FC<LockedContentProps> = ({
           expandedPanel === 2,
           <>
             <div className="relative w-full aspect-[2/1] rounded-md overflow-hidden bg-gray-100 mb-3 shadow-inner">
-              <img 
-                src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'}
-                onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'; }}
-                alt="Zone Clue" 
-                className={`w-full h-full object-cover transition-all duration-500 scale-105 opacity-90`}
-              />
+              <button className="w-full h-full" onClick={() => {
+                const raw = hintImage ?? clues.card1.image_placeholder;
+                const imgs = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+                const urls = imgs.map((p: string) => resolveImageUrl(p) || p).filter(Boolean) as string[];
+                if (urls.length) { setViewerImages(urls); setViewerIndex(0); setViewerOpen(true); }
+              }}>
+                <img 
+                  src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'}
+                  onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'; }}
+                  alt="Zone Clue" 
+                  className={`w-full h-full object-cover transition-all duration-500 scale-105 opacity-90`}
+                />
+              </button>
               {/* removed textual badge - left subtle overlay only if desired via CSS */}
             </div>
             <p className="mb-4 font-medium text-[var(--color-text-main)]">{clues.card1.lv2_text}</p>
@@ -259,12 +283,17 @@ export const LockedContent: React.FC<LockedContentProps> = ({
                     }}
                   >
                     {current ? (
-                      <img
-                        src={resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'}
-                        onError={(e) => { e.currentTarget.src = resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'; }}
-                        alt={`Exact NFC Location ${card3Index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
+                      <button className="w-full h-full" onClick={() => {
+                        const urls = imgs.map((p: string) => resolveImageUrl(p) || p).filter(Boolean) as string[];
+                        if (urls.length) { setViewerImages(urls); setViewerIndex(card3Index); setViewerOpen(true); }
+                      }}>
+                        <img
+                          src={resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'}
+                          onError={(e) => { e.currentTarget.src = resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'; }}
+                          alt={`Exact NFC Location ${card3Index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-[var(--color-text-secondary)]">
                         No image
@@ -304,6 +333,7 @@ export const LockedContent: React.FC<LockedContentProps> = ({
           </>
         )}
       </div>
+      <ImageViewer images={viewerImages} initialIndex={viewerIndex} isOpen={viewerOpen} onClose={() => setViewerOpen(false)} />
 
       {/* Full Cover Quiz Modal */}
       {activeQuiz && (
