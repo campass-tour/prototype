@@ -143,5 +143,46 @@
     "authorId": 1,
     "likes": 20,
     "timestamp": "2026-04-07T16:45:00.000Z"
+  },
+  {
+    "id": "msg_18",
+    "locationId": "fb",
+    "content": "Foundation Building always feels a little calmer in the early morning. Good place to settle down before class.",
+    "author": { "username": "quietcorner" },
+    "likes": 11,
+    "timestamp": "2026-04-08T08:10:00.000Z"
+  },
+  {
+    "id": "msg_19",
+    "locationId": "fb",
+    "content": "The light near the lobby was really nice today. Took a photo while waiting for my group meeting.",
+    "author": { "username": "campusframes", "avatarUrl": "https://i.pravatar.cc/150?u=campusframes" },
+    "likes": 19,
+    "timestamp": "2026-04-08T09:20:00.000Z",
+    "imageUrl": "https://picui.ogmua.cn/s1/2026/04/08/69d62aad59634.webp"
+  },
+  {
+    "id": "msg_20",
+    "locationId": "fb",
+    "content": "Reminder: the seminar room on the upper floor is quieter than I expected. Pretty good for last-minute review.",
+    "author": { "username": "week7survivor" },
+    "likes": 7,
+    "timestamp": "2026-04-07T16:45:00.000Z"
+  },
+  {
+    "id": "msg_21",
+    "locationId": "fb",
+    "content": "Passed by Foundation Building after the rain and the whole place looked unusually bright. Kind of a nice reset between classes.",
+    "author": { "username": "cloudbreak" },
+    "likes": 13,
+    "timestamp": "2026-04-07T11:10:00.000Z"
+  },
+  {
+    "id": "msg_22",
+    "locationId": "fb",
+    "content": "If you need somewhere to go over slides with your team, the tables near the entrance are usually free before noon.",
+    "author": { "username": "groupworkmode", "avatarUrl": "https://i.pravatar.cc/150?u=groupworkmode" },
+    "likes": 16,
+    "timestamp": "2026-04-08T09:10:00.000Z"
   }
 ]
