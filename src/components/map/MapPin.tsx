@@ -46,6 +46,7 @@ export const MapPin: React.FC<MapPinProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const pinRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const [popupPos, setPopupPos] = useState<{ left: number; top: number } | null>(null);
   const startY = useRef(0);
   const startOffset = useRef(0);
 
@@ -86,6 +87,29 @@ export const MapPin: React.FC<MapPinProps> = ({
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Calculate popup position in viewport when opening desktop popover
+  useEffect(() => {
+    if (!isOpen || isMobile) {
+      setPopupPos(null);
+      return;
+    }
+
+    const updatePos = () => {
+      const el = pinRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      setPopupPos({ left: rect.left + rect.width / 2, top: rect.top });
+    };
+
+    updatePos();
+    window.addEventListener('resize', updatePos);
+    window.addEventListener('scroll', updatePos, true);
+    return () => {
+      window.removeEventListener('resize', updatePos);
+      window.removeEventListener('scroll', updatePos, true);
+    };
+  }, [isOpen, isMobile]);
 
   // Manage Danmaku delayed closing
   useEffect(() => {
@@ -218,19 +242,29 @@ export const MapPin: React.FC<MapPinProps> = ({
           )}
         </div>
 
-        {/* Desktop Popover Container (Attached relative to the pin) */}
-        {isOpen && !isMobile && (
-          <div 
+        {/* Desktop Popover: render into document.body so it escapes map transform stacking context */}
+        {isOpen && !isMobile && popupPos && createPortal(
+          <div
             ref={popupRef}
-            className="absolute left-1/2 bottom-full mb-4 -translate-x-1/2 w-[420px] bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] p-[var(--spacing-4)] z-50 animate-in fade-in zoom-in-95 border border-[var(--border)]"
+            className="w-[420px] bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] p-[var(--spacing-4)] animate-in fade-in zoom-in-95 border border-[var(--border)]"
             onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'absolute',
+              left: popupPos.left,
+              top: popupPos.top,
+              transform: 'translate(-50%, -100%)',
+              zIndex: 10000,
+            }}
           >
             {renderContent()}
-            {/* Popover Arrow */}
-            <div className="absolute left-1/2 top-full -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[12px] border-transparent border-t-[var(--border)]">
-              <div className="absolute left-1/2 -top-[13px] -translate-x-1/2 w-0 h-0 border-l-[9px] border-r-[9px] border-t-[11px] border-transparent border-t-[var(--color-surface)]"></div>
+            {/* Popover Arrow (single SVG to avoid double-triangle rendering) */}
+            <div style={{ position: 'absolute', left: '50%', top: '100%', transform: 'translateX(-50%)', lineHeight: 0 }}>
+              <svg width="22" height="12" viewBox="0 0 22 12" aria-hidden>
+                <path d="M1 1 L11 11 L21 1 Z" fill="var(--color-surface)" stroke="var(--border)" strokeWidth="1" />
+              </svg>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
       </div>
 

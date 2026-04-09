@@ -8,7 +8,7 @@
         "lv2_text": "No need to delve deep into the maze’s core. Head to the North Campus, where you’ll find the entrance."
       },
       "card2": {
-        "image_placeholder": ["assets/clues/cb-clue3-1.png","assets/clues/cb-clue3-2.png"],
+        "image_placeholder": ["assets/clues/cb-clue3-1.png","assets/clues/cb-clue3-2.png","assets/clues/cb-clue3-3.png"],
         "lv3_text": "At the the north gate of the Central Building (across from FB)"
       }
     },

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import cluesDataRaw from '../../data/clues.json';
 import ImageViewer from '../common/ImageViewer';
+import { getClueUnlockLevel, setClueUnlockLevel } from '../../lib/storage';
 
 const ALL_CLUES = cluesDataRaw as any[];
 
@@ -61,8 +62,8 @@ export const LockedContent: React.FC<LockedContentProps> = ({
     }
     return base + path;
   };
-  const [unlockedLevel, setUnlockedLevel] = useState(1);
-  const [expandedPanel, setExpandedPanel] = useState(1);
+  const [unlockedLevel, setUnlockedLevel] = useState(() => id ? getClueUnlockLevel(id) : 1);
+  const [expandedPanel, setExpandedPanel] = useState(() => id ? getClueUnlockLevel(id) : 1);
   const [activeQuiz, setActiveQuiz] = useState<any>(null);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [quizFeedback, setQuizFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
@@ -129,8 +130,12 @@ export const LockedContent: React.FC<LockedContentProps> = ({
     if (selectedOption === activeQuiz.quiz.correctAnswerIndex) {
       setQuizFeedback({ type: 'success', message: activeQuiz.quiz.successMessage });
       setTimeout(() => {
-        setUnlockedLevel(activeQuiz.levelToUnlock);
-        setExpandedPanel(activeQuiz.levelToUnlock);
+        const newLevel = activeQuiz.levelToUnlock;
+        setUnlockedLevel(newLevel);
+        setExpandedPanel(newLevel);
+        if (id) {
+          setClueUnlockLevel(id, newLevel);
+        }
         setActiveQuiz(null);
         setQuizFeedback(null);
       }, 2000);

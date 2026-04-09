@@ -65,8 +65,8 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
 
   const node = (
     <div
-      className="image-viewer-overlay fixed inset-0 z-[100] flex items-center justify-center animate-in fade-in duration-300 backdrop-blur-sm"
-      style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
+      className="image-viewer-overlay fixed inset-0 flex items-center justify-center animate-in fade-in duration-300 backdrop-blur-sm"
+      style={{ backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 11000 }}
       onWheel={onWheel}
       role="dialog"
       aria-modal="true"
@@ -75,7 +75,8 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
         <button
           onClick={(e) => { e.stopPropagation(); onClose(); }}
           aria-label="Close image viewer"
-          className="absolute right-4 top-4 z-[110] bg-white/20 hover:bg-white/30 text-white rounded-full w-12 h-12 flex items-center justify-center backdrop-blur-md transition-all"
+          className="absolute right-4 top-4 bg-white/20 hover:bg-white/30 text-white rounded-full w-12 h-12 flex items-center justify-center backdrop-blur-md transition-all"
+          style={{ zIndex: 11010 }}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -87,7 +88,8 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
           <button
             onClick={(e) => { e.stopPropagation(); prev(); }}
             aria-label="Previous"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-[110] text-white bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full w-12 h-12 flex items-center justify-center transition-all"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full w-12 h-12 flex items-center justify-center transition-all"
+            style={{ zIndex: 11010 }}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6"></polyline>
@@ -120,7 +122,8 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
           <button
             onClick={(e) => { e.stopPropagation(); next(); }}
             aria-label="Next"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-[110] text-white bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full w-12 h-12 flex items-center justify-center transition-all"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full w-12 h-12 flex items-center justify-center transition-all"
+            style={{ zIndex: 11010 }}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6"></polyline>
@@ -129,7 +132,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
         )}
 
         {/* Bottom Glassmorphism Controls */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[110] flex items-center gap-4 bg-white/10 backdrop-blur-lg px-6 py-3 rounded-full border border-white/20 shadow-xl">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-white/10 backdrop-blur-lg px-6 py-3 rounded-full border border-white/20 shadow-xl" style={{ zIndex: 11010 }}>
           <div className="flex gap-2 items-center border-r border-white/20 pr-4">
             <button onClick={(e) => { e.stopPropagation(); setScale(s => Math.max(1, s - 0.5)); }} className="text-white hover:text-[var(--color-primary-light)] transition-colors p-1" aria-label="Zoom out">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>

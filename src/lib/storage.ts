@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'unlocked_collectibles';
+const CLUE_UNLOCK_KEY = 'clue_unlock_levels';
 
 export function getUnlockedCollectibles(): Record<string, boolean> {
   try {
@@ -22,4 +23,24 @@ export function isCollectibleUnlocked(id: string): boolean {
 
 export function getUnlockedCount(): number {
   return Object.keys(getUnlockedCollectibles()).length;
+}
+
+export function getClueUnlockLevel(locationId: string): number {
+  try {
+    const levels = JSON.parse(localStorage.getItem(CLUE_UNLOCK_KEY) || '{}');
+    return levels[locationId] || 1; // Default to level 1
+  } catch (e) {
+    console.error('Error parsing clue unlock levels from local storage', e);
+    return 1;
+  }
+}
+
+export function setClueUnlockLevel(locationId: string, level: number): void {
+  try {
+    const levels = JSON.parse(localStorage.getItem(CLUE_UNLOCK_KEY) || '{}');
+    levels[locationId] = level;
+    localStorage.setItem(CLUE_UNLOCK_KEY, JSON.stringify(levels));
+  } catch (e) {
+    console.error('Error saving clue unlock level to local storage', e);
+  }
 }
