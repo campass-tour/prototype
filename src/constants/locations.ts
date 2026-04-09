@@ -9,6 +9,7 @@ export const getLocationData = (id: string) => {
   return {
     id: location.id,
     locationName: location.name,
-    mascotName: `${location.name} Mascot`
+    mascotName: `${location.name} Mascot`,
+    lv: location.lv || 1
   };
 };

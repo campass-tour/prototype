@@ -8,6 +8,7 @@ import mapImage from '@/assets/image/map.svg';
 import { UserPositionIndicator } from './UserPositionIndicator';
 import { MapPin } from './MapPin';
 import { MapOverlayLayer } from './MapOverlayLayer';
+import MapFilter from './MapFilter';
 import ARModelViewer from '../photo/ARModelViewer';
 import { LOCATIONS } from '../../constants/locations';
 import { userPosition } from '../../constants/userPositionData';
@@ -26,6 +27,8 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
   const navigate = useNavigate();
 
   const [arTarget, setArTarget] = useState<{ id: string, name: string } | null>(null);
+  const [selectedLevels, setSelectedLevels] = useState<number[] | null>(null);
+  const availableLevels = Array.from(new Set(LOCATIONS.map(l => l.lv || 1))).sort();
 
   // 用户位置和Pin点数据已提取到独立文件
 
@@ -130,6 +133,11 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
       >
         {({ zoomIn, zoomOut, resetTransform, setTransform }) => (
           <>
+            <MapFilter
+              availableLevels={availableLevels}
+              selectedLevels={selectedLevels}
+              onChange={(levels) => setSelectedLevels(levels)}
+            />
             <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-2 bg-(--color-surface) p-2 rounded-xl shadow-(--shadow-card) border border-(--color-state-disabled)">
               <button 
                 onClick={() => centerOnUserMarker(
@@ -192,7 +200,10 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                 {/* Render pins and markers onto an exact proportional overlay */}
                 <MapOverlayLayer>
                   <UserPositionIndicator userPosition={userPosition} />
-                  {LOCATIONS.map(location => {
+                  {LOCATIONS.filter(loc => {
+                    if (selectedLevels === null) return true;
+                    return selectedLevels.includes(loc.lv ?? 1);
+                  }).map(location => {
                     const isUnlocked = isCollectibleUnlocked(location.id);
                     return (
                       <MapPin

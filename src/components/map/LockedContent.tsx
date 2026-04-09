@@ -46,13 +46,20 @@ export const LockedContent: React.FC<LockedContentProps> = ({
     // Normalize to filename and try to match against the globbed modules
     const fileName = path.replace(/^.*\//, '');
     const matchKey = Object.keys(clueImageModules).find(k => k.endsWith(fileName));
-    if (matchKey) return clueImageModules[matchKey];
-    // If JSON provided a leading-root path like /assets/clues/foo.png, prefix with Vite base so
-    // the URL works when deployed under a sub-path (e.g., GitHub Pages project site).
-    if (path.startsWith('/')) {
-      return import.meta.env.BASE_URL + path.replace(/^\//, '');
+    if (matchKey) {
+      const mod = (clueImageModules as any)[matchKey];
+      // import.meta.glob with `as: 'url'` should give strings, but the bundler may wrap them.
+      if (typeof mod === 'string') return mod;
+      if (mod && typeof mod === 'object' && 'default' in mod) return (mod as any).default;
+      return String(mod);
     }
-    return path;
+
+    // Ensure non-URL paths are prefixed with Vite base so they resolve under project sub-paths
+    const base = import.meta.env.BASE_URL || '/';
+    if (path.startsWith('/')) {
+      return base + path.replace(/^\//, '');
+    }
+    return base + path;
   };
   const [unlockedLevel, setUnlockedLevel] = useState(1);
   const [expandedPanel, setExpandedPanel] = useState(1);

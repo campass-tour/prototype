@@ -100,10 +100,22 @@ export const MapPin: React.FC<MapPinProps> = ({
   }, [isOpen, status]);
 
   const isLocked = status === 'locked';
-
   const lore = getLoreById(id);
   const locationData = getLocationData(id);
   const realBuildingName = locationData?.locationName || buildingName || 'Mysterious Spot';
+  const level = locationData?.lv || 1;
+
+
+  const getPinClasses = () => {
+    const baseClasses = 'cursor-pointer flex items-center justify-center rounded-[var(--radius-pill)] w-12 h-12 transition-all duration-300 box-border';
+    const colorClass = level === 2 ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-primary)]';
+
+    if (isLocked) {
+      return `${baseClasses} relative backdrop-blur-md text-white shadow-lg animate-bounce overflow-hidden`;
+    } else {
+      return `${baseClasses} ${colorClass} text-white shadow-[var(--shadow-card)]`;
+    }
+  };
 
   // Get image src
   let imageSrc = defaultImageUrl;
@@ -169,17 +181,19 @@ export const MapPin: React.FC<MapPinProps> = ({
               setDrawerOffset(0);
             }
           }}
-          className={`
-            cursor-pointer flex items-center justify-center rounded-[var(--radius-pill)] 
-            w-12 h-12 transition-all duration-300 box-border
-            ${isLocked 
-              ? 'backdrop-blur-md bg-[var(--color-primary)]/50 text-white shadow-lg animate-bounce' 
-              : 'bg-[var(--color-primary)] text-white shadow-[var(--shadow-card)]'
-            }
-          `}
+          className={getPinClasses()}
         >
           {isLocked ? (
-            <span className="text-[var(--font-size-h2)] font-[var(--font-weight-bold)]">?</span>
+            <div className="relative w-full h-full flex items-center justify-center">
+              <span
+                className="absolute inset-0 rounded-[var(--radius-pill)]"
+                style={{
+                  backgroundColor: level === 2 ? 'var(--color-accent)' : 'var(--color-primary)',
+                  opacity: 0.6
+                }}
+              />
+              <span className="relative z-10 text-[var(--font-size-h2)] font-[var(--font-weight-bold)]">?</span>
+            </div>
           ) : (
             <span className="w-6 h-6 flex items-center justify-center">
               {(() => {

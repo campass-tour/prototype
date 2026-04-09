@@ -20,6 +20,7 @@ export interface Location {
   name: string;
   x: number;
   y: number;
+  lv: number;
 }
 
 export interface LocationLore {
