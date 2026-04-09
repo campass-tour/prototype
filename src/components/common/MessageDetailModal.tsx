@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, MapPin } from 'lucide-react';
 import type { DanmakuItem } from '../wall/Danmaku';
 import { getLocationData } from '../../constants/locations';
 import { isCollectibleUnlocked } from '../../lib/storage';
+import { ImageViewer } from './ImageViewer';
 
 interface MessageDetailModalProps {
   item: DanmakuItem | null;
@@ -13,6 +14,8 @@ interface MessageDetailModalProps {
 export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, onClose }) => {
   // 判断是否为移动端
   const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  // ImageViewer state
+  const [viewerOpen, setViewerOpen] = useState(false);
   // Prevent scrolling when modal is open
   useEffect(() => {
     if (item) {
@@ -31,7 +34,7 @@ export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, on
   const isUnlocked = isCollectibleUnlocked(item.originalMessage.locationId);
   const locationName = isUnlocked && locationData ? locationData.locationName : 'Mysterious Location';
 
-  return createPortal(
+  const portalContent = createPortal(
     <div
       className="fixed inset-0 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 danmaku-modal-overlay"
       style={isMobile ? { pointerEvents: 'none', zIndex: 20000 } : { zIndex: 20000 }}
@@ -80,8 +83,8 @@ export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, on
         </div>
 
         {/* Location Badge */}
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full px-2 py-1 w-max">
-          <MapPin className="w-3 h-3 text-[var(--color-primary)]" />
+        <div className="location-badge">
+          <MapPin className="location-badge-pin" />
           {locationName}
         </div>
 
@@ -97,7 +100,7 @@ export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, on
 
         {/* Optional Image */}
         {item.rightImage && (
-          <div className="w-full h-48 rounded-[var(--radius-button)] overflow-hidden bg-gray-100 mt-1 shadow-sm">
+          <div className="w-full h-48 rounded-[var(--radius-button)] overflow-hidden bg-gray-100 mt-1 shadow-sm cursor-pointer" onClick={() => setViewerOpen(true)}>
             <img
               src={item.rightImage}
               alt="attachment"
@@ -108,5 +111,16 @@ export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, on
       </div>
     </div>,
     document.body
+  );
+
+  return (
+    <>
+      {portalContent}
+      <ImageViewer
+        images={item?.rightImage ? [item.rightImage] : []}
+        isOpen={viewerOpen}
+        onClose={() => setViewerOpen(false)}
+      />
+    </>
   );
 };
