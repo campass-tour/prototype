@@ -213,8 +213,8 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                           ) : undefined
                         }
                         hintText={isUnlocked ? undefined : `Find this ${location.name} to unlock its secrets!`}
-                        onMessageWallClick={location.id === 'cb' ? () => navigate('/wall?location=cb') : undefined}
-                        onEnterAR={location.id === 'cb' ? (id, name) => setArTarget({ id, name }) : undefined}
+                        onMessageWallClick={() => navigate(`/wall?location=${location.id}`)}
+                        onEnterAR={(id, name) => setArTarget({ id, name })}
                       />
                     );
                   })}
