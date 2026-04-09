@@ -3,18 +3,13 @@ import { BookHeart } from 'lucide-react';
 import { MESSAGES } from '../../constants/messages';
 import PolaroidCard from '../../components/wall/PolaroidCard';
 
-const formatTimestamp = (iso?: string) => {
-  if (!iso) return '';
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return iso;
-  return d.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
+/* timestamp formatter removed (unused) */
 
 export const MyMemories: React.FC = () => {
   // For now use authorId === 1 as the current user (data/users.json)
   const currentUserId = 1;
   const userMessages = useMemo(() => MESSAGES.filter(m => m.authorId === currentUserId || m.author.username === 'silly bird'), []);
-  const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
+  const [, setSelectedMessageId] = useState<string | null>(null);
 
   return (
     <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-6 shadow-[var(--shadow-card)] w-full border border-[var(--border)]">

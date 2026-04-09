@@ -17,14 +17,15 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (import.meta.env.DEV) console.log('ImageViewer: isOpen=', isOpen, 'initialIndex=', initialIndex, 'images length=', images?.length);
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      try { document.body.style.overflow = 'hidden'; } catch (e) { if (import.meta.env.DEV) console.error('ImageViewer: failed to set body overflow', e); }
     } else {
-      document.body.style.overflow = '';
+      try { document.body.style.overflow = ''; } catch (e) { }
       setScale(1);
       setTranslate({ x: 0, y: 0 });
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => { try { document.body.style.overflow = ''; } catch (e) { } };
   }, [isOpen]);
 
   useEffect(() => {

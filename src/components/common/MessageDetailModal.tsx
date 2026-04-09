@@ -100,7 +100,13 @@ export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, on
 
         {/* Optional Image */}
         {item.rightImage && (
-          <div className="w-full h-48 rounded-[var(--radius-button)] overflow-hidden bg-gray-100 mt-1 shadow-sm cursor-pointer" onClick={() => setViewerOpen(true)}>
+          <div
+            className="w-full h-48 rounded-[var(--radius-button)] overflow-hidden bg-gray-100 mt-1 shadow-sm cursor-pointer"
+            onClick={() => {
+              if (import.meta.env.DEV) console.log('MessageDetailModal: open image viewer', item.rightImage);
+              setViewerOpen(true);
+            }}
+          >
             <img
               src={item.rightImage}
               alt="attachment"

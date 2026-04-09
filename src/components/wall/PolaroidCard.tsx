@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import type { Message } from '../../types';
 import { getLocationData } from '../../constants/locations';
 import { isCollectibleUnlocked } from '../../lib/storage';
