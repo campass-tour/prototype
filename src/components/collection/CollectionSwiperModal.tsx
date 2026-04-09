@@ -62,7 +62,7 @@ export default function CollectionSwiperModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-md animate-in fade-in duration-300">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/40 p-4 backdrop-blur-md animate-in fade-in duration-300" style={{ zIndex: 'var(--z-overlay)' }}>
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* Swiper Container */}
@@ -153,7 +153,8 @@ export default function CollectionSwiperModal({
         {/* Global Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-2xl text-white transition hover:bg-white/30"
+          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-2xl text-white transition hover:bg-white/30"
+          style={{ zIndex: 'var(--z-modal)' }}
         >
           ×
         </button>

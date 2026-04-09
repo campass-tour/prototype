@@ -4,13 +4,21 @@ import { getMessages } from '../../lib/dataSources';
 import MessageCard from '../wall/MessageCard';
 import type { Message } from '../../types';
 
+const formatTimestamp = (iso?: string) => {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  // Force English formatting to avoid user's locale (e.g., Chinese)
+  return d.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
 export const MyMemories: React.FC = () => {
   const all = getMessages();
   // filter messages authored by user with id = 1
   const myMessages = all.filter((m: Message) => m.authorId === 1 || m.author?.username === 'silly bird');
 
   return (
-    <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-6 shadow-[var(--shadow-card)] w-full min-h-[250px] flex flex-col border border-[var(--border)]">
+    <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-6 shadow-[var(--shadow-card)] w-full min-h-[250px] border border-[var(--border)]">
       <h3 className="text-lg md:text-xl font-bold text-[var(--color-text-main)] mb-4 flex items-center gap-2 m-0">
         <BookHeart size={20} className="text-[var(--color-accent)]" />
         Memories & Echoes
@@ -29,13 +37,13 @@ export const MyMemories: React.FC = () => {
           </p>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {myMessages.map((m) => (
             <MessageCard
               key={m.id}
               userName={m.author.username}
               userAvatar={m.author.avatarUrl || ''}
-              timestamp={m.timestamp}
+              timestamp={formatTimestamp(m.timestamp)}
               text={m.content}
               imageUrl={m.imageUrl}
               initialLikes={m.likes}

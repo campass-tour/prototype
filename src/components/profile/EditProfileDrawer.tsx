@@ -21,7 +21,7 @@ const EditProfileDrawer: React.FC<EditProfileDrawerProps> = ({ isOpen, onClose }
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 flex items-end sm:items-center justify-center" style={{ zIndex: 'var(--z-overlay)' }}>
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
@@ -29,7 +29,7 @@ const EditProfileDrawer: React.FC<EditProfileDrawerProps> = ({ isOpen, onClose }
       />
       
       {/* Drawer Panel */}
-      <div className="relative w-full max-w-lg bg-[var(--color-surface)] rounded-t-2xl sm:rounded-2xl p-6 sm:p-8 shadow-xl transform transition-transform animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-8">
+      <div className="relative w-full max-w-lg bg-[var(--color-surface)] rounded-t-2xl sm:rounded-2xl p-6 sm:p-8 shadow-xl transform transition-transform animate-in slide-in-from-bottom-full sm:slide-in-from-bottom-8" style={{ zIndex: 'var(--z-modal)' }}>
         <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 sm:hidden" />
         
         <div className="flex justify-between items-center mb-6">

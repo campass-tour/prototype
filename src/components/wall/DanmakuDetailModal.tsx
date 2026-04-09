@@ -33,8 +33,8 @@ export const DanmakuDetailModal: React.FC<DanmakuDetailModalProps> = ({ item, on
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 danmaku-modal-overlay"
-      style={isMobile ? { pointerEvents: 'none' } : {}}
+      className="fixed inset-0 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 danmaku-modal-overlay"
+      style={isMobile ? { pointerEvents: 'none', zIndex: 'var(--z-modal)' } : { zIndex: 'var(--z-modal)' }}
     >
       {/* 遮罩不再可点击关闭，仅作遮罩用 */}
       <div className="absolute inset-0 cursor-default select-none" />

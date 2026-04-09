@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { MESSAGES } from '../constants/messages';
 import type { Message } from '../types';
 import { Heart, MapPin, Plus } from 'lucide-react';
-import { DanmakuDetailModal } from '../components/wall/DanmakuDetailModal';
+import { MessageDetailModal } from '../components/common/MessageDetailModal';
 import { ComposeMessageModal } from '../components/wall/ComposeMessageModal';
 import type { DanmakuItem } from '../components/wall/Danmaku';
 import { getLocationData } from '../constants/locations';
@@ -236,7 +236,7 @@ export const WallPage: React.FC = () => {
         ))}
       </div>
 
-      <DanmakuDetailModal 
+      <MessageDetailModal 
         item={selectedDanmakuItem} 
         onClose={() => setSelectedMessage(null)} 
       />

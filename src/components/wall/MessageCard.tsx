@@ -25,8 +25,9 @@ const MessageCard: React.FC<MessageCardProps> = ({
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLikes(isLiked ? likes + 1 : likes - 1);
+    // Correct logic: if currently liked, unliking should decrement; if not liked, liking should increment.
+    setLikes((l) => (isLiked ? l - 1 : l + 1));
+    setIsLiked((s) => !s);
   };
 
   return (

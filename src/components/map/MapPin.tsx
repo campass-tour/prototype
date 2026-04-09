@@ -253,7 +253,7 @@ export const MapPin: React.FC<MapPinProps> = ({
               left: popupPos.left,
               top: popupPos.top,
               transform: 'translate(-50%, -100%)',
-              zIndex: 10000,
+              zIndex: 'var(--z-map-pin)',
             }}
           >
             {renderContent()}
@@ -272,8 +272,9 @@ export const MapPin: React.FC<MapPinProps> = ({
       {isOpen && isMobile && createPortal(
         <div 
           ref={popupRef}
-          className="fixed inset-x-0 bottom-0 z-50 bg-[var(--color-surface)] text-[var(--color-text-main)] animate-in slide-in-from-bottom flex flex-col"
+          className="fixed inset-x-0 bottom-0 bg-[var(--color-surface)] text-[var(--color-text-main)] animate-in slide-in-from-bottom flex flex-col"
           style={{ 
+            zIndex: 'var(--z-modal)',
             borderTopLeftRadius: 'var(--radius-card)', 
             borderTopRightRadius: 'var(--radius-card)',
             boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.15)',

@@ -348,7 +348,7 @@ export const LockedContent: React.FC<LockedContentProps> = ({
 
       {/* Full Cover Quiz Modal */}
       {activeQuiz && (
-        <div className="absolute inset-0 z-50 bg-[var(--color-surface)] flex flex-col rounded-[var(--radius-card)]">
+        <div className="absolute inset-0 bg-[var(--color-surface)] flex flex-col rounded-[var(--radius-card)]" style={{ zIndex: 'var(--z-modal)' }}>
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
             <h3 className="font-bold text-[var(--color-primary)] flex items-center gap-2">

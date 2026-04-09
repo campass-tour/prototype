@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { DanmakuDetailModal } from './DanmakuDetailModal';
+import { MessageDetailModal } from '../common/MessageDetailModal';
 import { getMessagesByLocation } from '../../constants/messages';
 import type { Message } from '../../types';
 
@@ -131,7 +131,7 @@ export const Danmaku: React.FC<{ isActive: boolean; locationId: string }> = ({ i
       ))}
       </div>
       
-      <DanmakuDetailModal 
+      <MessageDetailModal 
         item={selectedItem} 
         onClose={() => setSelectedItem(null)} 
       />

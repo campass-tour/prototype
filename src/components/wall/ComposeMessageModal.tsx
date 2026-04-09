@@ -123,14 +123,16 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
     <>
       {/* Overlay */}
       <div 
-        className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+        style={{ zIndex: 'var(--z-overlay)' }}
         onClick={onClose}
       />
 
       {/* Desktop Modal */}
       {!isMobile && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+          className="fixed inset-0 flex items-center justify-center pointer-events-none"
+          style={{ zIndex: 'var(--z-modal)' }}
         >
           <div 
             onClick={handleContentClick}
@@ -144,9 +146,10 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
       {/* Mobile Bottom Sheet */}
       {isMobile && (
         <div 
-          className="fixed inset-x-0 bottom-0 z-50 bg-[var(--color-surface)] animate-in slide-in-from-bottom duration-300 flex flex-col"
+          className="fixed inset-x-0 bottom-0 bg-[var(--color-surface)] animate-in slide-in-from-bottom duration-300 flex flex-col"
           onClick={handleContentClick}
           style={{ 
+            zIndex: 'var(--z-modal)',
             borderTopLeftRadius: 'var(--radius-card)', 
             borderTopRightRadius: 'var(--radius-card)',
             boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.2)',

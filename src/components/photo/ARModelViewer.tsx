@@ -56,15 +56,16 @@ export default function ARModelViewer({
   const modelSrc = checkinId ? (glbModels[targetModelPath] || defaultModelUrl) : defaultModelUrl;
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[var(--color-background)] animate-in fade-in duration-300">
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-[var(--color-background)] animate-in fade-in duration-300" style={{ zIndex: 'var(--z-overlay)' }}>
       {/* Header bar */}
-      <div className="absolute top-0 left-0 right-0 z-10 flex h-16 items-center justify-between px-4 bg-gradient-to-b from-black/50 to-transparent">
+      <div className="absolute top-0 left-0 right-0 flex h-16 items-center justify-between px-4 bg-gradient-to-b from-black/50 to-transparent" style={{ zIndex: 'var(--z-overlay)' }}>
         <h2 className="text-lg font-bold text-white drop-shadow-md">
           {mascotName} AR
         </h2>
-        <button
+            <button
           onClick={onClose}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white transition hover:bg-white/30 active:scale-95"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white transition hover:bg-white/30 active:scale-95"
+              style={{ zIndex: 'var(--z-overlay)' }}
         >
           <X className="h-6 w-6" />
         </button>
@@ -93,7 +94,8 @@ export default function ARModelViewer({
             {/* Custom styled AR Button replacing the default one */}
             <button
               slot="ar-button"
-              className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 font-bold text-white shadow-[var(--shadow-floating)] transition-all hover:scale-[1.02] active:scale-95 z-20 cursor-pointer"
+              className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 font-bold text-white shadow-[var(--shadow-floating)] transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+              style={{ zIndex: 'var(--z-overlay)' }}
             >
               <Camera className="h-5 w-5 text-[var(--color-accent)]" />
               <span>Start AR</span>
