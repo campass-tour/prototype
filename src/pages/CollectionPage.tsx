@@ -7,7 +7,7 @@ import { LOCATIONS, getLocationData } from '../constants/locations';
 import { getUnlockedCollectibles, getUnlockedCount } from '../lib/storage';
 import defaultImageUrl from '../assets/image/default-image.png';
 
-const imageFiles = import.meta.glob('../assets/image/*-image.{png,jpg,jpeg,webp}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+const imageFiles = import.meta.glob('../assets/image/*.{png,jpg,jpeg,webp,svg}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 
 export const CollectionPage: React.FC = () => {
   const unlockedData = getUnlockedCollectibles();
@@ -55,18 +55,12 @@ export const CollectionPage: React.FC = () => {
           const locData = getLocationData(loc.id);
           const isUnlocked = !!unlockedData[loc.id];
           
-          // Determine image dynamically. Format: id-image.png/jpg or fallback to default-image.png
+          // Image now comes from getLocationData (may be null) and maps to assets via JSON
           let imageSrc = defaultImageUrl;
-          
-          const pngPath = `../assets/image/${loc.id}-image.png`;
-          const jpgPath = `../assets/image/${loc.id}-image.jpg`;
-          const jpegPath = `../assets/image/${loc.id}-image.jpeg`;
-          const webpPath = `../assets/image/${loc.id}-image.webp`;
-
-          if (imageFiles[pngPath]) imageSrc = imageFiles[pngPath];
-          else if (imageFiles[jpgPath]) imageSrc = imageFiles[jpgPath];
-          else if (imageFiles[jpegPath]) imageSrc = imageFiles[jpegPath];
-          else if (imageFiles[webpPath]) imageSrc = imageFiles[webpPath];
+          if (locData?.image) {
+            const path = `../assets/image/${locData.image}`;
+            imageSrc = imageFiles[path] || defaultImageUrl;
+          }
 
           return (
             <div key={loc.id} onClick={() => handleMascotClick(loc.id, isUnlocked)} className={isUnlocked ? "cursor-pointer" : ""}>

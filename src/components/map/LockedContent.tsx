@@ -39,7 +39,7 @@ export const LockedContent: React.FC<LockedContentProps> = ({
 }) => {
   // Preload all clue images under src/assets/clues and map filenames to resolved URLs.
   // Uses Vite's import.meta.glob with eager + as:'url' to produce usable URLs at runtime.
-  const clueImageModules = import.meta.glob('../../assets/clues/*', { eager: true, as: 'url' }) as Record<string, string>;
+  const clueImageModules = import.meta.glob('../../assets/clues/*', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
   const resolveImageUrl = (path?: string | null) => {
     if (!path) return null;
     // If it's already a full URL (http/https) or data URI, return as-is

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SummonARButton } from './SummonARButton';
+import { getLocationData } from '../../constants/locations';
 
 interface UnlockedContentProps {
   id: string;
@@ -46,7 +47,7 @@ export const UnlockedContent: React.FC<UnlockedContentProps> = ({
         {/* Action Buttons */}
         <div className="flex flex-col gap-2 mt-1">
           <SummonARButton
-            onClick={() => onEnterAR?.(id, realBuildingName)}
+            onClick={() => onEnterAR?.(id, getLocationData(id)?.mascotName || realBuildingName)}
             label="Summon in AR"
             className="py-3 px-4"
           />

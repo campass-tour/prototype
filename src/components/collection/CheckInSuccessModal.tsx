@@ -3,6 +3,7 @@ import { Backpack, Map as MapIcon } from 'lucide-react';
 import '@google/model-viewer';
 import LottieModule from 'lottie-react';
 import defaultModelUrl from '../../assets/model/default-model.glb?url';
+import { getLocationData } from '../../constants/locations';
 import { SummonARButton } from '../photo/SummonARButton';
 
 const Lottie = (LottieModule as any).default || LottieModule;
@@ -66,9 +67,17 @@ export default function CheckInSuccessModal({
   const safeTotal = total > 0 ? total : 1;
   const percentage = Math.min((displayedCurrent / safeTotal) * 100, 100);
 
-  // Determine model dynamically. Format: id-model.glb or fallback to default-model.glb
-  const targetModelPath = `../../assets/model/${checkinId}-model.glb`;
-  const modelSrc = glbModels[targetModelPath] || defaultModelUrl;
+  // Determine model dynamically using location assets mapping
+  const locData = getLocationData(checkinId);
+  const modelFile = locData?.model;
+  let modelSrc = defaultModelUrl;
+  if (modelFile) {
+    const path = `../../assets/model/${modelFile}`;
+    modelSrc = glbModels[path] || defaultModelUrl;
+  } else if (checkinId) {
+    const fallbackPath = `../../assets/model/${checkinId}-model.glb`;
+    modelSrc = glbModels[fallbackPath] || defaultModelUrl;
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 p-2 sm:p-4 backdrop-blur-md animate-in fade-in duration-300" style={{ zIndex: 'var(--z-overlay)' }}>

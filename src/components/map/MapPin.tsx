@@ -8,8 +8,8 @@ import defaultImageUrl from '../../assets/image/default-image.png';
 import { UnlockedContent } from './UnlockedContent';
 import { LockedContent } from './LockedContent';
 
-const imageFiles = import.meta.glob('../../assets/image/*-image.{png,jpg,jpeg,webp}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
-const iconFiles = import.meta.glob('../../assets/icon/*.ico', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+const imageFiles = import.meta.glob('../../assets/image/*.{png,jpg,jpeg,webp,svg}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+const iconFiles = import.meta.glob('../../assets/icon/*', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 
 interface MapPinProps {
   id: string; // The location ID for fetching messages
@@ -141,24 +141,20 @@ export const MapPin: React.FC<MapPinProps> = ({
     }
   };
 
-  // Get image src
+  // Get image src from locationData.image (provided by constants/getLocationData)
   let imageSrc = defaultImageUrl;
-  const pngPath = `../../assets/image/${id}-image.png`;
-  const jpgPath = `../../assets/image/${id}-image.jpg`;
-  const jpegPath = `../../assets/image/${id}-image.jpeg`;
-  const webpPath = `../../assets/image/${id}-image.webp`;
-
-  if (imageFiles[pngPath]) imageSrc = imageFiles[pngPath];
-  else if (imageFiles[jpgPath]) imageSrc = imageFiles[jpgPath];
-  else if (imageFiles[jpegPath]) imageSrc = imageFiles[jpegPath];
-  else if (imageFiles[webpPath]) imageSrc = imageFiles[webpPath];
+  if (locationData?.image) {
+    const path = `../../assets/image/${locationData.image}`;
+    imageSrc = imageFiles[path] || defaultImageUrl;
+  }
 
   // Calculate actual message count for this location
   const whisperCount = MESSAGES.filter(msg => msg.locationId === id).length;
 
-  // Get icon src for unlocked pins
+  // Get icon src from locationData.icon
   const getIconSrc = () => {
-    const iconPath = `../../assets/icon/${id}-icon.ico`;
+    if (!locationData?.icon) return null;
+    const iconPath = `../../assets/icon/${locationData.icon}`;
     return iconFiles[iconPath] || null;
   };
 

@@ -80,7 +80,8 @@ export default function CollectionSwiperModal({
           className="w-full h-[520px]"
         >
           {displayList.map((item) => {
-            const targetModelPath = `../../assets/model/${item.id}-model.glb`;
+            const modelFile = item.model;
+            const targetModelPath = modelFile ? `../../assets/model/${modelFile}` : `../../assets/model/${item.id}-model.glb`;
             const modelSrc = glbModels[targetModelPath] || defaultModelUrl;
 
             return (

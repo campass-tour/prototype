@@ -2,12 +2,14 @@ import messagesData from '../data/messages.json';
 import locationsData from '../data/locations.json';
 import loresData from '../data/lores.json';
 import userPositionData from '../data/userPosition.json';
+import locationAssetsData from '../data/locationAssets.json';
 import type { Message, Location, LocationLore, UserPosition } from '../types';
 
 const messages = messagesData as unknown as Message[];
 const locations = locationsData as unknown as Location[];
 const lores = loresData as unknown as LocationLore[];
 const userPosition = userPositionData as unknown as UserPosition;
+const locationAssets = locationAssetsData as unknown as Array<{ id: string; icon?: string | null; image?: string | null; model?: string | null; mascotName?: string | null }>;
 
 export function getMessages(): Message[] {
   return messages;
@@ -33,6 +35,10 @@ export function getUserPosition(): UserPosition {
   return userPosition;
 }
 
+export function getLocationAssetsById(id: string) {
+  return locationAssets.find((a) => a.id === id);
+}
+
 export default {
   getMessages,
   getMessagesByLocation,
@@ -40,4 +46,5 @@ export default {
   getLocationById,
   getLoreById,
   getUserPosition,
+  getLocationAssetsById,
 };
