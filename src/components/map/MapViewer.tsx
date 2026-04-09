@@ -15,6 +15,7 @@ import { userPosition } from '../../constants/userPositionData';
 // import { getMarkerAndContainerCenters } from './getMarkerAndContainerCenters';
 import { isCollectibleUnlocked } from '../../lib/storage';
 import { centerMarkerInContainer } from '../../lib/mapUtils';
+import type { TransformAnimationType } from '../../lib/mapUtils';
 import { MapWhispersDrawer } from './MapWhispersDrawer';
 
 interface MapViewerProps {
@@ -77,7 +78,7 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
       positionX: number,
       positionY: number,
       scale: number,
-      setTransform: (x: number, y: number, scale: number, animationTime?: number, animationType?: string) => void,
+      setTransform: (x: number, y: number, scale: number, animationTime?: number, animationType?: TransformAnimationType) => void,
       animationTime = 500
     ) => {
       return centerMarkerInContainer(

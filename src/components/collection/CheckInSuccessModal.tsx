@@ -1,13 +1,13 @@
-﻿import { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Backpack, Map as MapIcon } from 'lucide-react';
 import '@google/model-viewer';
-import LottieModule from 'lottie-react';
+import Lottie from 'lottie-react';
 import defaultModelUrl from '../../assets/model/default-model.glb?url';
 import { getLocationData } from '../../constants/locations';
 import { SummonARButton } from '../photo/SummonARButton';
 
-const Lottie = (LottieModule as unknown).default || LottieModule;
-const ModelViewer = 'model-viewer' as unknown;
+// Provide a small React wrapper that renders the `model-viewer` web component
+const ModelViewer: React.FC<any> = (props) => React.createElement('model-viewer', props);
 
 // Dynamically load all .glb models in the assets folder
 const glbModels = import.meta.glob('../../assets/model/*.glb', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
@@ -54,7 +54,9 @@ export default function CheckInSuccessModal({
   // Animate progress bar: show old value, then after short delay, animate to new value
   useEffect(() => {
     if (open) {
-      setDisplayedCurrent(current - 1 >= 0 ? current - 1 : 0);
+      setTimeout(() => {
+        setDisplayedCurrent(current - 1 >= 0 ? current - 1 : 0);
+      }, 0);
       const timer = setTimeout(() => {
         setDisplayedCurrent(current);
       }, 400); // 400ms delay before animating up
@@ -83,9 +85,9 @@ export default function CheckInSuccessModal({
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 p-2 sm:p-4 backdrop-blur-md animate-in fade-in duration-300" style={{ zIndex: 'var(--z-overlay)' }}>
       <div className="absolute inset-0" onClick={onClose} />
 
-      {lottieData && (
+      {lottieData != null && (
         <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-70 mix-blend-screen">
-          <Lottie animationData={lottieData} loop={true} style={{ width: '150%', height: '150%' }} />
+          <Lottie animationData={lottieData as any} loop={true} style={{ width: '150%', height: '150%' }} />
         </div>
       )}
 
