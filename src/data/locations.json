@@ -2,5 +2,6 @@
   { "id": "cb", "name": "Central Building", "x": 31.5, "y": 50 },
   { "id": "sb", "name": "Science Building B", "x": 45, "y": 35 },
   { "id": "mus", "name": "Museum", "x": 60, "y": 65 },
-  { "id": "hui", "name": "Hui Bar", "x": 20, "y": 70 }
+  { "id": "hui", "name": "Hui Bar", "x": 20, "y": 70 },
+  { "id": "fb", "name": "Foundation Building", "x": 30, "y": 35.1 }
 ]
