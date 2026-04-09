@@ -2,6 +2,23 @@
 // 通用地图操作工具函数
 import { getMarkerAndContainerCenters } from '../components/map/getMarkerAndContainerCenters';
 
+// 与 react-zoom-pan-pinch 的 setTransform 动画类型保持一致
+export type TransformAnimationType =
+  | 'linear'
+  | 'easeOut'
+  | 'easeInQuad'
+  | 'easeOutQuad'
+  | 'easeInOutQuad'
+  | 'easeInCubic'
+  | 'easeOutCubic'
+  | 'easeInOutCubic'
+  | 'easeInQuart'
+  | 'easeOutQuart'
+  | 'easeInOutQuart'
+  | 'easeInQuint'
+  | 'easeOutQuint'
+  | 'easeInOutQuint';
+
 /**
  * 居中指定 marker 到容器中心
  * @param markerId marker 元素的 id
@@ -24,7 +41,7 @@ export function centerMarkerInContainer(
     y: number,
     scale: number,
     animationTime?: number,
-    animationType?: string
+    animationType?: TransformAnimationType
   ) => void,
   animationTime = 500
 ) {
