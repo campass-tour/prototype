@@ -4,7 +4,7 @@
     "icon": "cb-icon.ico",
     "image": "cb-image.png",
     "model": "cb-model.glb",
-    "mascotName": "Central Building Mascot"
+    "mascotName": "CB Bird"
   },
   {
     "id": "sb",
@@ -32,6 +32,6 @@
     "icon": "fb-icon.ico",
     "image": "fb-image.png",
     "model": "fb-model.glb",
-    "mascotName": "Foundation Building Mascot"
+    "mascotName": "FB Bird"
   }
 ]

@@ -6,8 +6,8 @@ import defaultModelUrl from '../../assets/model/default-model.glb?url';
 import { getLocationData } from '../../constants/locations';
 import { SummonARButton } from '../photo/SummonARButton';
 
-const Lottie = (LottieModule as any).default || LottieModule;
-const ModelViewer = 'model-viewer' as any;
+const Lottie = (LottieModule as unknown).default || LottieModule;
+const ModelViewer = 'model-viewer' as unknown;
 
 // Dynamically load all .glb models in the assets folder
 const glbModels = import.meta.glob('../../assets/model/*.glb', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
@@ -35,7 +35,7 @@ export default function CheckInSuccessModal({
   onViewCollection,
   onEnterAR,
 }: CheckInSuccessModalProps) {
-  const [lottieData, setLottieData] = useState<any>(null);
+  const [lottieData, setLottieData] = useState<unknown>(null);
   // For progress bar animation
   const [displayedCurrent, setDisplayedCurrent] = useState(current - 1 >= 0 ? current - 1 : 0);
 

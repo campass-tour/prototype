@@ -14,6 +14,7 @@ import { LOCATIONS } from '../../constants/locations';
 import { userPosition } from '../../constants/userPositionData';
 import { getMarkerAndContainerCenters } from './getMarkerAndContainerCenters';
 import { isCollectibleUnlocked } from '../../lib/storage';
+import { MapWhispersDrawer } from './MapWhispersDrawer';
 
 interface MapViewerProps {
   className?: string;
@@ -28,7 +29,17 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
 
   const [arTarget, setArTarget] = useState<{ id: string, name: string } | null>(null);
   const [selectedLevels, setSelectedLevels] = useState<number[] | null>(null);
+  const [activeDrawerLocation, setActiveDrawerLocation] = useState<string | null>(null);
   const availableLevels = Array.from(new Set(LOCATIONS.map(l => l.lv || 1))).sort();
+  const [isWideScreen, setIsWideScreen] = useState(() => typeof window !== 'undefined' ? window.innerWidth > 900 : true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWideScreen(window.innerWidth > 900);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // 用户位置和Pin点数据已提取到独立文件
 
@@ -225,7 +236,20 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                           ) : undefined
                         }
                         hintText={isUnlocked ? undefined : `Find this ${location.name} to unlock its secrets!`}
-                        onMessageWallClick={() => navigate(`/wall?location=${location.id}`)}
+                        onMessageWallClick={() => {
+                          if (isWideScreen) {
+                            setActiveDrawerLocation(location.id);
+                          } else {
+                            navigate(`/wall?location=${location.id}`);
+                          }
+                        }}
+                        onPinClick={() => {
+                          if (isWideScreen && activeDrawerLocation !== null) {
+                            setActiveDrawerLocation(location.id);
+                            return true;
+                          }
+                          return false;
+                        }}
                         onEnterAR={(id, name) => setArTarget({ id, name })}
                       />
                     );
@@ -243,6 +267,14 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
         checkinId={arTarget?.id}
         mascotName={arTarget?.name || 'Mascot'}
       />
+      
+      {isWideScreen && (
+        <MapWhispersDrawer
+          isOpen={activeDrawerLocation !== null}
+          locationId={activeDrawerLocation}
+          onClose={() => setActiveDrawerLocation(null)}
+        />
+      )}
     </div>
   );
 }

@@ -22,6 +22,7 @@ interface MapPinProps {
   hintText?: string;
   onMessageWallClick?: () => void;
   onEnterAR?: (id: string, name: string) => void;
+  onPinClick?: () => boolean | void; // Return true to prevent default open/close behavior
 }
 
 export const MapPin: React.FC<MapPinProps> = ({ 
@@ -34,7 +35,8 @@ export const MapPin: React.FC<MapPinProps> = ({
   hintImage, 
   hintText, 
   onMessageWallClick,
-  onEnterAR
+  onEnterAR,
+  onPinClick
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -196,6 +198,10 @@ export const MapPin: React.FC<MapPinProps> = ({
           ref={pinRef}
           onClick={(e) => {
             e.stopPropagation();
+            if (onPinClick) {
+              const preventDefault = onPinClick();
+              if (preventDefault) return;
+            }
             setIsOpen(!isOpen);
             if (!isOpen) {
               setDrawerOffset(0);
