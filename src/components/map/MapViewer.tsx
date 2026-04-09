@@ -12,8 +12,9 @@ import MapFilter from './MapFilter';
 import ARModelViewer from '../photo/ARModelViewer';
 import { LOCATIONS } from '../../constants/locations';
 import { userPosition } from '../../constants/userPositionData';
-import { getMarkerAndContainerCenters } from './getMarkerAndContainerCenters';
+// import { getMarkerAndContainerCenters } from './getMarkerAndContainerCenters';
 import { isCollectibleUnlocked } from '../../lib/storage';
+import { centerMarkerInContainer } from '../../lib/mapUtils';
 import { MapWhispersDrawer } from './MapWhispersDrawer';
 
 interface MapViewerProps {
@@ -76,16 +77,18 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
       positionX: number,
       positionY: number,
       scale: number,
-      setTransform: (x: number, y: number, scale: number, animationTime?: number, animationType?: "linear" | "easeOut" | "easeInQuad" | "easeOutQuad" | "easeInOutQuad" | "easeInCubic" | "easeOutCubic" | "easeInOutCubic" | "easeInQuart" | "easeOutQuart" | "easeInOutQuart" | "easeInQuint" | "easeOutQuint" | "easeInOutQuint") => void,
+      setTransform: (x: number, y: number, scale: number, animationTime?: number, animationType?: string) => void,
       animationTime = 500
     ) => {
-      const centers = getMarkerAndContainerCenters('user-position-marker', containerRef.current);
-      if (!centers) return false;
-      const { markerCenterX, markerCenterY, containerCenterX, containerCenterY } = centers;
-      const deltaX = containerCenterX - markerCenterX;
-      const deltaY = containerCenterY - markerCenterY;
-      setTransform(positionX + deltaX, positionY + deltaY, scale, animationTime, 'easeOut');
-      return true;
+      return centerMarkerInContainer(
+        'user-position-marker',
+        containerRef.current,
+        positionX,
+        positionY,
+        scale,
+        setTransform,
+        animationTime
+      );
     },
     []
   );
@@ -141,7 +144,11 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
         pinch={{ step: 5 }}
         wheel={{ step: 0.1 }}
         onInit={handleTransformInit}
-        onTransformed={(_, state) => updateCSSVars(state.scale)}
+        onTransformed={(_, state) => {
+          updateCSSVars(state.scale);
+          // 地图变换完成后，触发弹窗位置更新
+          window.dispatchEvent(new CustomEvent('map-transform'));
+        }}
       >
         {({ zoomIn, zoomOut, resetTransform, setTransform }) => (
           <>
@@ -244,11 +251,51 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                           }
                         }}
                         onPinClick={() => {
-                          if (isWideScreen && activeDrawerLocation !== null) {
-                            setActiveDrawerLocation(location.id);
-                            return true;
-                          }
-                          return false;
+                          // 首先记录当前的抽屉状态
+                          const needsToOpenDrawer = isWideScreen && activeDrawerLocation !== null;
+
+                          // 首先执行居中，居中完成后再处理抽屉逻辑
+                          requestAnimationFrame(() => {
+                            // 从 ref 中获取当前状态，或使用默认值
+                            const { positionX, positionY, scale } = transformRef.current?.state || {
+                              positionX: 0,
+                              positionY: 0,
+                              scale: initialScale
+                            };
+
+                            // 使用 TransformWrapper 回调中提供的 setTransform，因为它是最新的
+                            const centerSuccess = centerMarkerInContainer(
+                              `pin-${location.id}`,
+                              containerRef.current,
+                              positionX,
+                              positionY,
+                              scale,
+                              setTransform, // 使用从回调中获得的 setTransform
+                              500
+                            );
+
+                            if (centerSuccess) {
+                              // 居中成功后，计划在下一个动画帧中打开抽屉
+                              // 这样确保变换动画已经开始，即使尚未完成
+                              requestAnimationFrame(() => {
+                                if (needsToOpenDrawer) {
+                                  // 为当前location打开抽屉
+                                  setActiveDrawerLocation(location.id);
+                                  // 触发一个自定义事件通知所有弹窗更新位置
+                                  window.dispatchEvent(new CustomEvent('map-transform'));
+                                }
+                              });
+                            } else if (needsToOpenDrawer) {
+                              // 如果居中失败但仍需打开抽屉
+                              setActiveDrawerLocation(location.id);
+                              // 触发一个自定义事件通知所有弹窗更新位置
+                              window.dispatchEvent(new CustomEvent('map-transform'));
+                            }
+                          });
+
+                          // 在桌面端返回true，阻止MapPin内部的默认打开行为
+                          // 这样我们可以控制何时打开弹窗
+                          return needsToOpenDrawer;
                         }}
                         onEnterAR={(id, name) => setArTarget({ id, name })}
                       />

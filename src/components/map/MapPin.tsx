@@ -25,15 +25,15 @@ interface MapPinProps {
   onPinClick?: () => boolean | void; // Return true to prevent default open/close behavior
 }
 
-export const MapPin: React.FC<MapPinProps> = ({ 
+export const MapPin: React.FC<MapPinProps> = ({
   id,
-  x, 
-  y, 
-  status, 
-  buildingIcon, 
-  buildingName, 
-  hintImage, 
-  hintText, 
+  x,
+  y,
+  status,
+  buildingIcon,
+  buildingName,
+  hintImage,
+  hintText,
   onMessageWallClick,
   onEnterAR,
   onPinClick
@@ -107,11 +107,22 @@ export const MapPin: React.FC<MapPinProps> = ({
     updatePos();
     window.addEventListener('resize', updatePos);
     window.addEventListener('scroll', updatePos, true);
+
+    // 为了使弹窗跟随地图变换，我们监听地图容器的变化
+    // 创建一个自定义事件监听器
+    const handleMapTransform = () => {
+      // 地图变换后，更新弹窗位置
+      setTimeout(updatePos, 0); // 使用timeout确保DOM已更新
+    };
+
+    window.addEventListener('map-transform', handleMapTransform);
+
     return () => {
       window.removeEventListener('resize', updatePos);
       window.removeEventListener('scroll', updatePos, true);
+      window.removeEventListener('map-transform', handleMapTransform);
     };
-  }, [isOpen, isMobile]);
+  }, [isOpen, isMobile, x, y]);
 
   // Manage Danmaku delayed closing
   useEffect(() => {
@@ -184,9 +195,9 @@ export const MapPin: React.FC<MapPinProps> = ({
 
   return (
     <>
-      <div 
+      <div
         className="absolute z-10 pointer-events-auto"
-        style={{ 
+        style={{
           left: `${x}%`,
           top: `${y}%`,
           transform: "translate(-50%, -50%) scale(var(--map-inv-scale, 1))",
@@ -194,7 +205,8 @@ export const MapPin: React.FC<MapPinProps> = ({
         }}
       >
         {/* The Map Pin Indicator */}
-        <div 
+        <div
+          id={`pin-${id}`}  // 添加ID属性以便在地图上定位
           ref={pinRef}
           onClick={(e) => {
             e.stopPropagation();
