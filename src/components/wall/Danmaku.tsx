@@ -133,7 +133,8 @@ export const Danmaku: React.FC<{ isActive: boolean; locationId: string }> = ({ i
       
       <MessageDetailModal 
         item={selectedItem} 
-        onClose={() => setSelectedItem(null)} 
+        onClose={() => setSelectedItem(null)}
+        showDeleteIcon={selectedItem?.originalMessage.author.username === 'silly bird'}
       />
     </>,
     document.body

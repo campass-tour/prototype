@@ -2,14 +2,21 @@ import React, { useMemo, useState } from 'react';
 import { BookHeart } from 'lucide-react';
 import { MESSAGES } from '../../constants/messages';
 import PolaroidCard from '../../components/wall/PolaroidCard';
+import { MessageDetailModal } from '../../components/common/MessageDetailModal';
 
 /* timestamp formatter removed (unused) */
+
+
+// DanmakuItem type (copied from Danmaku.tsx for reference)
+// export interface DanmakuItem {
+//   id: string; text: string; avatar?: string; rightImage?: string; top: number; duration: number; originalMessage: Message;
+// }
 
 export const MyMemories: React.FC = () => {
   // For now use authorId === 1 as the current user (data/users.json)
   const currentUserId = 1;
   const userMessages = useMemo(() => MESSAGES.filter(m => m.authorId === currentUserId || m.author.username === 'silly bird'), []);
-  const [, setSelectedMessageId] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
   return (
     <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-6 shadow-[var(--shadow-card)] w-full border border-[var(--border)]">
@@ -32,12 +39,33 @@ export const MyMemories: React.FC = () => {
           <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4" style={{ columnGap: '1.5rem' }}>
             {userMessages.map((msg, idx) => (
               <div className="mb-6" key={msg.id}>
-                <PolaroidCard message={msg} index={idx} onClick={() => setSelectedMessageId(msg.id)} />
+                <PolaroidCard
+                  message={msg}
+                  index={idx}
+                  onClick={() => {
+                    // Convert to DanmakuItem shape for MessageDetailModal
+                    setSelectedItem({
+                      id: msg.id,
+                      text: msg.content,
+                      avatar: msg.author.avatarUrl,
+                      rightImage: msg.imageUrl,
+                      top: 0,
+                      duration: 0,
+                      originalMessage: msg
+                    });
+                  }}
+                />
               </div>
             ))}
           </div>
         </div>
       )}
+      {/* MessageDetailModal for selected card */}
+      <MessageDetailModal 
+        item={selectedItem} 
+        onClose={() => setSelectedItem(null)}
+        showDeleteIcon={selectedItem?.originalMessage.author.username === 'silly bird'}
+      />
     </div>
   );
 };

@@ -86,6 +86,7 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
       return false;
     }
 
+    if (!ref.state) return false;
     const { positionX, positionY, scale } = ref.state;
 
     return centerOnUserMarker(
@@ -141,9 +142,9 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
             <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-2 bg-(--color-surface) p-2 rounded-xl shadow-(--shadow-card) border border-(--color-state-disabled)">
               <button 
                 onClick={() => centerOnUserMarker(
-                  transformRef.current?.state.positionX ?? 0,
-                  transformRef.current?.state.positionY ?? 0,
-                  transformRef.current?.state.scale ?? initialScale,
+                  transformRef.current?.state?.positionX ?? 0,
+                  transformRef.current?.state?.positionY ?? 0,
+                  transformRef.current?.state?.scale ?? initialScale,
                   setTransform,
                 )} 
                 className="p-2 rounded-lg hover:bg-(--color-background) text-(--color-primary) bg-primary/10 transition-colors focus:outline-none"
@@ -188,7 +189,7 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                   className="pointer-events-auto select-none max-w-none"
                   draggable={false}
                   onLoad={() => {
-                    const scale = transformRef.current?.state.scale ?? initialScale;
+                    const scale = transformRef.current?.state?.scale ?? initialScale;
                     updateCSSVars(scale);
                     // 先居中用户箭头，再做其它逻辑
                     setTimeout(() => {

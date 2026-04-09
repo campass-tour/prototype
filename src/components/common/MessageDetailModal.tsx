@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, MapPin } from 'lucide-react';
+import { X, MapPin, Trash2 } from 'lucide-react';
 import type { DanmakuItem } from '../wall/Danmaku';
 import { getLocationData } from '../../constants/locations';
 import { isCollectibleUnlocked } from '../../lib/storage';
@@ -9,9 +9,11 @@ import { ImageViewer } from './ImageViewer';
 interface MessageDetailModalProps {
   item: DanmakuItem | null;
   onClose: () => void;
+  showDeleteIcon?: boolean;
+  onDelete?: () => void;
 }
 
-export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, onClose }) => {
+export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, onClose, showDeleteIcon = false, onDelete }) => {
   // 判断是否为移动端
   const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
   // ImageViewer state
@@ -53,6 +55,16 @@ export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, on
         >
           <X size={20} />
         </button>
+
+        {/* Delete button (optional) */}
+        {showDeleteIcon && (
+          <button
+            onClick={onDelete}
+            className="absolute top-4 right-12 text-[var(--color-text-secondary)] hover:text-red-500 transition-colors focus:outline-none bg-[var(--color-background)] rounded-full p-1"
+          >
+            <Trash2 size={20} />
+          </button>
+        )}
 
         {/* User Info header */}
         <div className="flex items-center gap-3 pr-8">

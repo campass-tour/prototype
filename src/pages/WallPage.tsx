@@ -134,7 +134,8 @@ export const WallPage: React.FC = () => {
 
       <MessageDetailModal 
         item={selectedDanmakuItem} 
-        onClose={() => setSelectedMessage(null)} 
+        onClose={() => setSelectedMessage(null)}
+        showDeleteIcon={selectedDanmakuItem?.originalMessage.author.username === 'silly bird'}
       />
 
       {/* Mobile Compose FAB */}
