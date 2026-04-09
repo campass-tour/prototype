@@ -47,7 +47,11 @@ export const LockedContent: React.FC<LockedContentProps> = ({
     const fileName = path.replace(/^.*\//, '');
     const matchKey = Object.keys(clueImageModules).find(k => k.endsWith(fileName));
     if (matchKey) return clueImageModules[matchKey];
-    // If JSON provided a leading-root path like /assets/clues/foo.png, try to use it as-is
+    // If JSON provided a leading-root path like /assets/clues/foo.png, prefix with Vite base so
+    // the URL works when deployed under a sub-path (e.g., GitHub Pages project site).
+    if (path.startsWith('/')) {
+      return import.meta.env.BASE_URL + path.replace(/^\//, '');
+    }
     return path;
   };
   const [unlockedLevel, setUnlockedLevel] = useState(1);
@@ -179,19 +183,14 @@ export const LockedContent: React.FC<LockedContentProps> = ({
           expandedPanel === 1,
           <>
             <div className="relative w-full aspect-video rounded-md overflow-hidden bg-gray-200 mb-3 shadow-inner">
-              <button className="w-full h-full" onClick={() => {
-                const raw = hintImage ?? clues.card1.image_placeholder;
-                const imgs = Array.isArray(raw) ? raw : (raw ? [raw] : []);
-                const urls = imgs.map((p: string) => resolveImageUrl(p) || p).filter(Boolean) as string[];
-                if (urls.length) { setViewerImages(urls); setViewerIndex(0); setViewerOpen(true); }
-              }}>
+              <div className="w-full h-full cursor-default select-none">
                 <img 
                   src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'}
                   onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
                   alt="Ambience Clue" 
                   className={`w-full h-full object-cover transition-all duration-500 blur-[8px] scale-110 opacity-70`}
                 />
-              </button>
+              </div>
               <div className="absolute inset-0 pointer-events-none bg-white/10 backdrop-blur-sm" />
             </div>
             <p className="mb-4 italic">"{clues.card1.lv1_text}"</p>

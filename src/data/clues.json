@@ -3,12 +3,12 @@
     "locationId": "cb",
     "clues": {
       "card1": {
-        "image_placeholder": "/assets/clues/cb-clue1.png",
+        "image_placeholder": "assets/clues/cb-clue1.png",
         "lv1_text": "It is the brain and heart of this university, housing both a vast sea of books and the wisdom of decision-making.",
         "lv2_text": "No need to delve deep into the maze’s core. Head to the North Campus, where you’ll find the entrance."
       },
       "card2": {
-        "image_placeholder": ["/assets/clues/cb-clue3-1.png","/assets/clues/cb-clue3-2.png"],
+        "image_placeholder": ["assets/clues/cb-clue3-1.png","assets/clues/cb-clue3-2.png"],
         "lv3_text": "At the the north gate of the Central Building (across from FB)"
       }
     },
@@ -45,12 +45,12 @@
     "locationId": "sb",
     "clues": {
       "card1": {
-        "image_placeholder": "/assets/clues/sb_ambience.jpg",
+        "image_placeholder": "assets/clues/sb_ambience.jpg",
         "lv1_text": "A complex of laboratories and futuristic classrooms where scientific equations meet architectural grandeur. Often dubbed the 'bridge of logic'.",
         "lv2_text": "Situated in the heart of South Campus, its unique geometric design features multiple interconnected blocks and distinctive sky bridges."
       },
       "card2": {
-        "image_placeholder": ["/assets/clues/sb_exact_nfc.jpg"],
+        "image_placeholder": ["assets/clues/sb_exact_nfc.jpg"],
         "lv3_text": "Walk up the main stairs of Block B to the 2nd floor open study corner. The magic tag hides behind the third whiteboard facing the corridor!"
       }
     },
@@ -87,12 +87,12 @@
     "locationId": "mus",
     "clues": {
       "card1": {
-        "image_placeholder": "/assets/clues/mus_ambience.jpg",
+        "image_placeholder": "assets/clues/mus_ambience.jpg",
         "lv1_text": "A silent treasury of time and memory. Here, the university's past, present, and future artifacts are carefully preserved.",
         "lv2_text": "Find this cultural epicenter near the southern entrance of the North Campus, just steps away from the central administrative block."
       },
       "card2": {
-        "image_placeholder": ["/assets/clues/mus_exact_nfc.jpg"],
+        "image_placeholder": ["assets/clues/mus_exact_nfc.jpg"],
         "lv3_text": "Enter the main exhibition hall, head past the scale model of the campus, and check under the showcase describing the university's founding year!"
       }
     },
@@ -129,12 +129,12 @@
     "locationId": "hui",
     "clues": {
       "card1": {
-        "image_placeholder": "/assets/clues/hui_ambience.jpg",
+        "image_placeholder": "assets/clues/hui_ambience.jpg",
         "lv1_text": "A vibrant sanctuary where espresso shots fuel endless club discussions, late-night cram sessions, and serendipitous encounters.",
         "lv2_text": "Nestled in the student activity center area, this spot is synonymous with the lively, informal learning culture of the campus."
       },
       "card2": {
-        "image_placeholder": ["/assets/clues/hui_exact_nfc.jpg"],
+        "image_placeholder": ["assets/clues/hui_exact_nfc.jpg"],
         "lv3_text": "Order a latte, walk to the high tables by the right-side window, and peek underneath the table closest to the door to find the tag!"
       }
     },
