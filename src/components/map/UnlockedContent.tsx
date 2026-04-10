@@ -11,6 +11,8 @@ interface UnlockedContentProps {
   onMessageWallClick?: () => void;
   onEnterAR?: (id: string, name: string) => void;
   isDesktopUA: boolean;
+  hideViewWhispersButton?: boolean;
+  hideTitle?: boolean;
 }
 
 export const UnlockedContent: React.FC<UnlockedContentProps> = ({
@@ -21,15 +23,19 @@ export const UnlockedContent: React.FC<UnlockedContentProps> = ({
   lore,
   onMessageWallClick,
   onEnterAR,
-  isDesktopUA
+  isDesktopUA,
+  hideViewWhispersButton = false,
+  hideTitle = false,
 }) => {
   const [isLoreExpanded, setIsLoreExpanded] = useState(false);
 
   return (
     <>
-      <h2 className="font-bold mb-[var(--spacing-3)] text-2xl leading-tight text-[var(--color-text-main)]">
-        {realBuildingName}
-      </h2>
+      {!hideTitle && (
+        <h2 className="font-bold mb-[var(--spacing-3)] text-2xl leading-tight text-[var(--color-text-main)]">
+          {realBuildingName}
+        </h2>
+      )}
       <div className="flex flex-col gap-4">
         {/* Visual Center: Mascot Preview */}
         <div className="flex items-center gap-4 bg-[var(--color-background)] p-3 rounded-xl border border-[var(--border)]">
@@ -52,15 +58,17 @@ export const UnlockedContent: React.FC<UnlockedContentProps> = ({
             className="py-3 px-4"
           />
 
-          <button
-            onClick={onMessageWallClick}
-            className="w-full bg-[var(--color-surface)] border-2 border-[var(--color-primary)] text-[var(--color-primary)] font-bold py-[10px] px-4 rounded-xl hover:bg-[var(--color-primary)] hover:text-white active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-          >
-            <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-            <span>View Whispers <span className="text-[0.9em] opacity-90">({whisperCount})</span> </span>
-          </button>
+          {!hideViewWhispersButton && (
+            <button
+              onClick={onMessageWallClick}
+              className="w-full bg-[var(--color-surface)] border-2 border-[var(--color-primary)] text-[var(--color-primary)] font-bold py-[10px] px-4 rounded-xl hover:bg-[var(--color-primary)] hover:text-white active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            >
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <span>View Whispers <span className="text-[0.9em] opacity-90">({whisperCount})</span> </span>
+            </button>
+          )}
         </div>
 
         {/* Cultural Lore Section (Expandable/Flippable) */}

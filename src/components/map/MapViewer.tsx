@@ -16,7 +16,8 @@ import { userPosition } from '../../constants/userPositionData';
 import { isCollectibleUnlocked } from '../../lib/storage';
 import { centerMarkerInContainer } from '../../lib/mapUtils';
 import type { TransformAnimationType } from '../../lib/mapUtils';
-import { MapWhispersDrawer } from './MapWhispersDrawer';
+import { SideDrawer } from '../common/SideDrawer';
+import WallContent from './WallContent';
 
 interface MapViewerProps {
   className?: string;
@@ -252,12 +253,9 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                           }
                         }}
                         onPinClick={() => {
-                          // 首先记录当前的抽屉状态
-                          const needsToOpenDrawer = isWideScreen && activeDrawerLocation !== null;
+                          const needsToOpenDrawer = isWideScreen; // All desktop clicks should open the drawer now
 
-                          // 首先执行居中，居中完成后再处理抽屉逻辑
                           requestAnimationFrame(() => {
-                            // 从 ref 中获取当前状态，或使用默认值
                             const { positionX, positionY, scale } = transformRef.current?.state || {
                               positionX: 0,
                               positionY: 0,
@@ -299,6 +297,7 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                           return needsToOpenDrawer;
                         }}
                         onEnterAR={(id, name) => setArTarget({ id, name })}
+                        isSidebarOpen={activeDrawerLocation !== null}
                       />
                     );
                   })}
@@ -317,11 +316,15 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
       />
       
       {isWideScreen && (
-        <MapWhispersDrawer
+        <SideDrawer
           isOpen={activeDrawerLocation !== null}
-          locationId={activeDrawerLocation}
           onClose={() => setActiveDrawerLocation(null)}
-        />
+        >
+          {/* 保持原有内容逻辑 */}
+          {activeDrawerLocation && (
+            <WallContent locationId={activeDrawerLocation} onClose={() => setActiveDrawerLocation(null)} />
+          )}
+        </SideDrawer>
       )}
     </div>
   );
