@@ -1,56 +1,71 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { BookHeart } from 'lucide-react';
-import { getMessages } from '../../lib/dataSources';
-import MessageCard from '../wall/MessageCard';
-import type { Message } from '../../types';
+import { MESSAGES } from '../../constants/messages';
+import PolaroidCard from '../../components/wall/PolaroidCard';
+import { MessageDetailModal } from '../../components/common/MessageDetailModal';
 
-const formatTimestamp = (iso?: string) => {
-  if (!iso) return '';
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return iso;
-  // Force English formatting to avoid user's locale (e.g., Chinese)
-  return d.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
+/* timestamp formatter removed (unused) */
+
+
+// DanmakuItem type (copied from Danmaku.tsx for reference)
+// export interface DanmakuItem {
+//   id: string; text: string; avatar?: string; rightImage?: string; top: number; duration: number; originalMessage: Message;
+// }
 
 export const MyMemories: React.FC = () => {
-  const all = getMessages();
-  // filter messages authored by user with id = 1
-  const myMessages = all.filter((m: Message) => m.authorId === 1 || m.author?.username === 'silly bird');
+  // For now use authorId === 1 as the current user (data/users.json)
+  const currentUserId = 1;
+  const userMessages = useMemo(() => MESSAGES.filter(m => m.authorId === currentUserId || m.author.username === 'silly bird'), []);
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
   return (
-    <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-6 shadow-[var(--shadow-card)] w-full min-h-[250px] border border-[var(--border)]">
+    <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-6 shadow-[var(--shadow-card)] w-full border border-[var(--border)]">
       <h3 className="text-lg md:text-xl font-bold text-[var(--color-text-main)] mb-4 flex items-center gap-2 m-0">
         <BookHeart size={20} className="text-[var(--color-accent)]" />
         Memories & Echoes
       </h3>
 
-      {myMessages.length === 0 ? (
+      {userMessages.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center py-10">
           <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-[var(--color-state-disabled)]/50">
             <svg className="w-6 h-6 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h11"></path></svg>
           </div>
-          <p className="text-[var(--color-text-secondary)] text-sm md:text-base max-w-[200px]">
-            No echoes found.
-          </p>
-          <p className="text-xs text-[var(--color-text-secondary)] mt-1 opacity-70">
-            Explore the campus and leave your first echo!
+          <p className="text-[var(--color-text-secondary)] text-sm md:text-base max-w-[300px]">
+            You haven't posted any memories yet.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {myMessages.map((m) => (
-            <MessageCard
-              key={m.id}
-              userName={m.author.username}
-              userAvatar={m.author.avatarUrl || ''}
-              timestamp={formatTimestamp(m.timestamp)}
-              text={m.content}
-              imageUrl={m.imageUrl}
-              initialLikes={m.likes}
-            />
-          ))}
+        <div className="max-h-[52vh] overflow-auto pr-4 px-4 pb-4 pt-4">
+          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4" style={{ columnGap: '1.5rem' }}>
+            {userMessages.map((msg, idx) => (
+              <div className="mb-6" key={msg.id}>
+                <PolaroidCard
+                  message={msg}
+                  index={idx}
+                  onClick={() => {
+                    // Convert to DanmakuItem shape for MessageDetailModal
+                    setSelectedItem({
+                      id: msg.id,
+                      text: msg.content,
+                      avatar: msg.author.avatarUrl,
+                      rightImage: msg.imageUrl,
+                      top: 0,
+                      duration: 0,
+                      originalMessage: msg
+                    });
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       )}
+      {/* MessageDetailModal for selected card */}
+      <MessageDetailModal 
+        item={selectedItem} 
+        onClose={() => setSelectedItem(null)}
+        showDeleteIcon={selectedItem?.originalMessage.author.username === 'silly bird'}
+      />
     </div>
   );
 };

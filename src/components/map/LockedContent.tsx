@@ -10,6 +10,7 @@ interface LockedContentProps {
   realBuildingName: string;
   hintImage?: string;
   hintText?: string;
+  hideTitle?: boolean;
 }
 
 const LockIcon = () => (
@@ -35,11 +36,12 @@ export const LockedContent: React.FC<LockedContentProps> = ({
   id,
   realBuildingName,
   hintImage,
-  hintText
+  hintText,
+  hideTitle = false
 }) => {
   // Preload all clue images under src/assets/clues and map filenames to resolved URLs.
   // Uses Vite's import.meta.glob with eager + as:'url' to produce usable URLs at runtime.
-  const clueImageModules = import.meta.glob('../../assets/clues/*', { eager: true, as: 'url' }) as Record<string, string>;
+  const clueImageModules = import.meta.glob('../../assets/clues/*', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
   const resolveImageUrl = (path?: string | null) => {
     if (!path) return null;
     // If it's already a full URL (http/https) or data URI, return as-is
@@ -78,9 +80,11 @@ export const LockedContent: React.FC<LockedContentProps> = ({
   if (!locationData) {
     return (
       <div className="flex flex-col gap-4">
-        <h2 className="font-bold mb-[var(--spacing-3)] text-2xl leading-tight text-[var(--color-text-main)]">
-          Mysterious Spot
-        </h2>
+        {!hideTitle && (
+          <h2 className="font-bold mb-[var(--spacing-3)] text-2xl leading-tight text-[var(--color-text-main)]">
+            Mysterious Spot
+          </h2>
+        )}
         <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
           {hintText || 'Find this exact spot to unlock its secrets.'}
         </p>
@@ -181,9 +185,11 @@ export const LockedContent: React.FC<LockedContentProps> = ({
 
   return (
     <div className="flex flex-col gap-3 relative">
-      <h2 className="font-bold px-1 text-xl text-[var(--color-text-main)] text-center">
-        {realBuildingName}
-      </h2>
+      {!hideTitle && (
+        <h2 className="font-bold px-1 text-xl text-[var(--color-text-main)] text-center">
+          {realBuildingName}
+        </h2>
+      )}
 
       {/* Accordion List */}
       <div className="flex flex-col gap-2">

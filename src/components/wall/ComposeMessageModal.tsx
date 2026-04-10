@@ -121,10 +121,10 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
 
   return createPortal(
     <>
-      {/* Overlay */}
+      {/* Overlay (put below modal content) */}
       <div 
         className="fixed inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
-        style={{ zIndex: 'var(--z-overlay)' }}
+        style={{ zIndex: 'var(--z-modal)' }}
         onClick={onClose}
       />
 
@@ -132,7 +132,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
       {!isMobile && (
         <div 
           className="fixed inset-0 flex items-center justify-center pointer-events-none"
-          style={{ zIndex: 'var(--z-modal)' }}
+          style={{ zIndex: 'var(--z-overlay)' }}
         >
           <div 
             onClick={handleContentClick}
@@ -149,7 +149,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
           className="fixed inset-x-0 bottom-0 bg-[var(--color-surface)] animate-in slide-in-from-bottom duration-300 flex flex-col"
           onClick={handleContentClick}
           style={{ 
-            zIndex: 'var(--z-modal)',
+            zIndex: 'var(--z-overlay)',
             borderTopLeftRadius: 'var(--radius-card)', 
             borderTopRightRadius: 'var(--radius-card)',
             boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.2)',

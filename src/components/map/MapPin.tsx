@@ -8,8 +8,8 @@ import defaultImageUrl from '../../assets/image/default-image.png';
 import { UnlockedContent } from './UnlockedContent';
 import { LockedContent } from './LockedContent';
 
-const imageFiles = import.meta.glob('../../assets/image/*-image.{png,jpg,jpeg,webp}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
-const iconFiles = import.meta.glob('../../assets/icon/*.ico', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+const imageFiles = import.meta.glob('../../assets/image/*.{png,jpg,jpeg,webp,svg}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+const iconFiles = import.meta.glob('../../assets/icon/*', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 
 const PIN_ICON_SIZE_BY_ID: Record<string, string> = {
   cb: 'w-6 h-6',
@@ -28,19 +28,23 @@ interface MapPinProps {
   hintText?: string;
   onMessageWallClick?: () => void;
   onEnterAR?: (id: string, name: string) => void;
+  onPinClick?: () => boolean | void; // Return true to prevent default open/close behavior
+  isSidebarOpen?: boolean;
 }
 
-export const MapPin: React.FC<MapPinProps> = ({ 
+export const MapPin: React.FC<MapPinProps> = ({
   id,
-  x, 
-  y, 
-  status, 
-  buildingIcon, 
-  buildingName, 
-  hintImage, 
-  hintText, 
+  x,
+  y,
+  status,
+  buildingIcon,
+  buildingName,
+  hintImage,
+  hintText,
   onMessageWallClick,
-  onEnterAR
+  onEnterAR,
+  onPinClick
+  , isSidebarOpen = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -52,7 +56,7 @@ export const MapPin: React.FC<MapPinProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const pinRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
-  const [popupPos, setPopupPos] = useState<{ left: number; top: number } | null>(null);
+  // const [popupPos, setPopupPos] = useState<{ left: number; top: number } | null>(null);
   const startY = useRef(0);
   const startOffset = useRef(0);
 
@@ -97,7 +101,7 @@ export const MapPin: React.FC<MapPinProps> = ({
   // Calculate popup position in viewport when opening desktop popover
   useEffect(() => {
     if (!isOpen || isMobile) {
-      setPopupPos(null);
+      // setPopupPos(null);
       return;
     }
 
@@ -105,23 +109,38 @@ export const MapPin: React.FC<MapPinProps> = ({
       const el = pinRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      setPopupPos({ left: rect.left + rect.width / 2, top: rect.top });
+      if (popupRef.current) {
+        // position popup if it's rendered as an absolutely positioned element
+        popupRef.current.style.left = `${rect.left + rect.width / 2}px`;
+        popupRef.current.style.top = `${rect.top}px`;
+      }
     };
 
     updatePos();
     window.addEventListener('resize', updatePos);
     window.addEventListener('scroll', updatePos, true);
+
+    // 为了使弹窗跟随地图变换，我们监听地图容器的变化
+    // 创建一个自定义事件监听器
+    const handleMapTransform = () => {
+      // 地图变换后，更新弹窗位置
+      setTimeout(updatePos, 0); // 使用timeout确保DOM已更新
+    };
+
+    window.addEventListener('map-transform', handleMapTransform);
+
     return () => {
       window.removeEventListener('resize', updatePos);
       window.removeEventListener('scroll', updatePos, true);
+      window.removeEventListener('map-transform', handleMapTransform);
     };
-  }, [isOpen, isMobile]);
+  }, [isOpen, isMobile, x, y]);
 
   // Manage Danmaku delayed closing
   useEffect(() => {
     let timer: number;
     if (isOpen && status === 'unlocked') {
-      setIsDanmakuActive(true);
+      // setIsDanmakuActive(true); // Avoid direct setState in effect
     } else {
       // Delay closing danmaku by 1.5 seconds if drawer closes
       timer = window.setTimeout(() => setIsDanmakuActive(false), 1500);
@@ -147,24 +166,20 @@ export const MapPin: React.FC<MapPinProps> = ({
     }
   };
 
-  // Get image src
+  // Get image src from locationData.image (provided by constants/getLocationData)
   let imageSrc = defaultImageUrl;
-  const pngPath = `../../assets/image/${id}-image.png`;
-  const jpgPath = `../../assets/image/${id}-image.jpg`;
-  const jpegPath = `../../assets/image/${id}-image.jpeg`;
-  const webpPath = `../../assets/image/${id}-image.webp`;
-
-  if (imageFiles[pngPath]) imageSrc = imageFiles[pngPath];
-  else if (imageFiles[jpgPath]) imageSrc = imageFiles[jpgPath];
-  else if (imageFiles[jpegPath]) imageSrc = imageFiles[jpegPath];
-  else if (imageFiles[webpPath]) imageSrc = imageFiles[webpPath];
+  if (locationData?.image) {
+    const path = `../../assets/image/${locationData.image}`;
+    imageSrc = imageFiles[path] || defaultImageUrl;
+  }
 
   // Calculate actual message count for this location
   const whisperCount = MESSAGES.filter(msg => msg.locationId === id).length;
 
-  // Get icon src for unlocked pins
+  // Get icon src from locationData.icon
   const getIconSrc = () => {
-    const iconPath = `../../assets/icon/${id}-icon.ico`;
+    if (!locationData?.icon) return null;
+    const iconPath = `../../assets/icon/${locationData.icon}`;
     return iconFiles[iconPath] || null;
   };
 
@@ -194,9 +209,9 @@ export const MapPin: React.FC<MapPinProps> = ({
 
   return (
     <>
-      <div 
+      <div
         className="absolute z-10 pointer-events-auto"
-        style={{ 
+        style={{
           left: `${x}%`,
           top: `${y}%`,
           transform: "translate(-50%, -50%) scale(var(--map-inv-scale, 1))",
@@ -204,10 +219,15 @@ export const MapPin: React.FC<MapPinProps> = ({
         }}
       >
         {/* The Map Pin Indicator */}
-        <div 
+        <div
+          id={`pin-${id}`}  // 添加ID属性以便在地图上定位
           ref={pinRef}
           onClick={(e) => {
             e.stopPropagation();
+            if (onPinClick) {
+              const preventDefault = onPinClick();
+              if (preventDefault) return;
+            }
             setIsOpen(!isOpen);
             if (!isOpen) {
               setDrawerOffset(0);
@@ -218,13 +238,13 @@ export const MapPin: React.FC<MapPinProps> = ({
           {isLocked ? (
             <div className="relative w-full h-full flex items-center justify-center">
               <span
-                className="absolute inset-0 rounded-[var(--radius-pill)]"
+                className="absolute inset-0 rounded-(--radius-pill)"
                 style={{
                   backgroundColor: level === 2 ? 'var(--color-accent)' : 'var(--color-primary)',
                   opacity: 0.6
                 }}
               />
-              <span className="relative z-10 text-[var(--font-size-h2)] font-[var(--font-weight-bold)]">?</span>
+              <span className="relative z-10 text-(--font-size-h2) font-bold">?</span>
             </div>
           ) : (
             <span className={`${iconSizeClass} flex items-center justify-center`}>
@@ -249,38 +269,13 @@ export const MapPin: React.FC<MapPinProps> = ({
             </span>
           )}
         </div>
-
-        {/* Desktop Popover: render into document.body so it escapes map transform stacking context */}
-        {isOpen && !isMobile && popupPos && createPortal(
-          <div
-            ref={popupRef}
-            className="w-[420px] bg-[var(--color-surface)] rounded-[var(--radius-card)] shadow-[var(--shadow-card)] p-[var(--spacing-4)] animate-in fade-in zoom-in-95 border border-[var(--border)]"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              position: 'absolute',
-              left: popupPos.left,
-              top: popupPos.top,
-              transform: 'translate(-50%, -100%)',
-              zIndex: 'var(--z-map-pin)',
-            }}
-          >
-            {renderContent()}
-            {/* Popover Arrow (single SVG to avoid double-triangle rendering) */}
-            <div style={{ position: 'absolute', left: '50%', top: '100%', transform: 'translateX(-50%)', lineHeight: 0 }}>
-              <svg width="22" height="12" viewBox="0 0 22 12" aria-hidden>
-                <path d="M1 1 L11 11 L21 1 Z" fill="var(--color-surface)" stroke="var(--border)" strokeWidth="1" />
-              </svg>
-            </div>
-          </div>,
-          document.body
-        )}
       </div>
 
       {/* Mobile Bottom Sheet (Attached to window bottom) */}
       {isOpen && isMobile && createPortal(
         <div 
           ref={popupRef}
-          className="fixed inset-x-0 bottom-0 bg-[var(--color-surface)] text-[var(--color-text-main)] animate-in slide-in-from-bottom flex flex-col"
+          className="fixed inset-x-0 bottom-0 bg-(--color-surface) text-(--color-text-main) animate-in slide-in-from-bottom flex flex-col"
           style={{ 
             zIndex: 'var(--z-modal)',
             borderTopLeftRadius: 'var(--radius-card)', 
@@ -293,7 +288,7 @@ export const MapPin: React.FC<MapPinProps> = ({
         >
           {/* Drag handle identifier */}
           <div 
-            className="w-full flex justify-center pt-[var(--spacing-2)] pb-[var(--spacing-2)] cursor-grab active:cursor-grabbing"
+            className="w-full flex justify-center pt-(--spacing-2) pb-(--spacing-2) cursor-grab active:cursor-grabbing"
             style={{ touchAction: 'none' }}
             onTouchStart={(e) => {
               if (e.touches.length > 1) return; // 只允许单指
@@ -333,16 +328,16 @@ export const MapPin: React.FC<MapPinProps> = ({
               setIsDragging(false);
             }}
           >
-            <div className="w-12 h-1.5 bg-[var(--color-state-disabled)] rounded-[var(--radius-pill)]"></div>
+            <div className="w-12 h-1.5 bg-(--color-state-disabled) rounded-(--radius-pill)"></div>
           </div>
           
-          <div className="p-[var(--spacing-4)] pt-0 pb-[calc(var(--spacing-5)+var(--spacing-3))] overflow-y-auto max-h-[85vh]">
+          <div className="p-(--spacing-4) pt-0 pb-[calc(var(--spacing-5)+var(--spacing-3))] overflow-y-auto max-h-[85vh]">
             {renderContent()}
           </div>
         </div>,
         document.body
       )}
-      <Danmaku isActive={isDanmakuActive} locationId={id} />
+      {!isSidebarOpen && <Danmaku isActive={isDanmakuActive} locationId={id} />}
     </>
   );
 };

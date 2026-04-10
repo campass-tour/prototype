@@ -17,14 +17,15 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (import.meta.env.DEV) console.log('ImageViewer: isOpen=', isOpen, 'initialIndex=', initialIndex, 'images length=', images?.length);
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      try { document.body.style.overflow = 'hidden'; } catch (e) { if (import.meta.env.DEV) console.error('ImageViewer: failed to set body overflow', e); }
     } else {
-      document.body.style.overflow = '';
+      try { document.body.style.overflow = ''; } catch (e) { }
       setScale(1);
       setTranslate({ x: 0, y: 0 });
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => { try { document.body.style.overflow = ''; } catch (e) { } };
   }, [isOpen]);
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
   const node = (
     <div
       className="image-viewer-overlay fixed inset-0 flex items-center justify-center animate-in fade-in duration-300 backdrop-blur-sm"
-      style={{ backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 11000 }}
+      style={{ backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 'var(--z-overlay)' }}
       onWheel={onWheel}
       role="dialog"
       aria-modal="true"
@@ -76,7 +77,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
           onClick={(e) => { e.stopPropagation(); onClose(); }}
           aria-label="Close image viewer"
           className="absolute right-4 top-4 bg-white/20 hover:bg-white/30 text-white rounded-full w-12 h-12 flex items-center justify-center backdrop-blur-md transition-all"
-          style={{ zIndex: 11010 }}
+          style={{ zIndex: 'var(--z-overlay)' }}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -89,7 +90,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
             onClick={(e) => { e.stopPropagation(); prev(); }}
             aria-label="Previous"
             className="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full w-12 h-12 flex items-center justify-center transition-all"
-            style={{ zIndex: 11010 }}
+            style={{ zIndex: 'var(--z-overlay)' }}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6"></polyline>
@@ -123,7 +124,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
             onClick={(e) => { e.stopPropagation(); next(); }}
             aria-label="Next"
             className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full w-12 h-12 flex items-center justify-center transition-all"
-            style={{ zIndex: 11010 }}
+            style={{ zIndex: 'var(--z-overlay)' }}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6"></polyline>

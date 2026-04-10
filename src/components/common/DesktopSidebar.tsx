@@ -3,6 +3,7 @@ import { Sun, Moon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import type { TabId } from './MainLayout';
+// import { SideDrawer } from './SideDrawer';
 
 interface DesktopSidebarProps {
   tabs: { id: TabId; label: string; icon: React.ElementType }[];
@@ -13,18 +14,18 @@ interface DesktopSidebarProps {
 
 export function DesktopSidebar({ tabs, activeTab, isDarkMode, toggleDarkMode }: DesktopSidebarProps) {
   return (
-    <aside className="hidden md:flex flex-col w-64 bg-[var(--color-surface)] shadow-[2px_0_12px_rgba(0,0,0,0.03)] z-20 shrink-0 h-full border-r border-[var(--color-state-disabled)] relative">
+    <aside className="hidden md:flex flex-col w-64 bg-(--color-surface) shadow-[2px_0_12px_rgba(0,0,0,0.03)] z-20 shrink-0 h-full border-r border-(--color-state-disabled) relative">
       <button 
         onClick={toggleDarkMode}
-        className="absolute left-4 top-4 p-2 rounded-full text-[var(--color-text-secondary)] hover:bg-[var(--color-background)] transition-colors"
+        className="absolute left-4 top-4 p-2 rounded-full text-(--color-text-secondary) hover:bg-(--color-background) transition-colors"
         aria-label="Toggle dark mode"
       >
         {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
       </button>
       <div className="p-8 pb-4 flex items-center justify-center">
         <h1 className="campass-logo font-extrabold text-4xl tracking-tight flex select-none">
-          <span className="text-[var(--color-logo-cam)]">Cam</span>
-          <span className="text-[var(--color-logo-pass)]">pass</span>
+          <span className="text-(--color-logo-cam)">Cam</span>
+          <span className="text-(--color-logo-pass)">pass</span>
         </h1>
       </div>
       
@@ -40,8 +41,8 @@ export function DesktopSidebar({ tabs, activeTab, isDarkMode, toggleDarkMode }: 
               className={cn(
                 "flex items-center space-x-4 w-full px-5 py-4 rounded-xl transition-all duration-200 font-semibold text-base",
                 isActive 
-                  ? "bg-[var(--color-primary)] text-white shadow-md shadow-[var(--color-primary)]/20" 
-                  : "text-[var(--color-text-secondary)] hover:bg-[var(--color-background)] hover:text-[var(--color-text-main)]"
+                  ? "bg-(--color-primary) text-white shadow-md shadow-(--color-primary)/20"
+                  : "text-(--color-text-secondary) hover:bg-(--color-background) hover:text-(--color-text-main)"
               )}
             >
               <Icon size={22} className={isActive ? "text-white" : ""} strokeWidth={isActive ? 2.5 : 2} />

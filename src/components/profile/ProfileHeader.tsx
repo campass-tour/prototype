@@ -17,7 +17,7 @@ export const ProfileHeader: React.FC = () => {
       </div>
       <div className="px-4 pb-4 md:px-6 relative flex flex-col md:flex-row md:items-center text-center md:text-left">
         {/* Avatar Area */}
-        <div className="relative -mt-14 md:-mt-12 mb-3 md:mb-0 inline-block md:mr-4">
+        <div className="relative -mt-14 md:-mt-12 mb-3 md:mb-0 inline-block mx-auto md:mr-4">
           <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-white p-1 shadow-[0_0_16px_rgba(156,125,217,0.45)] flex items-center justify-center object-cover">
              <img 
                 src="https://picui.ogmua.cn/s1/2026/04/08/69d56b9761229.webp" 
@@ -53,3 +53,6 @@ export const ProfileHeader: React.FC = () => {
     </div>
   );
 };
+
+
+export default ProfileHeader;

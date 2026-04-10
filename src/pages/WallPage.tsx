@@ -2,120 +2,16 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { MESSAGES } from '../constants/messages';
 import type { Message } from '../types';
-import { Heart, MapPin, Plus } from 'lucide-react';
+import { MapPin, Plus } from 'lucide-react';
 import { MessageDetailModal } from '../components/common/MessageDetailModal';
 import { ComposeMessageModal } from '../components/wall/ComposeMessageModal';
 import type { DanmakuItem } from '../components/wall/Danmaku';
-import { getLocationData } from '../constants/locations';
-import { isCollectibleUnlocked } from '../lib/storage';
 import { LOCATIONS } from '../constants/locations';
+import { isCollectibleUnlocked } from '../lib/storage';
+import PolaroidCard from '../components/wall/PolaroidCard';
 import { Button } from '../components/ui/button';
 
-const formatTimeAgo = (isoString: string) => {
-  const date = new Date(isoString);
-  const now = new Date();
-  const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-  
-  if (diffInMinutes < 60) return `${diffInMinutes} mins ago`;
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) return `${diffInHours} hours ago`;
-  return `${Math.floor(diffInHours / 24)} days ago`;
-};
-
-const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => void }> = ({ message, index, onClick }) => {
-  // Generate a random slight rotation for desktop hover
-  const hoverRotation = useMemo(() => {
-    const rotations = ['-2deg', '-1deg', '1deg', '2deg'];
-    return rotations[index % rotations.length];
-  }, [index]);
-
-  const locationData = getLocationData(message.locationId);
-  const isUnlocked = isCollectibleUnlocked(message.locationId);
-  const locationName = isUnlocked && locationData ? locationData.locationName : 'Mysterious Location';
-
-  return (
-    <div
-      className="group break-inside-avoid mb-6 transition-all duration-300 hover:scale-105 cursor-pointer flex flex-col"
-      onClick={onClick}
-      style={{
-        '--hover-rotate': hoverRotation,
-      } as React.CSSProperties}
-    >
-      <div 
-        className="bg-white p-3 pb-6 md:p-4 md:pb-8 shadow-(--shadow-card) rounded-sm border border-gray-200/50"
-        style={{
-          transform: 'rotate(var(--tw-rotate, 0))',
-          transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-        }}
-      >
-        <style>{`
-          @media (min-width: 768px) {
-            .group:hover > div {
-              transform: rotate(${hoverRotation}) !important;
-            }
-          }
-        `}</style>
-        
-        {/* Photo Section */}
-        {message.imageUrl && (
-          <div className="w-full bg-gray-100 rounded-sm mb-4 overflow-hidden" style={{ aspectRatio: '4/5' }}>
-            <img 
-              src={message.imageUrl} 
-              alt="Memory" 
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-        )}
-        
-        {/* Text Section (Handwritten font feeling) */}
-        <div className="flex flex-col space-y-3">
-          <p 
-            className="text-black text-lg md:text-xl leading-relaxed" 
-            style={{ 
-              fontFamily: '"Caveat", "Comic Sans MS", cursive, sans-serif' // Fallback for handwritten
-            }}
-          >
-            {message.content}
-          </p>
-
-          {/* Always show profile info */}
-          <div className="flex items-center gap-2 mt-1">
-            {message.author.avatarUrl ? (
-              <img src={message.author.avatarUrl} alt={message.author.username} className="w-6 h-6 rounded-full" />
-            ) : (
-              <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-500">
-                {message.author.username.charAt(0).toUpperCase()}
-              </div>
-            )}
-            <span className="text-gray-600 text-sm font-medium">{message.author.username}</span>
-          </div>
-
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full px-2 py-1 w-max">
-            <MapPin className="w-3 h-3 text-(--color-primary)" />
-            {locationName}
-          </div>
-
-          <div className="flex items-center justify-between text-gray-500 text-sm mt-2">
-            <span style={{ fontFamily: '"Caveat", "Comic Sans MS", cursive, sans-serif', fontSize: '1.1rem' }}>
-              {formatTimeAgo(message.timestamp)}
-            </span>
-              <div 
-                className="flex items-center gap-1 p-1 -mr-1 rounded-md transition-colors hover:bg-[var(--color-background)] group/like"
-              onClick={(e) => {
-                e.stopPropagation(); // prevent card click
-                // In a real app we would call a like hook here
-              }}
-            >
-              <Heart className="w-4 h-4 text-red-400 group-hover/like:text-red-500 group-hover/like:fill-red-400 transition-all" />
-              <span className="group-hover/like:text-red-500 font-medium">{message.likes}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+ 
 
 export const WallPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -238,7 +134,8 @@ export const WallPage: React.FC = () => {
 
       <MessageDetailModal 
         item={selectedDanmakuItem} 
-        onClose={() => setSelectedMessage(null)} 
+        onClose={() => setSelectedMessage(null)}
+        showDeleteIcon={selectedDanmakuItem?.originalMessage.author.username === 'silly bird'}
       />
 
       {/* Mobile Compose FAB */}

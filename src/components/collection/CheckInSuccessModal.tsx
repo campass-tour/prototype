@@ -1,12 +1,13 @@
-﻿import { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Backpack, Map as MapIcon } from 'lucide-react';
 import '@google/model-viewer';
-import LottieModule from 'lottie-react';
+import LottieLib from 'lottie-react';
 import defaultModelUrl from '../../assets/model/default-model.glb?url';
+import { getLocationData } from '../../constants/locations';
 import { SummonARButton } from '../photo/SummonARButton';
 
-const Lottie = (LottieModule as any).default || LottieModule;
-const ModelViewer = 'model-viewer' as any;
+// Provide a small React wrapper that renders the `model-viewer` web component
+const ModelViewer: React.FC<any> = (props) => React.createElement('model-viewer', props);
 
 // Dynamically load all .glb models in the assets folder
 const glbModels = import.meta.glob('../../assets/model/*.glb', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
@@ -34,7 +35,7 @@ export default function CheckInSuccessModal({
   onViewCollection,
   onEnterAR,
 }: CheckInSuccessModalProps) {
-  const [lottieData, setLottieData] = useState<any>(null);
+  const [lottieData, setLottieData] = useState<unknown>(null);
   // For progress bar animation
   const [displayedCurrent, setDisplayedCurrent] = useState(current - 1 >= 0 ? current - 1 : 0);
 
@@ -53,7 +54,9 @@ export default function CheckInSuccessModal({
   // Animate progress bar: show old value, then after short delay, animate to new value
   useEffect(() => {
     if (open) {
-      setDisplayedCurrent(current - 1 >= 0 ? current - 1 : 0);
+      setTimeout(() => {
+        setDisplayedCurrent(current - 1 >= 0 ? current - 1 : 0);
+      }, 0);
       const timer = setTimeout(() => {
         setDisplayedCurrent(current);
       }, 400); // 400ms delay before animating up
@@ -66,19 +69,30 @@ export default function CheckInSuccessModal({
   const safeTotal = total > 0 ? total : 1;
   const percentage = Math.min((displayedCurrent / safeTotal) * 100, 100);
 
-  // Determine model dynamically. Format: id-model.glb or fallback to default-model.glb
-  const targetModelPath = `../../assets/model/${checkinId}-model.glb`;
-  const modelSrc = glbModels[targetModelPath] || defaultModelUrl;
+  // Determine model dynamically using location assets mapping
+  const locData = getLocationData(checkinId);
+  const modelFile = locData?.model;
+  let modelSrc = defaultModelUrl;
+  if (modelFile) {
+    const path = `../../assets/model/${modelFile}`;
+    modelSrc = glbModels[path] || defaultModelUrl;
+  } else if (checkinId) {
+    const fallbackPath = `../../assets/model/${checkinId}-model.glb`;
+    modelSrc = glbModels[fallbackPath] || defaultModelUrl;
+  }
+
+  // Resolve lottie-react default vs named export at runtime
+  const Lottie = (LottieLib as any)?.default || LottieLib;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 p-2 sm:p-4 backdrop-blur-md animate-in fade-in duration-300" style={{ zIndex: 'var(--z-overlay)' }}>
       <div className="absolute inset-0" onClick={onClose} />
 
-      {lottieData && (
-        <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-70 mix-blend-screen">
-          <Lottie animationData={lottieData} loop={true} style={{ width: '150%', height: '150%' }} />
-        </div>
-      )}
+      {lottieData != null && (
+            <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-70 mix-blend-screen">
+              <Lottie animationData={lottieData as any} loop={true} style={{ width: '150%', height: '150%' }} />
+            </div>
+          )}
 
       <div className="relative z-10 w-full max-w-[95vw] sm:max-w-sm overflow-hidden rounded-[18px] sm:rounded-[24px] border border-[var(--color-primary)]/30 bg-[var(--color-surface)]/85 p-3 sm:p-6 shadow-[var(--shadow-card)] backdrop-blur-xl animate-in zoom-in-95 duration-500">
         <button

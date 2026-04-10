@@ -30,6 +30,7 @@ const ProfilePage: React.FC = () => {
         </div>
 
       </div>
+      <div className="md:hidden" style={{ height: 'calc(56px + env(safe-area-inset-bottom))' }} />
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { X, Camera } from 'lucide-react';
 import '@google/model-viewer';
 import ARUnsupportedPrompt from './ARUnsupportedPrompt';
 import defaultModelUrl from '../../assets/model/default-model.glb?url';
+import { getLocationData } from '../../constants/locations';
 
 // Dynamically load all .glb models in the assets folder
 const glbModels = import.meta.glob('../../assets/model/*.glb', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
@@ -51,9 +52,17 @@ export default function ARModelViewer({
 
   if (!open) return null;
 
-  // Determine model dynamically
-  const targetModelPath = `../../assets/model/${checkinId}-model.glb`;
-  const modelSrc = checkinId ? (glbModels[targetModelPath] || defaultModelUrl) : defaultModelUrl;
+  // Determine model dynamically using unified assets mapping
+  const locData = checkinId ? getLocationData(checkinId) : null;
+  const modelFile = locData?.model;
+  let modelSrc = defaultModelUrl;
+  if (modelFile) {
+    const path = `../../assets/model/${modelFile}`;
+    modelSrc = glbModels[path] || defaultModelUrl;
+  } else if (checkinId) {
+    const fallbackPath = `../../assets/model/${checkinId}-model.glb`;
+    modelSrc = glbModels[fallbackPath] || defaultModelUrl;
+  }
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-[var(--color-background)] animate-in fade-in duration-300" style={{ zIndex: 'var(--z-overlay)' }}>

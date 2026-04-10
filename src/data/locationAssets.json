@@ -1,0 +1,37 @@
+[
+  {
+    "id": "cb",
+    "icon": "cb-icon.ico",
+    "image": "cb-image.png",
+    "model": "cb-model.glb",
+    "mascotName": "CB Bird"
+  },
+  {
+    "id": "sb",
+    "icon": null,
+    "image": null,
+    "model": "sb-model.glb",
+    "mascotName": "Science Building Mascot"
+  },
+  {
+    "id": "mus",
+    "icon": null,
+    "image": null,
+    "model": null,
+    "mascotName": "Museum Mascot"
+  },
+  {
+    "id": "hui",
+    "icon": null,
+    "image": null,
+    "model": null,
+    "mascotName": "Hui Mascot"
+  },
+  {
+    "id": "fb",
+    "icon": "fb-icon.ico",
+    "image": "fb-image.png",
+    "model": "fb-model.glb",
+    "mascotName": "FB Bird"
+  }
+]
