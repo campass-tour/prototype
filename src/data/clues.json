@@ -166,5 +166,93 @@
         "successMessage": "Brilliant! You've mastered the art of informal learning. The exact tag location is now unblurred!"
       }
     ]
+  },
+  {
+    "locationId": "fb",
+    "clues": {
+      "card1": {
+        "image_placeholder": "assets/clues/fb-clue1.webp",
+        "lv1_text": "A place of first steps and steady routines, where many students begin their campus journey among classrooms, corridors, and quiet preparation.",
+        "lv2_text": "Head toward the Foundation Building area on campus. Look for the side facing the Central Building, where students often pass through between classes."
+      },
+      "card2": {
+        "image_placeholder": [
+          "assets/clues/fb-clue3-1.webp", "assets/clues/fb-clue3-2.webp", "assets/clues/fb-clue3-3.webp"
+        ],
+        "lv3_text": "Follow the final route images to the exact spot in Foundation Building. The NFC tag is placed at the clearly marked position shown in the last clue image."
+      }
+    },
+    "quizzes": [
+      {
+        "quizId": "q1",
+        "unlocks": "Level 2",
+        "question": "What best describes the role of Foundation Building at XJTLU?",
+        "options": [
+          "A. A campus sports arena for training and competitions",
+          "B. A starting point for learning, classes, and daily academic routines",
+          "C. The university's main museum and exhibition hall",
+          "D. A research laboratory reserved only for postgraduate students"
+        ],
+        "correctAnswerIndex": 2,
+        "successMessage": "Correct! The first layer fades away, and the building's location is now much clearer."
+      },
+      {
+        "quizId": "q2",
+        "unlocks": "Level 3",
+        "question": "Which clue best helps you distinguish Foundation Building from places like the museum, cafe, or research labs?",
+        "options": [
+          "A. It is known mainly for exhibits and campus history displays",
+          "B. It is centered on coffee, social events, and informal hangouts",
+          "C. It is associated with classrooms, daily study routines, and students moving between lessons",
+          "D. It is primarily filled with advanced scientific laboratories"
+        ],
+        "correctAnswerIndex": 3,
+        "successMessage": "Exactly. The final route and the NFC position are now fully revealed."
+      }
+    ]
+  },
+  {
+    "locationId": "gym",
+    "clues": {
+      "card1": {
+        "image_placeholder": "assets/clues/gym-clue1.webp",
+        "lv1_text": "A place where motion becomes habit and effort echoes through courts, studios, and training rooms all day long.",
+        "lv2_text": "Head toward the campus sports complex. Look for the building known for workouts, indoor courts, and student training sessions."
+      },
+      "card2": {
+        "image_placeholder": [
+          "assets/clues/gym-clue3-1.webp", "assets/clues/gym-clue3-2.webp", "assets/clues/gym-clue3-3.webp", "assets/clues/gym-clue3-4.webp"
+        ],
+        "lv3_text": "Follow the final route images outside the GYM to reach the exact NFC position. The tag is placed at the clearly marked spot shown in the last clue image."
+      }
+    },
+    "quizzes": [
+      {
+        "quizId": "q1",
+        "unlocks": "Level 2",
+        "question": "What best describes the main role of the GYM at XJTLU?",
+        "options": [
+          "A. A museum space for preserving campus history",
+          "B. A place for exercise, sports practice, and physical training",
+          "C. A coffee bar for informal discussions",
+          "D. A library and administrative center"
+        ],
+        "correctAnswerIndex": 2,
+        "successMessage": "Correct! The rhythm of movement points you closer to the right building."
+      },
+      {
+        "quizId": "q2",
+        "unlocks": "Level 3",
+        "question": "Which detail most clearly helps you identify the GYM instead of an academic or social building?",
+        "options": [
+          "A. It is associated with courts, workouts, and sports activities",
+          "B. It is mainly used for exhibitions and historical displays",
+          "C. It is best known for coffee and casual conversation",
+          "D. It is filled with classrooms and daily lectures"
+        ],
+        "correctAnswerIndex": 1,
+        "successMessage": "Exactly. The final route is unlocked, and the exact tag location is now visible."
+      }
+    ]
   }
 ]

@@ -22,7 +22,12 @@
   ,
   {
     "id": "fb",
-    "title": "Where New Journeys Take Root",
+    "title": "New Journeys Take Root",
     "content": "Foundation Building is where many students begin settling into the rhythm of campus life. With its classrooms, shared spaces, and steady flow of students, it carries the atmosphere of fresh starts, quiet effort, and small daily progress. More than just a place for lessons, it is where confidence grows and the first foundations of university life are built."
+  },
+  {
+    "id": "gym",
+    "title": "Energy Finds Its Rhythm",
+    "content": "The GYM is where students reset, recharge, and push themselves a little further every day. From quick workouts to team practice, it carries the pulse of movement, discipline, and shared momentum across campus. More than a training space, it is where effort becomes routine and energy turns into confidence."
   }
 ]
