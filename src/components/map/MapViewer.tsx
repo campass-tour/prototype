@@ -230,8 +230,8 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                       <MapPin
                         key={location.id}
                         id={location.id}
-                        x={location.x}
-                        y={location.y}
+                        x={location.x ?? 50}
+                        y={location.y ?? 50}
                         status={isUnlocked ? 'unlocked' : 'locked'}
                         buildingName={location.name}
                         buildingIcon={
