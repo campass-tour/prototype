@@ -33,5 +33,12 @@
     "image": "fb-image.png",
     "model": "fb-model.glb",
     "mascotName": "FB Bird"
+  },
+  {
+    "id": "gym",
+    "icon": "gym-icon.ico",
+    "image": "gym-image.png",
+    "model": "gym-model.glb",
+    "mascotName": "GYM Mascot"
   }
 ]
