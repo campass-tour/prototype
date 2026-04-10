@@ -184,5 +184,104 @@
     "author": { "username": "groupworkmode", "avatarUrl": "https://i.pravatar.cc/150?u=groupworkmode" },
     "likes": 16,
     "timestamp": "2026-04-08T09:10:00.000Z"
+  },
+  {
+    "id": "msg_23",
+    "locationId": "gym",
+    "content": "The gym was surprisingly quiet before 10 this morning. Best time for a quick workout before class.",
+    "author": { "username": "earlyset" },
+    "likes": 14,
+    "timestamp": "2026-04-09T07:50:00.000Z"
+  },
+  {
+    "id": "msg_24",
+    "locationId": "gym",
+    "content": "Tried the climbing wall for the first time today and my arms are absolutely gone, but it was worth it.",
+    "author": { "username": "holdplease" },
+    "likes": 29,
+    "timestamp": "2026-04-09T10:20:00.000Z",
+    "imageUrl": "https://free.boltp.com/2026/04/09/69d7b803d8147.webp"
+  },
+  {
+    "id": "msg_25",
+    "locationId": "gym",
+    "content": "The badminton courts filled up fast this afternoon. If you're planning doubles, come a little earlier.",
+    "author": { "username": "courtwatch" },
+    "likes": 17,
+    "timestamp": "2026-04-09T14:05:00.000Z"
+  },
+  {
+    "id": "msg_26",
+    "locationId": "gym",
+    "content": "There was a really nice stretch session happening outside the yoga room when I walked by. The whole floor felt calmer than usual.",
+    "author": { "username": "slowbreath", "avatarUrl": "https://i.pravatar.cc/150?u=slowbreath" },
+    "likes": 22,
+    "timestamp": "2026-04-09T11:10:00.000Z"
+  },
+  {
+    "id": "msg_27",
+    "locationId": "gym",
+    "content": "The table tennis room has become my favorite place to clear my head between deadlines. Fast games, no overthinking.",
+    "author": { "username": "spinserve" },
+    "likes": 18,
+    "timestamp": "2026-04-06T16:00:00.000Z"
+  },
+  {
+    "id": "msg_28",
+    "locationId": "gym",
+    "content": "The resistance bands neatly stacked in the fitness room today. The setup looked unusually organized.",
+    "author": { "username": "legdaylater" },
+    "likes": 9,
+    "timestamp": "2026-04-07T16:35:00.000Z"
+  },
+  {
+    "id": "msg_29",
+    "locationId": "gym",
+    "content": "Archery practice looked so focused this morning. The whole room went quiet every time someone drew the bow.",
+    "author": { "username": "targetline" },
+    "likes": 31,
+    "timestamp": "2026-04-05T18:10:00.000Z",
+    "imageUrl": "https://free.boltp.com/2026/04/09/69d7b7738f217.webp"
+  },
+  {
+    "id": "msg_30",
+    "locationId": "gym",
+    "content": "The basketball hall was packed after dinner, but the energy was great. Even from outside you could hear everyone calling for the ball.",
+    "author": { "username": "fullcourt" },
+    "likes": 26,
+    "timestamp": "2026-04-05T19:00:00.000Z"
+  },
+  {
+    "id": "msg_31",
+    "locationId": "gym",
+    "content": "Saw someone practicing short game drills at the golf area today. I didn't expect that corner to feel so serious and so quiet at the same time.",
+    "author": { "username": "greenside" },
+    "likes": 12,
+    "timestamp": "2026-04-07T19:20:00.000Z"
+  },
+  {
+    "id": "msg_32",
+    "locationId": "gym",
+    "content": "Dancing in the studio this afternoon was honestly so much fun. The whole room felt bright, energetic, and easy to get lost in.",
+    "author": { "username": "countsandeight", "avatarUrl": "https://i.pravatar.cc/150?u=countsandeight" },
+    "likes": 24,
+    "timestamp": "2026-04-05T20:05:00.000Z",
+    "imageUrl": "https://free.boltp.com/2026/04/09/69d7b6e1422c3.webp"
+  },
+  {
+    "id": "msg_33",
+    "locationId": "gym",
+    "content": "Tried squash for the first time and immediately understood why everyone says it looks easier than it is.",
+    "author": { "username": "wallreturn" },
+    "likes": 15,
+    "timestamp": "2026-04-07T20:40:00.000Z"
+  },
+  {
+    "id": "msg_34",
+    "locationId": "gym",
+    "content": "If you're looking for a quieter corner, the yoga and dance side of the building usually feels less crowded than the courts in the evening.",
+    "author": { "username": "afterclassmove" },
+    "likes": 11,
+    "timestamp": "2026-04-08T21:10:00.000Z"
   }
 ]
