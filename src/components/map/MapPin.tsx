@@ -11,6 +11,12 @@ import { LockedContent } from './LockedContent';
 const imageFiles = import.meta.glob('../../assets/image/*-image.{png,jpg,jpeg,webp}', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 const iconFiles = import.meta.glob('../../assets/icon/*.ico', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 
+const PIN_ICON_SIZE_BY_ID: Record<string, string> = {
+  cb: 'w-6 h-6',
+  fb: 'w-9 h-9',
+  gym: 'w-20 h-20',
+};
+
 interface MapPinProps {
   id: string; // The location ID for fetching messages
   x: number; // Percentage horizontal position (0-100)
@@ -162,6 +168,8 @@ export const MapPin: React.FC<MapPinProps> = ({
     return iconFiles[iconPath] || null;
   };
 
+  const iconSizeClass = PIN_ICON_SIZE_BY_ID[id] ?? 'w-6 h-6';
+
   const renderContent = () => (
     isLocked ? (
       <LockedContent
@@ -219,7 +227,7 @@ export const MapPin: React.FC<MapPinProps> = ({
               <span className="relative z-10 text-[var(--font-size-h2)] font-[var(--font-weight-bold)]">?</span>
             </div>
           ) : (
-            <span className="w-6 h-6 flex items-center justify-center">
+            <span className={`${iconSizeClass} flex items-center justify-center`}>
               {(() => {
                 const customIconSrc = getIconSrc();
                 if (customIconSrc) {
