@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { createPortal } from 'react-dom';
 import { MessageDetailModal } from '../common/MessageDetailModal';
 import { getMessagesByLocation } from '../../constants/messages';
@@ -105,10 +106,11 @@ export const Danmaku: React.FC<{ isActive: boolean; locationId: string }> = ({ i
           >
           {/* The Circular Avatar is positioned at the leftmost end */}
           {item.avatar ? (
-            <img 
-              src={item.avatar} 
-              alt="avatar" 
+            <LazyLoadImage
+              src={item.avatar}
+              alt="avatar"
               className="w-8 h-8 rounded-[var(--radius-pill)] object-cover flex-shrink-0 bg-gray-200"
+              effect="blur"
             />
           ) : (
             <div className="w-8 h-8 rounded-[var(--radius-pill)] bg-[var(--color-primary)] flex items-center justify-center flex-shrink-0 text-white font-[var(--font-weight-bold)] text-[12px]">
@@ -121,10 +123,11 @@ export const Danmaku: React.FC<{ isActive: boolean; locationId: string }> = ({ i
           </span>
           {/* Optional right-side image */}
           {item.rightImage && (
-            <img
+            <LazyLoadImage
               src={item.rightImage}
               alt="danmaku-right"
               className="w-8 h-8 rounded-lg object-cover flex-shrink-0 bg-gray-200 ml-2"
+              effect="blur"
             />
           )}
         </div>

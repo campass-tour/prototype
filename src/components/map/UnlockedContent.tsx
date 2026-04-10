@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { SummonARButton } from './SummonARButton';
 import { getLocationData } from '../../constants/locations';
 
@@ -40,7 +41,7 @@ export const UnlockedContent: React.FC<UnlockedContentProps> = ({
         {/* Visual Center: Mascot Preview */}
         <div className="flex items-center gap-4 bg-[var(--color-background)] p-3 rounded-xl border border-[var(--border)]">
           <div className="w-20 h-20 shrink-0 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center overflow-hidden">
-            <img src={imageSrc} alt="Mascot Preview" className="w-[85%] h-[85%] object-contain drop-shadow-sm" />
+            <LazyLoadImage src={imageSrc} alt="Mascot Preview" className="w-[85%] h-[85%] object-contain drop-shadow-sm" effect="blur" />
           </div>
           <div className="flex flex-col">
             <span className="text-xs font-semibold text-[var(--color-accent)] tracking-wider uppercase mb-1">Mascot Found</span>

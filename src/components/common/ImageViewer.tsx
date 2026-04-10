@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { createPortal } from 'react-dom';
 
 interface ImageViewerProps {
@@ -106,7 +107,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
             onPointerCancel={onPointerUp}
             className="w-full h-full flex items-center justify-center p-4 md:p-12"
           >
-            <img
+            <LazyLoadImage
               src={images[index]}
               alt={`Image ${index + 1}`}
               draggable={false}
@@ -115,6 +116,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
                 transition: dragging.current ? 'none' : 'transform 150ms cubic-bezier(0.2, 0, 0, 1)'
               }}
               className="select-none pointer-events-auto rounded-[var(--radius-card)] shadow-2xl object-contain max-w-full max-h-full"
+              effect="blur"
             />
           </div>
         </div>

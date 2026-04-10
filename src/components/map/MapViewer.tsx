@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useCallback, useState, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import type { ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
@@ -9,7 +9,7 @@ import { UserPositionIndicator } from './UserPositionIndicator';
 import { MapPin } from './MapPin';
 import { MapOverlayLayer } from './MapOverlayLayer';
 import MapFilter from './MapFilter';
-import ARModelViewer from '../photo/ARModelViewer';
+const ARModelViewer = lazy(() => import('../photo/ARModelViewer'));
 import { LOCATIONS } from '../../constants/locations';
 import { userPosition as staticUserPosition } from '../../constants/userPositionData';
 import { convertGpsToImageCoordinates } from '../../lib/mapConverter';
@@ -423,12 +423,14 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
         )}
       </TransformWrapper>
       
-      <ARModelViewer
-        open={!!arTarget}
-        onClose={() => setArTarget(null)}
-        checkinId={arTarget?.id}
-        mascotName={arTarget?.name || 'Mascot'}
-      />
+      <Suspense fallback={null}>
+        <ARModelViewer
+          open={!!arTarget}
+          onClose={() => setArTarget(null)}
+          checkinId={arTarget?.id}
+          mascotName={arTarget?.name || 'Mascot'}
+        />
+      </Suspense>
       
       {isWideScreen && (
         <SideDrawer

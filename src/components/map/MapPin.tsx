@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { createPortal } from 'react-dom';
 import { Danmaku } from '../wall/Danmaku';
 import { getLoreById } from '../../constants/lores';
@@ -251,7 +252,7 @@ export const MapPin: React.FC<MapPinProps> = ({
               {(() => {
                 const customIconSrc = getIconSrc();
                 if (customIconSrc) {
-                  return <img src={customIconSrc} alt={`${realBuildingName} icon`} className="w-full h-full object-contain" />;
+                  return <LazyLoadImage src={customIconSrc} alt={`${realBuildingName} icon`} className="w-full h-full object-contain" effect="blur" />;
                 }
                 return buildingIcon || (
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

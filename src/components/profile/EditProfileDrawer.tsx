@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { X } from 'lucide-react';
 
 interface EditProfileDrawerProps {
@@ -52,10 +53,11 @@ const EditProfileDrawer: React.FC<EditProfileDrawerProps> = ({ isOpen, onClose }
             <div className="flex gap-4 overflow-x-auto pb-2 -mx-2 px-2 snap-x">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className={`w-16 h-16 rounded-full cursor-pointer snap-center shrink-0 border-2 ${i === 1 ? 'border-[var(--color-primary)]' : 'border-transparent'}`}>
-                  <img 
+                  <LazyLoadImage
                     src={`https://picui.ogmua.cn/s1/2026/04/08/69d56b9761229.webp`}
                     alt={`Avatar option ${i}`}
                     className="w-full h-full rounded-full object-cover"
+                    effect="blur"
                   />
                 </div>
               ))}

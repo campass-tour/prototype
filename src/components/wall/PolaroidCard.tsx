@@ -1,4 +1,5 @@
 import React from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import type { Message } from '../../types';
 import { getLocationData } from '../../constants/locations';
 import { isCollectibleUnlocked } from '../../lib/storage';
@@ -29,7 +30,7 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
 
         {message.imageUrl && (
           <div className="polaroid-image">
-            <img src={message.imageUrl} alt="Memory" className="w-full h-full object-cover" loading="lazy" />
+            <LazyLoadImage src={message.imageUrl} alt="Memory" className="w-full h-full object-cover" effect="blur" />
           </div>
         )}
 
@@ -38,7 +39,7 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
 
           <div className="polaroid-author">
             {message.author.avatarUrl ? (
-              <img src={message.author.avatarUrl} alt={message.author.username} className="avatar" />
+              <LazyLoadImage src={message.author.avatarUrl} alt={message.author.username} className="avatar" effect="blur" />
             ) : (
               <div className="avatar">{message.author.username.charAt(0).toUpperCase()}</div>
             )}

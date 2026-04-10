@@ -26,8 +26,7 @@ export const EdgeDirectionIndicator: React.FC<Props> = ({
 }) => {
   if (!visible) return null;
 
-  // 🌟 核心测向逻辑：目标角度 - 手机朝向 = 指针在屏幕上的实际旋转角度
-  // 如果没有 deviceHeading（如在电脑端），则默认手机朝北 (0)
+  // 目标角度 - 手机朝向 = 指针在屏幕上的实际旋转角度
   const currentHeading = deviceHeading || 0;
   const pointerRotation = bearing - currentHeading;
 
@@ -35,10 +34,9 @@ export const EdgeDirectionIndicator: React.FC<Props> = ({
   const targetLabel = targetName || 'Campus';
 
   return (
-    // 悬浮容器：手机端居中，电脑端居中偏上，使用毛玻璃效果
     <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[50] pointer-events-none">
       <div className="flex items-center gap-3 md:gap-4 px-4 py-2 md:px-6 md:py-3 bg-white/85 backdrop-blur-md rounded-full shadow-[0_8px_32px_rgba(40,21,89,0.12)] border border-[var(--color-primary)]/10">
-        {/* 🧭 自定义魔法雷达 Icon */}
+        {/* 自定义雷达 Icon */}
         <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
           <svg viewBox="0 0 64 64" className="w-full h-full drop-shadow-sm">
             {/* 外圈雷达虚线轨道 */}
@@ -47,34 +45,32 @@ export const EdgeDirectionIndicator: React.FC<Props> = ({
             <circle cx="32" cy="32" r="22" fill="var(--color-background)" stroke="var(--color-primary)" strokeWidth="1" opacity="0.6" />
             {/* 中心锚点 */}
             <circle cx="32" cy="32" r="3" fill="var(--color-primary)" />
-            {/* 🎯 旋转的指针组 */}
+            {/* 旋转的指针组 */}
             <g
               style={{
                 transform: `rotate(${pointerRotation}deg)`,
                 transformOrigin: '32px 32px',
-                // 注意：由于硬件陀螺仪更新频率极高（60fps），建议关闭 CSS 过渡以获得最真实的物理跟手感。
-                // 如果你的数据更新较慢，可以开启 transition: 'transform 0.2s ease-out'
               }}
             >
               {/* 指针发光阴影 */}
               <path d="M32 6 L42 40 L32 34 L22 40 Z" fill="var(--color-accent)" opacity="0.4" filter="blur(3px)" />
-              {/* 实体立体指针 (类似纸飞机/航天器) */}
+              {/* 实体立体指针 */}
               <path d="M32 8 L40 38 L32 33 Z" fill="var(--color-accent)" />
               <path d="M32 8 L24 38 L32 33 Z" fill="#009B9E" />
             </g>
           </svg>
         </div>
-        {/* 📝 响应式文案排版 */}
+        {/* 响应式文案排版 */}
         <div className="flex flex-col justify-center">
-          {/* 小字提示 (目标名称) */}
+          {/* 提示 (目标名称) */}
           <span className="text-[10px] md:text-xs font-semibold tracking-wider text-[var(--color-text-secondary)] uppercase">
             TARGET: {targetLabel}
           </span>
-          {/* 大字方位 (手机端精简，电脑端详尽) */}
+          {/* 方位 (手机端精简，电脑端详尽) */}
           <span className="text-sm md:text-base font-bold text-[var(--color-primary)] whitespace-nowrap">
-            {/* 📱 手机端显示：Head {cardinal} */}
+            {/* 手机端显示：Head {cardinal} */}
             <span className="sm:hidden">Head {cardinal}</span>
-            {/* 💻 电脑端/平板显示：Target is to your {cardinal} */}
+            {/* 电脑端/平板显示：Target is to your {cardinal} */}
             <span className="hidden sm:inline">Signal lost. Head {cardinal}</span>
           </span>
         </div>

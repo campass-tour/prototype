@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import bubblesUrl from '../../assets/image/bubbles.svg';
 
 type MascotCardProps = {
@@ -97,10 +98,11 @@ export default function MascotCard({
           }}
         >
           {image ? (
-            <img
+            <LazyLoadImage
               src={image}
               alt={name}
               className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              effect="blur"
             />
           ) : (
             <div className="text-7xl transition-transform duration-500 group-hover:scale-110 drop-shadow-xl">
