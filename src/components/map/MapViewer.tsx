@@ -11,7 +11,8 @@ import { MapOverlayLayer } from './MapOverlayLayer';
 import MapFilter from './MapFilter';
 import ARModelViewer from '../photo/ARModelViewer';
 import { LOCATIONS } from '../../constants/locations';
-import { userPosition } from '../../constants/userPositionData';
+import { userPosition as staticUserPosition } from '../../constants/userPositionData';
+import { convertGpsToImageCoordinates } from '../../lib/mapConverter';
 // import { getMarkerAndContainerCenters } from './getMarkerAndContainerCenters';
 import { isCollectibleUnlocked } from '../../lib/storage';
 import { centerMarkerInContainer } from '../../lib/mapUtils';
@@ -36,12 +37,64 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
   const availableLevels = Array.from(new Set(LOCATIONS.map(l => l.lv || 1))).sort();
   const [isWideScreen, setIsWideScreen] = useState(() => typeof window !== 'undefined' ? window.innerWidth > 900 : true);
 
+  // Real-time user image position derived from GPS (percent coordinates)
+  const [userImagePosition, setUserImagePosition] = useState<{ x: number; y: number; heading: number } | null>(null);
+  const [showUserImagePosition, setShowUserImagePosition] = useState<boolean>(false);
+
   useEffect(() => {
     const handleResize = () => {
       setIsWideScreen(window.innerWidth > 900);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Watch browser geolocation and convert to image % coordinates.
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('geolocation' in navigator)) return;
+
+    // Bounding box (GPS): NW and SE corners provided by user
+    const MIN_LON = 120.73598783189566;
+    const MAX_LON = 120.7470627351817;
+    const MIN_LAT = 31.268996839860193;
+    const MAX_LAT = 31.27890548449692;
+
+    let watchId: number | null = null;
+    try {
+      watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+
+          // If outside bounding box, show the arrow at image center (50%,50%) temporarily
+          if (lon < MIN_LON || lon > MAX_LON || lat < MIN_LAT || lat > MAX_LAT) {
+            setUserImagePosition({ x: 50, y: 50, heading: pos.coords.heading ?? 0 });
+            setShowUserImagePosition(true);
+            return;
+          }
+
+          const imageCoords = convertGpsToImageCoordinates({ lat, lon });
+          if (!imageCoords) {
+            setShowUserImagePosition(false);
+            return;
+          }
+
+          setUserImagePosition({ x: imageCoords.xPercent, y: imageCoords.yPercent, heading: pos.coords.heading ?? 0 });
+          setShowUserImagePosition(true);
+        },
+        () => {
+          // On error, hide the dynamic arrow (fallback to static if present)
+          setShowUserImagePosition(false);
+        },
+        { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+      );
+    } catch (e) {
+      setShowUserImagePosition(false);
+    }
+
+    return () => {
+      if (watchId !== null && 'geolocation' in navigator) navigator.geolocation.clearWatch(watchId);
+    };
   }, []);
 
   // 用户位置和Pin点数据已提取到独立文件
@@ -220,7 +273,13 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                 />
                 {/* Render pins and markers onto an exact proportional overlay */}
                 <MapOverlayLayer>
-                  <UserPositionIndicator userPosition={userPosition} />
+                  {showUserImagePosition && userImagePosition ? (
+                    <UserPositionIndicator userPosition={{ x: userImagePosition.x, y: userImagePosition.y, heading: userImagePosition.heading }} />
+                  ) : (
+                    staticUserPosition && (
+                      <UserPositionIndicator userPosition={{ x: staticUserPosition.x, y: staticUserPosition.y, heading: staticUserPosition.heading ?? 0 }} />
+                    )
+                  )}
                   {LOCATIONS.filter(loc => {
                     if (selectedLevels === null) return true;
                     return selectedLevels.includes(loc.lv ?? 1);

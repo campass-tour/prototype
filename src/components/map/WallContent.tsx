@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Maximize2, MessageSquare } from 'lucide-react';
+import { Maximize2, MessageSquare } from 'lucide-react';
 import { MESSAGES } from '../../constants/messages';
 import PolaroidCard from '../wall/PolaroidCard';
 import { getLocationData } from '../../constants/locations';
@@ -32,7 +32,7 @@ const mapToDanmakuItem = (msg: Message): DanmakuItem => ({
   originalMessage: msg
 });
 
-const WallContent: React.FC<WallContentProps> = ({ locationId, onClose }) => {
+const WallContent: React.FC<WallContentProps> = ({ locationId }) => {
   const navigate = useNavigate();
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
 
@@ -70,23 +70,7 @@ const WallContent: React.FC<WallContentProps> = ({ locationId, onClose }) => {
           </h2>
         </div>
         <div className="flex items-center gap-2">
-          {isUnlocked && (
-            <button 
-              onClick={handleFullscreen}
-              className="p-2 rounded-full hover:bg-(--color-divider) text-(--color-text-secondary) transition-colors"
-              aria-label="View on Wall"
-              title="Open in Fullscreen (Wall)"
-            >
-              <Maximize2 size={20} />
-            </button>
-          )}
-          <button 
-            onClick={onClose}
-            className="p-2 rounded-full hover:bg-(--color-divider) text-(--color-text-secondary) transition-colors"
-            aria-label="Close"
-          >
-            <X size={24} />
-          </button>
+          {/* Remove fullscreen button from header */}
         </div>
       </div>
 
@@ -116,12 +100,24 @@ const WallContent: React.FC<WallContentProps> = ({ locationId, onClose }) => {
               />
             </div>
 
-            {/* Divider */}
+            {/* Divider with fullscreen button for unlocked */}
             <div className="flex items-center gap-3 py-2">
               <div className="h-px bg-gray-200 flex-1"></div>
-              <div className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
-                <MessageSquare size={16} />
-                {messages.length} Whispers
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                  <MessageSquare size={16} />
+                  {messages.length} Whispers
+                </span>
+                {isUnlocked && (
+                  <button
+                    onClick={handleFullscreen}
+                    className="ml-2 p-1 rounded-full hover:bg-(--color-divider) text-(--color-text-secondary) transition-colors"
+                    aria-label="View on Wall"
+                    title="View on Wall"
+                  >
+                    <Maximize2 size={18} />
+                  </button>
+                )}
               </div>
               <div className="h-px bg-gray-200 flex-1"></div>
             </div>
