@@ -13,6 +13,8 @@ import ARModelViewer from '../photo/ARModelViewer';
 import { LOCATIONS } from '../../constants/locations';
 import { userPosition as staticUserPosition } from '../../constants/userPositionData';
 import { convertGpsToImageCoordinates } from '../../lib/mapConverter';
+import EdgeDirectionIndicator from './EdgeDirectionIndicator';
+import { ANCHOR_POINT_1, ANCHOR_POINT_2 } from '../../constants/mapConfig';
 // import { getMarkerAndContainerCenters } from './getMarkerAndContainerCenters';
 import { isCollectibleUnlocked } from '../../lib/storage';
 import { centerMarkerInContainer } from '../../lib/mapUtils';
@@ -40,6 +42,10 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
   // Real-time user image position derived from GPS (percent coordinates)
   const [userImagePosition, setUserImagePosition] = useState<{ x: number; y: number; heading: number } | null>(null);
   const [showUserImagePosition, setShowUserImagePosition] = useState<boolean>(false);
+  const [showEdgeIndicator, setShowEdgeIndicator] = useState<boolean>(false);
+  const [edgeBearing, setEdgeBearing] = useState<number>(0);
+  const [edgeTargetName, setEdgeTargetName] = useState<string | null>(null);
+  const [deviceHeading, setDeviceHeading] = useState<number | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -66,21 +72,58 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
           const lat = pos.coords.latitude;
           const lon = pos.coords.longitude;
 
-          // If outside bounding box, show the arrow at image center (50%,50%) temporarily
+          // If outside bounding box, hide blue dot and show edge indicator
           if (lon < MIN_LON || lon > MAX_LON || lat < MIN_LAT || lat > MAX_LAT) {
-            setUserImagePosition({ x: 50, y: 50, heading: pos.coords.heading ?? 0 });
-            setShowUserImagePosition(true);
+            setShowUserImagePosition(false);
+            // find nearest location with GPS as the target; fallback to center between anchors
+            let nearest: any = null;
+            let minDist = Infinity;
+            LOCATIONS.forEach((loc) => {
+              if (loc.gps && typeof loc.gps.lat === 'number' && typeof loc.gps.lon === 'number') {
+                const dLat = (loc.gps.lat - lat) * Math.PI / 180;
+                const dLon = (loc.gps.lon - lon) * Math.PI / 180;
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat * Math.PI / 180) * Math.cos(loc.gps.lat * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                const R = 6371000; // meters
+                const dist = R * c;
+                if (dist < minDist) {
+                  minDist = dist;
+                  nearest = loc;
+                }
+              }
+            });
+
+            let targetLat = (ANCHOR_POINT_1.gps.lat + ANCHOR_POINT_2.gps.lat) / 2;
+            let targetLon = (ANCHOR_POINT_1.gps.lon + ANCHOR_POINT_2.gps.lon) / 2;
+            if (nearest && nearest.gps) {
+              targetLat = nearest.gps.lat;
+              targetLon = nearest.gps.lon;
+              setEdgeTargetName(nearest.name || nearest.id || 'Campus');
+            } else {
+              setEdgeTargetName('Campus');
+            }
+
+            // compute bearing from user -> target
+            const toRad = Math.PI / 180;
+            const y = Math.sin((targetLon - lon) * toRad) * Math.cos(targetLat * toRad);
+            const x = Math.cos(lat * toRad) * Math.sin(targetLat * toRad) - Math.sin(lat * toRad) * Math.cos(targetLat * toRad) * Math.cos((targetLon - lon) * toRad);
+            const brng = Math.atan2(y, x) * 180 / Math.PI; // degrees
+            const bearing = (brng + 360) % 360;
+            setEdgeBearing(bearing);
+            setShowEdgeIndicator(true);
             return;
           }
 
           const imageCoords = convertGpsToImageCoordinates({ lat, lon });
           if (!imageCoords) {
             setShowUserImagePosition(false);
+            setShowEdgeIndicator(false);
             return;
           }
 
           setUserImagePosition({ x: imageCoords.xPercent, y: imageCoords.yPercent, heading: pos.coords.heading ?? 0 });
           setShowUserImagePosition(true);
+          setShowEdgeIndicator(false);
         },
         () => {
           // On error, hide the dynamic arrow (fallback to static if present)
@@ -95,6 +138,19 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
     return () => {
       if (watchId !== null && 'geolocation' in navigator) navigator.geolocation.clearWatch(watchId);
     };
+  }, []);
+
+  // Listen for device orientation (if available) to rotate arrow relative to device heading
+  useEffect(() => {
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (typeof e.alpha === 'number') {
+        // alpha is rotation around z axis in degrees (0..360), often relative to device
+        setDeviceHeading(e.alpha);
+      }
+    };
+
+    window.addEventListener('deviceorientation', handleOrientation as EventListener);
+    return () => window.removeEventListener('deviceorientation', handleOrientation as EventListener);
   }, []);
 
   // 用户位置和Pin点数据已提取到独立文件
@@ -276,9 +332,9 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                   {showUserImagePosition && userImagePosition ? (
                     <UserPositionIndicator userPosition={{ x: userImagePosition.x, y: userImagePosition.y, heading: userImagePosition.heading }} />
                   ) : (
-                    staticUserPosition && (
+                    !showEdgeIndicator && staticUserPosition ? (
                       <UserPositionIndicator userPosition={{ x: staticUserPosition.x, y: staticUserPosition.y, heading: staticUserPosition.heading ?? 0 }} />
-                    )
+                    ) : null
                   )}
                   {LOCATIONS.filter(loc => {
                     if (selectedLevels === null) return true;
@@ -384,6 +440,10 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
             <WallContent locationId={activeDrawerLocation} onClose={() => setActiveDrawerLocation(null)} />
           )}
         </SideDrawer>
+      )}
+
+      {showEdgeIndicator && (
+        <EdgeDirectionIndicator visible={showEdgeIndicator} bearing={edgeBearing} deviceHeading={deviceHeading} targetName={edgeTargetName} />
       )}
     </div>
   );

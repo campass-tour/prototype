@@ -9,23 +9,52 @@ Use the following structure as the canonical reference for new files, components
 
 ```
 src/
-  components/        # small presentational + domain components
+  components/        # Small presentational + domain components, organized by feature
     map/
     wall/
     collection/
     photo/
     ui/
-  hooks/             # reusable React hooks (useX)
-  lib/               # pure utilities and adapters (no hooks)
-    map.ts            # map-specific helpers
+    common/
+    profile/
+  hooks/             # Reusable React hooks (useX)
+  lib/               # Pure utility functions and adapters (no hooks)
+    dataSources.ts    # Central data access layer
+    mapConverter.ts   # Map data conversion helpers
+    mapUtils.ts       # Map utility functions
     storage.ts        # localStorage adapters
-    dataSources.ts    # central data access layer
-  constants/         # typed constant data (messages, locations, lores)
-  pages/             # top-level page components used by router
-  styles/            # global css, css-variables
-  types/             # shared TypeScript types and interfaces
-  assets/            # images, icons, models
-  tests/             # unit and integration tests
+    utils.ts          # General utility functions
+  constants/         # Typed constant data (messages, locations, lores, map config, etc.)
+    locations.ts
+    lores.ts
+    mapConfig.ts
+    messages.ts
+    userPositionData.ts
+  data/              # Static JSON data files for app content
+    clues.json
+    locationAssets.json
+    locations.json
+    lores.json
+    messages.json
+    userPosition.json
+    users.json
+  pages/             # Top-level page components used by router
+    CollectionPage.tsx
+    MapPage.tsx
+    ProfilePage.tsx
+    WallPage.tsx
+  styles/            # Global CSS and CSS variables
+    style.css
+    wall-compose-btn.css
+  types/             # Shared TypeScript types and interfaces (index.ts, model-viewer.d.ts)
+    index.ts
+    model-viewer.d.ts
+  assets/            # Images, icons, models (static resources only)
+    clues/
+    icon/
+    image/
+    model/
+  tests/             # Unit and integration tests (if not colocated with modules)
 ```
 
 ## Where to put new code
