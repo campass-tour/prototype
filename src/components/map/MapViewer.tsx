@@ -45,7 +45,6 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
   const [showEdgeIndicator, setShowEdgeIndicator] = useState<boolean>(false);
   const [edgeBearing, setEdgeBearing] = useState<number>(0);
   const [edgeTargetName, setEdgeTargetName] = useState<string | null>(null);
-  const [deviceHeading, setDeviceHeading] = useState<number | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -140,18 +139,7 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
     };
   }, []);
 
-  // Listen for device orientation (if available) to rotate arrow relative to device heading
-  useEffect(() => {
-    const handleOrientation = (e: DeviceOrientationEvent) => {
-      if (typeof e.alpha === 'number') {
-        // alpha is rotation around z axis in degrees (0..360), often relative to device
-        setDeviceHeading(e.alpha);
-      }
-    };
-
-    window.addEventListener('deviceorientation', handleOrientation as EventListener);
-    return () => window.removeEventListener('deviceorientation', handleOrientation as EventListener);
-  }, []);
+  // (device orientation listener removed; component no longer uses deviceHeading)
 
   // 用户位置和Pin点数据已提取到独立文件
 
@@ -445,7 +433,7 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
       )}
 
       {showEdgeIndicator && (
-        <EdgeDirectionIndicator visible={showEdgeIndicator} bearing={edgeBearing} deviceHeading={deviceHeading} targetName={edgeTargetName} />
+        <EdgeDirectionIndicator visible={showEdgeIndicator} bearing={edgeBearing} targetName={edgeTargetName} />
       )}
     </div>
   );
