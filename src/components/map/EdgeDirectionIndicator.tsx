@@ -35,10 +35,10 @@ export const EdgeDirectionIndicator: React.FC<Props> = ({
   const targetLabel = targetName || 'Campus';
 
   return (
-    <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[50] pointer-events-none">
-      <div className="flex items-center gap-3 px-4 py-2 bg-white/85 backdrop-blur-md rounded-full shadow-lg border border-primary/10">
+    <div className="absolute top-2 left-2 lg:top-6 lg:left-1/2 lg:-translate-x-1/2 z-[50] pointer-events-none transition-all duration-300 ease-in-out">
+      <div className="flex items-center gap-1.5 lg:gap-3 px-2 py-1.5 lg:px-4 lg:py-2 bg-white/85 backdrop-blur-md rounded-full shadow-[0_8px_32px_rgba(40,21,89,0.12)] border border-[var(--color-primary)]/10 min-h-[32px] lg:min-h-0">
         {/* 雷达 Icon */}
-        <div className="relative w-10 h-10 flex-shrink-0">
+        <div className="relative w-7 h-7 lg:w-10 lg:h-10 flex-shrink-0">
           <svg viewBox="0 0 64 64" className="w-full h-full">
             <circle cx="32" cy="32" r="28" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.3" />
             <circle cx="32" cy="32" r="3" fill="var(--color-primary)" />
@@ -48,13 +48,18 @@ export const EdgeDirectionIndicator: React.FC<Props> = ({
             </g>
           </svg>
         </div>
-        {/* 适配手机/电脑的响应式文案 */}
+        {/* 响应式文案排版 */}
         <div className="flex flex-col justify-center">
-          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-            DIRECTION
+          {/* 仅在 md 及以上显示目标名称 */}
+          <span className="hidden md:block text-[10px] md:text-xs font-semibold tracking-wider text-[var(--color-text-secondary)] uppercase">
+            TARGET: {targetLabel}
           </span>
-          <span className="text-sm font-bold text-[var(--color-primary)] whitespace-nowrap">
-            {targetLabel} is {cardinal}
+          {/* 方位 (手机端精简，电脑端详尽) */}
+          <span className="text-sm md:text-base font-bold text-[var(--color-primary)] whitespace-nowrap">
+            {/* 手机端显示：Head {cardinal} */}
+            <span className="sm:hidden">Head {cardinal}</span>
+            {/* 电脑端/平板显示：Target is to your {cardinal} */}
+            <span className="hidden sm:inline">Signal lost. Head {cardinal}</span>
           </span>
         </div>
       </div>

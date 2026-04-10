@@ -29,46 +29,49 @@ export const Danmaku: React.FC<{ isActive: boolean; locationId: string }> = ({ i
     if (messages.length === 0) return;
 
     let messageIndex = 0;
-    
+    // 控制同屏最大弹幕数
+    const MAX_ON_SCREEN = 3;
     // Play danmaku occasionally
     const spawnDanmaku = () => {
       if (messages.length === 0) return;
-      
-      const message = messages[messageIndex % messages.length];
-      messageIndex++;
-
-      const text = message.content;
-      const avatar = message.author.avatarUrl;
-      const rightImage = message.imageUrl;
-      
-      const top = 10 + Math.random() * 30; 
-      
-      const duration = 6 + Math.random() * 4;
-
-      const newItem: DanmakuItem = {
-        id: message.id + '_' + Date.now(), // Ensure unique ID even when looping
-        text,
-        avatar,
-        rightImage,
-        top,
-        duration,
-        originalMessage: message
-      };
-
-      setItems(prev => [...prev, newItem]);
-
-      setTimeout(() => {
-        setItems(prev => prev.filter(item => item.id !== newItem.id));
-      }, duration * 1000 + 500); 
+      setItems(prev => {
+        if (prev.length >= MAX_ON_SCREEN) return prev;
+        const message = messages[messageIndex % messages.length];
+        messageIndex++;
+        const text = message.content;
+        const avatar = message.author.avatarUrl;
+        const rightImage = message.imageUrl;
+        // 让弹幕分布更均匀
+        const usedTops = prev.map(i => i.top);
+        let top: number;
+        let tries = 0;
+        do {
+          top = 10 + Math.random() * 30;
+          tries++;
+        } while (usedTops.some(t => Math.abs(t - top) < 12) && tries < 10);
+        const duration = 7 + Math.random() * 3;
+        const newItem: DanmakuItem = {
+          id: message.id + '_' + Date.now(),
+          text,
+          avatar,
+          rightImage,
+          top,
+          duration,
+          originalMessage: message
+        };
+        setTimeout(() => {
+          setItems(cur => cur.filter(item => item.id !== newItem.id));
+        }, duration * 1000 + 500);
+        return [...prev, newItem];
+      });
     };
 
-   
+    // 初始只生成一条
     spawnDanmaku();
-    setTimeout(spawnDanmaku, 800);
-
+    // 之后每2.2秒尝试生成一条
     const interval = setInterval(() => {
       spawnDanmaku();
-    }, 1800);
+    }, 2200);
 
     return () => {
       clearInterval(interval);

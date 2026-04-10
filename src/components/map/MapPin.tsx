@@ -139,14 +139,15 @@ export const MapPin: React.FC<MapPinProps> = ({
 
   // Manage Danmaku delayed closing
   useEffect(() => {
-    let timer: number;
+    let timer: number | undefined;
     if (isOpen && status === 'unlocked') {
-      // setIsDanmakuActive(true); // Avoid direct setState in effect
+      // When the pin is opened on unlocked locations, activate danmaku
+      setIsDanmakuActive(true);
     } else {
-      // Delay closing danmaku by 1.5 seconds if drawer closes
+      // Delay closing danmaku by 1.5 seconds when drawer/popup closes
       timer = window.setTimeout(() => setIsDanmakuActive(false), 1500);
     }
-    return () => clearTimeout(timer);
+    return () => { if (timer) clearTimeout(timer); };
   }, [isOpen, status]);
 
   const isLocked = status === 'locked';

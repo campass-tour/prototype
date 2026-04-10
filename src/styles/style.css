@@ -379,8 +379,7 @@ code {
 }
 
 /* When the wrapper is used for full-width/height images like covers, force it to fill the block */
-.lazy-load-image-background:has(img[class*="w-full"][class*="h-full"]),
-.lazy-load-image-background:has(img[class*="object-cover"]) {
+.lazy-load-image-background:has(img[class*="w-full"][class*="h-full"]) {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
@@ -414,6 +413,30 @@ img[class*="object-cover"] {
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+/* Keep small avatar/inline images fixed size (don't let wrapper rules expand them) */
+.lazy-load-image-background img.w-4.h-4,
+img.w-4.h-4 {
+  width: 1rem !important;
+  height: 1rem !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+.lazy-load-image-background img.w-8.h-8,
+img.w-8.h-8,
+.avatar {
+  width: 2rem !important;
+  height: 2rem !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+.lazy-load-image-background img.w-12.h-12,
+img.w-12.h-12 {
+  width: 3rem !important;
+  height: 3rem !important;
+  max-width: none !important;
+  max-height: none !important;
 }
 
 .polaroid-content {
