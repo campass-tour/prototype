@@ -370,6 +370,50 @@ code {
   margin-bottom: 12px;
   overflow: hidden;
   aspect-ratio: 4 / 5;
+  display: block;
+}
+
+/* Force LazyLoadImage wrappers to fill their containers properly */
+.lazy-load-image-background {
+  display: inline-block; /* revert to normal by default */
+}
+
+/* When the wrapper is used for full-width/height images like covers, force it to fill the block */
+.lazy-load-image-background:has(img[class*="w-full"][class*="h-full"]),
+.lazy-load-image-background:has(img[class*="object-cover"]) {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.polaroid-image .lazy-load-image-background {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.polaroid-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block;
+}
+
+/* Ensure all images with object-cover class render properly */
+img[class*="object-cover"] {
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Ensure images in containers with overflow-hidden fill their space */
+[style*="overflow: hidden"] img,
+[class*="overflow-hidden"] img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .polaroid-content {
