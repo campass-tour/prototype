@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Backpack, GraduationCap, Camera } from 'lucide-react';
 import type { UserRole } from '../../lib/storage';
 import { setUserRole } from '../../lib/storage';
@@ -35,6 +36,97 @@ const roles: { id: UserRole; icon: React.ReactNode; label: string; description: 
 export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, onClose }) => {
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
 
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const confirmButtonRef = useRef<HTMLButtonElement | null>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Save active element to restore focus later
+    previousActiveElement.current = document.activeElement as HTMLElement | null;
+
+    // Lock body scroll
+    const prevBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    // Hide and disable pointer events for main app container(s)
+    const appRoot = document.getElementById('root') || document.getElementById('app') || document.querySelector('body > div');
+    if (appRoot && appRoot instanceof HTMLElement) {
+      appRoot.setAttribute('aria-hidden', 'true');
+      appRoot.style.pointerEvents = 'none';
+    }
+
+    // Focus management: try confirm button first, then first focusable
+    const focusableSelector = 'a[href], area[href], input:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const modalEl = modalRef.current;
+    const focusable = modalEl ? Array.from(modalEl.querySelectorAll<HTMLElement>(focusableSelector)) : [];
+    setTimeout(() => {
+      if (confirmButtonRef.current && !confirmButtonRef.current.disabled) {
+        confirmButtonRef.current.focus();
+      } else if (focusable.length) {
+        focusable[0].focus();
+      }
+    }, 0);
+
+    // Keydown handler: trap Tab and swallow Escape
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (!modalEl) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const nodes = Array.from(modalEl.querySelectorAll<HTMLElement>(focusableSelector));
+      if (nodes.length === 0) {
+        e.preventDefault();
+        return;
+      }
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          last.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === last) {
+          first.focus();
+          e.preventDefault();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown, true);
+
+    // Prevent pointer interactions from reaching background
+    const onPointerDown = (ev: PointerEvent) => {
+      if (!modalEl) return;
+      if (!modalEl.contains(ev.target as Node)) {
+        ev.preventDefault();
+        ev.stopPropagation();
+      }
+    };
+    document.addEventListener('pointerdown', onPointerDown, true);
+
+    return () => {
+      // restore body scroll
+      document.body.style.overflow = prevBodyOverflow || '';
+      // restore app root
+      if (appRoot && appRoot instanceof HTMLElement) {
+        appRoot.removeAttribute('aria-hidden');
+        appRoot.style.pointerEvents = '';
+      }
+      // restore focus
+      if (previousActiveElement.current) {
+        previousActiveElement.current.focus();
+      }
+      document.removeEventListener('keydown', onKeyDown, true);
+      document.removeEventListener('pointerdown', onPointerDown, true);
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleConfirm = () => {
@@ -44,14 +136,14 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, 
     }
   };
 
-  return (
-    <div className="fixed inset-0 flex items-center justify-center p-4" style={{ zIndex: 'var(--z-overlay)' }}>
+  return createPortal(
+    <div className="fixed inset-0 flex items-center justify-center p-4" style={{ zIndex: 'var(--z-overlay)' }} role="presentation" onMouseDown={(e) => e.stopPropagation()}>
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} />
 
       {/* Modal Content */}
-      <div className="relative w-full max-w-md bg-[var(--color-surface)] rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-300" style={{ zIndex: 'var(--z-modal)' }}>
-        <h2 className="text-2xl font-bold text-center text-[var(--color-text-main)] mb-2">
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="role-selection-title" tabIndex={-1} className="relative w-full max-w-md bg-[var(--color-surface)] rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-300" style={{ zIndex: 'var(--z-modal)' }}>
+        <h2 id="role-selection-title" className="text-2xl font-bold text-center text-[var(--color-text-main)] mb-2">
           Who are you exploring as today?
         </h2>
         <p className="text-center text-[var(--color-text-secondary)] mb-6 text-sm">
@@ -102,6 +194,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, 
         {/* Confirm Button */}
         <div className={`transition-all duration-300 overflow-hidden ${selectedRole ? 'max-h-16 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
           <button
+            ref={confirmButtonRef}
             onClick={handleConfirm}
             disabled={!selectedRole}
             className="w-full py-3 rounded-xl bg-[var(--color-primary)] text-white font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-50"
@@ -110,6 +203,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, 
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
