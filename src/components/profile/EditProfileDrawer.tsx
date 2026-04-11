@@ -1,6 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { X } from 'lucide-react';
+import { X, User } from 'lucide-react';
+import type { UserRole } from '../../lib/storage';
+import { getUserRole } from '../../lib/storage';
+import { RoleSelectionModal } from '../common/RoleSelectionModal';
 
 interface EditProfileDrawerProps {
   isOpen: boolean;
@@ -8,6 +11,9 @@ interface EditProfileDrawerProps {
 }
 
 const EditProfileDrawer: React.FC<EditProfileDrawerProps> = ({ isOpen, onClose }) => {
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
+  const [currentRole, setCurrentRole] = useState<UserRole | null>(() => getUserRole());
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -54,7 +60,7 @@ const EditProfileDrawer: React.FC<EditProfileDrawerProps> = ({ isOpen, onClose }
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className={`w-16 h-16 rounded-full cursor-pointer snap-center shrink-0 border-2 ${i === 1 ? 'border-[var(--color-primary)]' : 'border-transparent'}`}>
                   <LazyLoadImage
-                    src={`https://picui.ogmua.cn/s1/2026/04/08/69d56b9761229.webp`}
+                    src={`https://p.sda1.dev/32/b4ea84ad54daf342c6979fafe2e2f544/profile.png`}
                     alt={`Avatar option ${i}`}
                     className="w-full h-full rounded-full object-cover"
                     effect="blur"
@@ -72,9 +78,26 @@ const EditProfileDrawer: React.FC<EditProfileDrawerProps> = ({ isOpen, onClose }
             <input 
               id="nickname"
               type="text" 
-              defaultValue="Jane Doe"
+              defaultValue="silly bird"
               className="w-full border border-gray-300 rounded-lg px-4 py-3 text-[var(--color-text-main)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50 focus:border-[var(--color-primary)] transition-all bg-[var(--color-background)]"
             />
+          </div>
+
+          {/* Role Changer */}
+          <div>
+            <label className="block text-sm font-semibold text-[var(--color-text-main)] mb-2">
+              Campus Persona
+            </label>
+            <button
+              onClick={() => setRoleModalOpen(true)}
+              className="w-full flex items-center justify-between border border-gray-300 rounded-lg px-4 py-3 text-[var(--color-text-main)] hover:bg-gray-50 transition-colors bg-[var(--color-background)]"
+            >
+              <div className="flex items-center gap-2">
+                <User size={18} className="text-[var(--color-primary)]" />
+                <span className="capitalize">{currentRole ? currentRole : 'Select your role'}</span>
+              </div>
+              <span className="text-sm font-medium text-[var(--color-primary)]">Change</span>
+            </button>
           </div>
 
           <button 
@@ -85,6 +108,14 @@ const EditProfileDrawer: React.FC<EditProfileDrawerProps> = ({ isOpen, onClose }
           </button>
         </div>
       </div>
+      
+      <RoleSelectionModal 
+        isOpen={roleModalOpen} 
+        onClose={(role) => {
+          setCurrentRole(role);
+          setRoleModalOpen(false);
+        }} 
+      />
     </div>
   );
 };

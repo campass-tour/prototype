@@ -22,7 +22,7 @@ export const ProfileHeader: React.FC = () => {
         <div className="relative -mt-14 md:-mt-12 mb-3 md:mb-0 inline-block mx-auto md:mr-4">
           <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-white p-1 shadow-[0_0_16px_rgba(156,125,217,0.45)] flex items-center justify-center object-cover">
              <LazyLoadImage
-                src="https://picui.ogmua.cn/s1/2026/04/08/69d56b9761229.webp"
+                src="https://p.sda1.dev/32/b4ea84ad54daf342c6979fafe2e2f544/profile.png"
                 alt="Avatar"
                 className="w-full h-full rounded-full object-cover"
                 effect="blur"
