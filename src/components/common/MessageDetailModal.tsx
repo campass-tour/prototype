@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { createPortal } from 'react-dom';
 import { X, MapPin, Trash2 } from 'lucide-react';
 import type { DanmakuItem } from '../wall/Danmaku';
@@ -69,10 +70,11 @@ export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, on
         {/* User Info header */}
         <div className="flex items-center gap-3 pr-8">
           {item.avatar ? (
-            <img
+            <LazyLoadImage
               src={item.avatar}
               alt="avatar"
               className="w-12 h-12 rounded-[var(--radius-pill)] object-cover flex-shrink-0 bg-gray-200"
+              effect="blur"
             />
           ) : (
             <div className="w-12 h-12 rounded-[var(--radius-pill)] bg-[var(--color-primary)] flex flex-shrink-0 items-center justify-center text-white font-[var(--font-weight-bold)] text-[16px]">
@@ -119,10 +121,11 @@ export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, on
               setViewerOpen(true);
             }}
           >
-            <img
+            <LazyLoadImage
               src={item.rightImage}
               alt="attachment"
               className="w-full h-full object-cover"
+              effect="blur"
             />
           </div>
         )}

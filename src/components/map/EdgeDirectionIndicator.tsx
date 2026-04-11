@@ -1,72 +1,66 @@
+
 import React from 'react';
-import { Compass, ArrowUp } from 'lucide-react';
 
 interface Props {
   visible: boolean;
-  bearing: number; // degrees from North (0-360)
-  deviceHeading?: number | null; // degrees from North (0-360)
+  bearing: number; // 只需要这个参数！
   targetName?: string | null;
 }
 
+
+// 将角度转换为自然语言方位
 function bearingToCardinal(bearing: number) {
   const sectors = [
-    'North',
-    'Northeast',
-    'East',
-    'Southeast',
-    'South',
-    'Southwest',
-    'West',
-    'Northwest',
+    'North', 'Northeast', 'East', 'Southeast',
+    'South', 'Southwest', 'West', 'Northwest'
   ];
-  // normalize 0-360
   const b = ((bearing % 360) + 360) % 360;
   const index = Math.floor(((b + 22.5) % 360) / 45);
   return sectors[index];
 }
 
-export const EdgeDirectionIndicator: React.FC<Props> = ({ visible, bearing, deviceHeading, targetName }) => {
+
+export const EdgeDirectionIndicator: React.FC<Props> = ({
+  visible,
+  bearing,
+  targetName
+}) => {
   if (!visible) return null;
 
-  // rotation for compass dial based on bearing
-  const compassRotation = ((bearing % 360) + 360) % 360;
-  // rotation for arrow: if we have deviceHeading, rotate relative to device heading
-  const arrowRotation = deviceHeading != null ? bearing - deviceHeading : bearing;
-  const arrowRotationNorm = ((arrowRotation % 360) + 360) % 360;
+  // 🌟 关键：直接使用 bearing，不做任何减法运算！
+  // 此时指针会根据你的位置，永远指向目标建筑的方向
+  const pointerRotation = bearing;
 
   const cardinal = bearingToCardinal(bearing);
-  const label = targetName ? `${targetName} is to your ${cardinal}` : `Campus is to your ${cardinal}`;
+  const targetLabel = targetName || 'Campus';
 
   return (
-    <div className="absolute top-4 left-4 z-[9999] pointer-events-auto">
-      <style>{`
-        @keyframes arrow-swing { 0%{ transform: translateY(0) rotate(0deg);} 50%{ transform: translateY(-2px) rotate(6deg);} 100%{ transform: translateY(0) rotate(0deg);} }
-      `}</style>
-
-      <div className="flex items-center gap-4">
-        {/* Rotating Compass */}
-        <div 
-          className="flex-shrink-0 relative"
-          style={{ transform: `rotate(${compassRotation}deg)`, transition: 'transform 0.3s ease-out' }}
-        >
-          <div className="w-14 h-14 rounded-full bg-white/95 shadow-lg flex items-center justify-center text-[var(--color-primary)] border-2 border-[var(--color-primary)]/20">
-            <Compass size={20} />
-          </div>
-
-          {/* Arrow pointing outward */}
-          <div
-            className="absolute -right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center"
-            style={{ transform: `rotate(${arrowRotationNorm}deg)` }}
-          >
-            <div style={{ animation: 'arrow-swing 1.6s ease-in-out infinite' }}>
-              <ArrowUp size={16} className="text-[var(--color-primary)]" />
-            </div>
-          </div>
+    <div className="absolute top-2 left-2 lg:top-6 lg:left-1/2 lg:-translate-x-1/2 z-[50] pointer-events-none transition-all duration-300 ease-in-out">
+      <div className="flex items-center gap-1.5 lg:gap-3 px-2 py-1.5 lg:px-4 lg:py-2 bg-white/85 backdrop-blur-md rounded-full shadow-[0_8px_32px_rgba(40,21,89,0.12)] border border-[var(--color-primary)]/10 min-h-[32px] lg:min-h-0">
+        {/* 雷达 Icon */}
+        <div className="relative w-7 h-7 lg:w-10 lg:h-10 flex-shrink-0">
+          <svg viewBox="0 0 64 64" className="w-full h-full">
+            <circle cx="32" cy="32" r="28" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.3" />
+            <circle cx="32" cy="32" r="3" fill="var(--color-primary)" />
+            {/* 🌟 只有这里旋转，且只受 bearing 影响 */}
+            <g style={{ transform: `rotate(${pointerRotation}deg)`, transformOrigin: '32px 32px' }}>
+              <path d="M32 8 L40 38 L32 33 L24 38 Z" fill="var(--color-accent)" />
+            </g>
+          </svg>
         </div>
-
-        {/* Label on the right */}
-        <div className="text-sm font-medium text-[var(--color-text-secondary)] whitespace-nowrap">
-          {label}
+        {/* 响应式文案排版 */}
+        <div className="flex flex-col justify-center">
+          {/* 仅在 md 及以上显示目标名称 */}
+          <span className="hidden md:block text-[10px] md:text-xs font-semibold tracking-wider text-[var(--color-text-secondary)] uppercase">
+            TARGET: {targetLabel}
+          </span>
+          {/* 方位 (手机端精简，电脑端详尽) */}
+          <span className="text-sm md:text-base font-bold text-[var(--color-primary)] whitespace-nowrap">
+            {/* 手机端显示：Head {cardinal} */}
+            <span className="sm:hidden">Head {cardinal}</span>
+            {/* 电脑端/平板显示：Target is to your {cardinal} */}
+            <span className="hidden sm:inline">Signal lost. Head {cardinal}</span>
+          </span>
         </div>
       </div>
     </div>

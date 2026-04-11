@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { createPortal } from 'react-dom';
 import { Danmaku } from '../wall/Danmaku';
 import { getLoreById } from '../../constants/lores';
@@ -138,14 +139,15 @@ export const MapPin: React.FC<MapPinProps> = ({
 
   // Manage Danmaku delayed closing
   useEffect(() => {
-    let timer: number;
+    let timer: number | undefined;
     if (isOpen && status === 'unlocked') {
-      // setIsDanmakuActive(true); // Avoid direct setState in effect
+      // When the pin is opened on unlocked locations, activate danmaku
+      setIsDanmakuActive(true);
     } else {
-      // Delay closing danmaku by 1.5 seconds if drawer closes
+      // Delay closing danmaku by 1.5 seconds when drawer/popup closes
       timer = window.setTimeout(() => setIsDanmakuActive(false), 1500);
     }
-    return () => clearTimeout(timer);
+    return () => { if (timer) clearTimeout(timer); };
   }, [isOpen, status]);
 
   const isLocked = status === 'locked';
@@ -251,7 +253,7 @@ export const MapPin: React.FC<MapPinProps> = ({
               {(() => {
                 const customIconSrc = getIconSrc();
                 if (customIconSrc) {
-                  return <img src={customIconSrc} alt={`${realBuildingName} icon`} className="w-full h-full object-contain" />;
+                  return <LazyLoadImage src={customIconSrc} alt={`${realBuildingName} icon`} className="w-full h-full object-contain" effect="blur" />;
                 }
                 return buildingIcon || (
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import cluesDataRaw from '../../data/clues.json';
 import ImageViewer from '../common/ImageViewer';
 import { getClueUnlockLevel, setClueUnlockLevel } from '../../lib/storage';
@@ -94,11 +95,12 @@ export const LockedContent: React.FC<LockedContentProps> = ({
               const url = resolveImageUrl(hintImage) || undefined;
               if (url) { setViewerImages([url]); setViewerIndex(0); setViewerOpen(true); }
             }}>
-              <img 
-                src={resolveImageUrl(hintImage) || undefined} 
-                alt="Location Clue" 
-                onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
+              <LazyLoadImage
+                src={resolveImageUrl(hintImage) || undefined}
+                alt="Location Clue"
+                onError={(e: any) => { e.currentTarget.src = resolveImageUrl(hintImage) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
                 className="w-full h-full object-cover blur-[6px] scale-110"
+                effect="blur"
               />
             </button>
           ) : (
@@ -202,11 +204,12 @@ export const LockedContent: React.FC<LockedContentProps> = ({
           <>
             <div className="relative w-full aspect-video rounded-md overflow-hidden bg-gray-200 mb-3 shadow-inner">
               <div className="w-full h-full cursor-default select-none">
-                <img 
+                <LazyLoadImage
                   src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'}
-                  onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
-                  alt="Ambience Clue" 
+                  onError={(e: any) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
+                  alt="Ambience Clue"
                   className={`w-full h-full object-cover transition-all duration-500 blur-[8px] scale-110 opacity-70`}
+                  effect="blur"
                 />
               </div>
               <div className="absolute inset-0 pointer-events-none bg-white/10 backdrop-blur-sm" />
@@ -243,11 +246,12 @@ export const LockedContent: React.FC<LockedContentProps> = ({
                 const urls = imgs.map((p: string) => resolveImageUrl(p) || p).filter(Boolean) as string[];
                 if (urls.length) { setViewerImages(urls); setViewerIndex(0); setViewerOpen(true); }
               }}>
-                <img 
+                <LazyLoadImage
                   src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'}
-                  onError={(e) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'; }}
-                  alt="Zone Clue" 
+                  onError={(e: any) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'; }}
+                  alt="Zone Clue"
                   className={`w-full h-full object-cover transition-all duration-500 scale-105 opacity-90`}
+                  effect="blur"
                 />
               </button>
               {/* removed textual badge - left subtle overlay only if desired via CSS */}
@@ -304,11 +308,12 @@ export const LockedContent: React.FC<LockedContentProps> = ({
                         const urls = imgs.map((p: string) => resolveImageUrl(p) || p).filter(Boolean) as string[];
                         if (urls.length) { setViewerImages(urls); setViewerIndex(card3Index); setViewerOpen(true); }
                       }}>
-                        <img
+                        <LazyLoadImage
                           src={resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'}
-                          onError={(e) => { e.currentTarget.src = resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'; }}
+                          onError={(e: any) => { e.currentTarget.src = resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'; }}
                           alt={`Exact NFC Location ${card3Index + 1}`}
                           className="w-full h-full object-cover"
+                          effect="blur"
                         />
                       </button>
                     ) : (

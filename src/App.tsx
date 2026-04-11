@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MainLayout, type TabId } from './components/common/MainLayout';
 import { NfcSimulatorFab } from './components/common/NfcSimulatorFab';
 import CheckInSuccessModal from './components/collection/CheckInSuccessModal';
-import MapPage from './pages/MapPage';
-import { CollectionPage } from './pages/CollectionPage';
-import { WallPage } from './pages/WallPage';
-import ProfilePage from './pages/ProfilePage';
+// Route-based code-splitting: load pages and heavy viewers only when needed
+const MapPage = lazy(() => import('./pages/MapPage'));
+const CollectionPage = lazy(() => import('./pages/CollectionPage'));
+const WallPage = lazy(() => import('./pages/WallPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const ARModelViewer = lazy(() => import('./components/photo/ARModelViewer'));
 import { getLocationData, LOCATIONS } from './constants/locations';
 import { unlockCollectible, getUnlockedCount } from './lib/storage';
-import ARModelViewer from './components/photo/ARModelViewer';
+// Removed duplicate static import of ARModelViewer; only use lazy import above
 import './App.css';
 
 function App() {
@@ -81,7 +83,16 @@ function App() {
 
   return (
     <MainLayout activeTab={activeTab}>
-      {renderContent()}
+      <Suspense fallback={<div className="h-40 flex items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--color-primary)] border-t-transparent" /></div>}>
+        {renderContent()}
+
+        <ARModelViewer
+          open={isARViewerOpen}
+          onClose={() => setIsARViewerOpen(false)}
+          checkinId={checkInData.id}
+          mascotName={checkInData.mascotName}
+        />
+      </Suspense>
 
       <NfcSimulatorFab />
 
@@ -101,13 +112,6 @@ function App() {
         mascotName={checkInData.mascotName}
         current={unlockedCount}
         total={LOCATIONS.length}
-      />
-
-      <ARModelViewer
-        open={isARViewerOpen}
-        onClose={() => setIsARViewerOpen(false)}
-        checkinId={checkInData.id}
-        mascotName={checkInData.mascotName}
       />
     </MainLayout>
   );

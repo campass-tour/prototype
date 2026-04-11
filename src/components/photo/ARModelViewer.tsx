@@ -92,6 +92,7 @@ export default function ARModelViewer({
           <model-viewer
             ref={modelViewerRef}
             src={modelSrc}
+            loading="lazy"
             ar
             ar-modes="webxr scene-viewer quick-look"
             camera-controls
