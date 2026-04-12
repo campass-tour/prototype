@@ -2,7 +2,9 @@ import React, { useState, useRef } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import cluesDataRaw from '../../data/clues.json';
 import ImageViewer from '../common/ImageViewer';
-import { getClueUnlockLevel, setClueUnlockLevel } from '../../lib/storage';
+import type { UserRole } from '../../lib/storage';
+import { getClueUnlockLevel, setClueUnlockLevel, getUserRole } from '../../lib/storage';
+import { RoleSelectionModal } from '../common/RoleSelectionModal';
 
 const ALL_CLUES = cluesDataRaw as any[];
 
@@ -70,6 +72,8 @@ export const LockedContent: React.FC<LockedContentProps> = ({
   const [activeQuiz, setActiveQuiz] = useState<any>(null);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [quizFeedback, setQuizFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
+  const [pendingQuizLevel, setPendingQuizLevel] = useState<number | null>(null);
   const [card3Index, setCard3Index] = useState(0);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [viewerIndex, setViewerIndex] = useState(0);
@@ -120,14 +124,33 @@ export const LockedContent: React.FC<LockedContentProps> = ({
   }
 
   const { clues, quizzes } = locationData;
-  const q1 = quizzes[0];
-  const q2 = quizzes[1];
 
   const handleOpenQuiz = (levelToUnlock: number) => {
+    const currentRole = getUserRole();
+    if (!currentRole) {
+      setPendingQuizLevel(levelToUnlock);
+      setRoleModalOpen(true);
+      return;
+    }
+    openQuizForRole(levelToUnlock, currentRole);
+  };
+
+  const openQuizForRole = (levelToUnlock: number, role: UserRole) => {
+    const roleQuizzes = quizzes[role] || quizzes['freshman'];
+    const q1 = roleQuizzes[0];
+    const q2 = roleQuizzes[1];
     const targetQuiz = levelToUnlock === 2 ? q1 : q2;
     setActiveQuiz({ levelToUnlock, quiz: targetQuiz });
     setSelectedOption(null);
     setQuizFeedback(null);
+  };
+
+  const handleRoleSelected = (role: UserRole) => {
+    setRoleModalOpen(false);
+    if (pendingQuizLevel !== null) {
+      openQuizForRole(pendingQuizLevel, role);
+      setPendingQuizLevel(null);
+    }
   };
 
   const handleSubmitQuiz = () => {
@@ -420,6 +443,8 @@ export const LockedContent: React.FC<LockedContentProps> = ({
           </div>
         </div>
       )}
+
+      <RoleSelectionModal isOpen={roleModalOpen} onClose={handleRoleSelected} />
     </div>
   );
 };

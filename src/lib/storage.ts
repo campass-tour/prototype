@@ -1,5 +1,24 @@
 const STORAGE_KEY = 'unlocked_collectibles';
 const CLUE_UNLOCK_KEY = 'clue_unlock_levels';
+const USER_ROLE_KEY = 'user_exploration_role';
+
+export type UserRole = 'freshman' | 'senior' | 'visitor';
+
+export function getUserRole(): UserRole | null {
+  try {
+    return localStorage.getItem(USER_ROLE_KEY) as UserRole | null;
+  } catch (e) {
+    return null;
+  }
+}
+
+export function setUserRole(role: UserRole): void {
+  try {
+    localStorage.setItem(USER_ROLE_KEY, role);
+  } catch (e) {
+    console.error('Error saving user role to local storage', e);
+  }
+}
 
 export function getUnlockedCollectibles(): Record<string, boolean> {
   try {

@@ -128,7 +128,7 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
           // On error, hide the dynamic arrow (fallback to static if present)
           setShowUserImagePosition(false);
         },
-        { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+        { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
       );
     } catch (e) {
       setShowUserImagePosition(false);

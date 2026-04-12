@@ -12,34 +12,92 @@
         "lv3_text": "At the the north gate of the Central Building (across from FB)"
       }
     },
-    "quizzes":[
-      {
-        "quizId": "q1",
-        "unlocks": "Level 2",
-        "question": "What is the primary function of the Central Building at XJTLU?",
-        "options": [
-          "A. Student Canteen",
-          "B. Library and Administrative Center",
-          "C. Student Dormitories",
-          "D. Sports Facilities"
-        ],
-        "correctAnswerIndex": 2,
-        "successMessage": "Correct! Your sharp insight dispels the fog—the clues are now clearer!"
-      },
-      {
-        "quizId": "q2",
-        "unlocks": "Level 3",
-        "question": "What is a distinctive feature of XJTLU's learning and teaching philosophy that aligns with the design of the Central Building?",
-        "options": [
-          "A. Encouraging students to work in teams and engage in collaborative learning",
-          "B. Providing early research opportunities for students",
-          "C. Equipping students with skills for lifelong learning and personal development",
-          "D. All of the above"
-        ],
-        "correctAnswerIndex": 4,
-        "successMessage": "Perfect! The final coordinates are locked—go find the campus spirit!"
-      }
-    ]
+    "quizzes": {
+      "freshman": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "Looking for a snack or daily essentials? Which floor is the 'Youme Supermarket' located on?",
+          "options": [
+            "A. 2nd Floor (2F)",
+            "B. 1st Floor (1F)",
+            "C. Ground Floor (GF)",
+            "D. Basement (-1F)"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Correct! You found the survival hub. The regional clue is revealed!"
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Feeling stressed? Which 2nd-floor service offers 6 free counseling sessions for students?",
+          "options": [
+            "A. IT Support Desk",
+            "B. One-Stop Service Center",
+            "C. Student Counselling Centre",
+            "D. Admissions Office"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Spot on! Health is wealth. The final location is now visible!"
+        }
+      ],
+      "senior": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "It's raining outside! Which floor allows you to walk underground from CB to the Science Buildings (S)?",
+          "options": [
+            "A. Ground Floor (GF)",
+            "B. 1st Floor (1F)",
+            "C. 2nd Floor (2F)",
+            "D. Basement (-1F)"
+          ],
+          "correctAnswerIndex": 4,
+          "successMessage": "Senior level knowledge! You know the secret shortcuts. Level 2 clue unlocked!"
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "There is a piano on the Ground Floor (GF). What must you bring to play it without disturbing others?",
+          "options": [
+            "A. A music score",
+            "B. Wired headphones",
+            "C. A student ID card",
+            "D. A permission slip"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Exactly! Quiet practice is key. The final coordinates are revealed!"
+        }
+      ],
+      "visitor": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "The iconic 'holed' design of this building is inspired by which element of Suzhou gardens?",
+          "options": [
+            "A. Bamboo leaves",
+            "B. Taihu Stone (Scholar's Stone)",
+            "C. Silk umbrellas",
+            "D. Traditional fans"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! It represents the integration of knowledge. Level 2 clue unlocked!"
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "CB features many open sofas and 'sliced' learning zones. Which XJTLU philosophy does this represent?",
+          "options": [
+            "A. Silent-only learning",
+            "B. Student-Centered Education",
+            "C. Faculty-only access",
+            "D. Traditional lecture-style"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Perfect! You've grasped our core values. The final secret is yours!"
+        }
+      ]
+    }
   },
   {
     "locationId": "sb",
@@ -54,34 +112,92 @@
         "lv3_text": "Walk up the main stairs of Block B to the 2nd floor open study corner. The magic tag hides behind the third whiteboard facing the corridor!"
       }
     },
-    "quizzes": [
-      {
-        "quizId": "q1",
-        "unlocks": "Level 2",
-        "question": "What is the primary focus of the facilities in Science Building B?",
-        "options": [
-          "A. Liberal arts classrooms",
-          "B. Advanced laboratories and science research",
-          "C. Indoor sports courts",
-          "D. University administration"
-        ],
-        "correctAnswerIndex": 2,
-        "successMessage": "Correct! Your scientific intuition clears the path—the location is narrowed down."
-      },
-      {
-        "quizId": "q2",
-        "unlocks": "Level 3",
-        "question": "Which architectural feature closely links the Science Building blocks together at XJTLU, facilitating cross-disciplinary collaboration?",
-        "options": [
-          "A. Underground tunnels",
-          "B. Enclosed sky bridges",
-          "C. Open ropeways",
-          "D. Bamboo archways"
-        ],
-        "correctAnswerIndex": 2,
-        "successMessage": "Spot on! The final strike coordinates are now visible in the scanner."
-      }
-    ]
+    "quizzes": {
+      "freshman": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What is the primary focus of the facilities in Science Building B?",
+          "options": [
+            "A. Liberal arts classrooms",
+            "B. Advanced laboratories and science research",
+            "C. Indoor sports courts",
+            "D. University administration"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! Your scientific intuition clears the path—the location is narrowed down."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which architectural feature closely links the Science Building blocks together at XJTLU, facilitating cross-disciplinary collaboration?",
+          "options": [
+            "A. Underground tunnels",
+            "B. Enclosed sky bridges",
+            "C. Open ropeways",
+            "D. Bamboo archways"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Spot on! The final strike coordinates are now visible in the scanner."
+        }
+      ],
+      "senior": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What is the primary focus of the facilities in Science Building B?",
+          "options": [
+            "A. Liberal arts classrooms",
+            "B. Advanced laboratories and science research",
+            "C. Indoor sports courts",
+            "D. University administration"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! Your scientific intuition clears the path—the location is narrowed down."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which architectural feature closely links the Science Building blocks together at XJTLU, facilitating cross-disciplinary collaboration?",
+          "options": [
+            "A. Underground tunnels",
+            "B. Enclosed sky bridges",
+            "C. Open ropeways",
+            "D. Bamboo archways"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Spot on! The final strike coordinates are now visible in the scanner."
+        }
+      ],
+      "visitor": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What is the primary focus of the facilities in Science Building B?",
+          "options": [
+            "A. Liberal arts classrooms",
+            "B. Advanced laboratories and science research",
+            "C. Indoor sports courts",
+            "D. University administration"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! Your scientific intuition clears the path—the location is narrowed down."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which architectural feature closely links the Science Building blocks together at XJTLU, facilitating cross-disciplinary collaboration?",
+          "options": [
+            "A. Underground tunnels",
+            "B. Enclosed sky bridges",
+            "C. Open ropeways",
+            "D. Bamboo archways"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Spot on! The final strike coordinates are now visible in the scanner."
+        }
+      ]
+    }
   },
   {
     "locationId": "mus",
@@ -96,34 +212,92 @@
         "lv3_text": "Enter the main exhibition hall, head past the scale model of the campus, and check under the showcase describing the university's founding year!"
       }
     },
-    "quizzes": [
-      {
-        "quizId": "q1",
-        "unlocks": "Level 2",
-        "question": "What is the primary function of the XJTLU Museum?",
-        "options": [
-          "A. Hosting e-sports tournaments",
-          "B. Archiving and showcasing the university's history and milestones",
-          "C. Teaching culinary arts",
-          "D. Storing lost and found items"
-        ],
-        "correctAnswerIndex": 2,
-        "successMessage": "Correct! You unlocked a piece of history—the regional clue is revealed!"
-      },
-      {
-        "quizId": "q2",
-        "unlocks": "Level 3",
-        "question": "What year was XJTLU officially founded, marking the beginning of the history stored within these walls?",
-        "options": [
-          "A. 1999",
-          "B. 2004",
-          "C. 2006",
-          "D. 2010"
-        ],
-        "correctAnswerIndex": 3,
-        "successMessage": "Excellent! The timeline is complete, and the precise NFC location is yours!"
-      }
-    ]
+    "quizzes": {
+      "freshman": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What is the primary function of the XJTLU Museum?",
+          "options": [
+            "A. Hosting e-sports tournaments",
+            "B. Archiving and showcasing the university's history and milestones",
+            "C. Teaching culinary arts",
+            "D. Storing lost and found items"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! You unlocked a piece of history—the regional clue is revealed!"
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "What year was XJTLU officially founded, marking the beginning of the history stored within these walls?",
+          "options": [
+            "A. 1999",
+            "B. 2004",
+            "C. 2006",
+            "D. 2010"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Excellent! The timeline is complete, and the precise NFC location is yours!"
+        }
+      ],
+      "senior": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What is the primary function of the XJTLU Museum?",
+          "options": [
+            "A. Hosting e-sports tournaments",
+            "B. Archiving and showcasing the university's history and milestones",
+            "C. Teaching culinary arts",
+            "D. Storing lost and found items"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! You unlocked a piece of history—the regional clue is revealed!"
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "What year was XJTLU officially founded, marking the beginning of the history stored within these walls?",
+          "options": [
+            "A. 1999",
+            "B. 2004",
+            "C. 2006",
+            "D. 2010"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Excellent! The timeline is complete, and the precise NFC location is yours!"
+        }
+      ],
+      "visitor": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What is the primary function of the XJTLU Museum?",
+          "options": [
+            "A. Hosting e-sports tournaments",
+            "B. Archiving and showcasing the university's history and milestones",
+            "C. Teaching culinary arts",
+            "D. Storing lost and found items"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! You unlocked a piece of history—the regional clue is revealed!"
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "What year was XJTLU officially founded, marking the beginning of the history stored within these walls?",
+          "options": [
+            "A. 1999",
+            "B. 2004",
+            "C. 2006",
+            "D. 2010"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Excellent! The timeline is complete, and the precise NFC location is yours!"
+        }
+      ]
+    }
   },
   {
     "locationId": "hui",
@@ -138,34 +312,92 @@
         "lv3_text": "Order a latte, walk to the high tables by the right-side window, and peek underneath the table closest to the door to find the tag!"
       }
     },
-    "quizzes": [
-      {
-        "quizId": "q1",
-        "unlocks": "Level 2",
-        "question": "What role does Hui Bar primarily serve for students at XJTLU?",
-        "options": [
-          "A. A quiet exam-only zone",
-          "B. A social hub for informal learning, discussions, and networking",
-          "C. The main faculty dining hall",
-          "D. A silent library"
-        ],
-        "correctAnswerIndex": 2,
-        "successMessage": "Exactly! The aroma of coffee leads you closer to the truth."
-      },
-      {
-        "quizId": "q2",
-        "unlocks": "Level 3",
-        "question": "'Informal learning' is a key concept at XJTLU. Which of these activities best exemplifies informal learning at Hui Bar?",
-        "options": [
-          "A. Sitting for a final written exam",
-          "B. Attending a mandatory faculty lecture",
-          "C. Discussing and brainstorming a group project over coffee",
-          "D. Registering for upcoming semester courses"
-        ],
-        "correctAnswerIndex": 3,
-        "successMessage": "Brilliant! You've mastered the art of informal learning. The exact tag location is now unblurred!"
-      }
-    ]
+    "quizzes": {
+      "freshman": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What role does Hui Bar primarily serve for students at XJTLU?",
+          "options": [
+            "A. A quiet exam-only zone",
+            "B. A social hub for informal learning, discussions, and networking",
+            "C. The main faculty dining hall",
+            "D. A silent library"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Exactly! The aroma of coffee leads you closer to the truth."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "'Informal learning' is a key concept at XJTLU. Which of these activities best exemplifies informal learning at Hui Bar?",
+          "options": [
+            "A. Sitting for a final written exam",
+            "B. Attending a mandatory faculty lecture",
+            "C. Discussing and brainstorming a group project over coffee",
+            "D. Registering for upcoming semester courses"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Brilliant! You've mastered the art of informal learning. The exact tag location is now unblurred!"
+        }
+      ],
+      "senior": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What role does Hui Bar primarily serve for students at XJTLU?",
+          "options": [
+            "A. A quiet exam-only zone",
+            "B. A social hub for informal learning, discussions, and networking",
+            "C. The main faculty dining hall",
+            "D. A silent library"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Exactly! The aroma of coffee leads you closer to the truth."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "'Informal learning' is a key concept at XJTLU. Which of these activities best exemplifies informal learning at Hui Bar?",
+          "options": [
+            "A. Sitting for a final written exam",
+            "B. Attending a mandatory faculty lecture",
+            "C. Discussing and brainstorming a group project over coffee",
+            "D. Registering for upcoming semester courses"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Brilliant! You've mastered the art of informal learning. The exact tag location is now unblurred!"
+        }
+      ],
+      "visitor": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What role does Hui Bar primarily serve for students at XJTLU?",
+          "options": [
+            "A. A quiet exam-only zone",
+            "B. A social hub for informal learning, discussions, and networking",
+            "C. The main faculty dining hall",
+            "D. A silent library"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Exactly! The aroma of coffee leads you closer to the truth."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "'Informal learning' is a key concept at XJTLU. Which of these activities best exemplifies informal learning at Hui Bar?",
+          "options": [
+            "A. Sitting for a final written exam",
+            "B. Attending a mandatory faculty lecture",
+            "C. Discussing and brainstorming a group project over coffee",
+            "D. Registering for upcoming semester courses"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Brilliant! You've mastered the art of informal learning. The exact tag location is now unblurred!"
+        }
+      ]
+    }
   },
   {
     "locationId": "fb",
@@ -182,34 +414,92 @@
         "lv3_text": "Follow the final route images to the exact spot in Foundation Building. The NFC tag is placed at the clearly marked position shown in the last clue image."
       }
     },
-    "quizzes": [
-      {
-        "quizId": "q1",
-        "unlocks": "Level 2",
-        "question": "What best describes the role of Foundation Building at XJTLU?",
-        "options": [
-          "A. A campus sports arena for training and competitions",
-          "B. A starting point for learning, classes, and daily academic routines",
-          "C. The university's main museum and exhibition hall",
-          "D. A research laboratory reserved only for postgraduate students"
-        ],
-        "correctAnswerIndex": 2,
-        "successMessage": "Correct! The first layer fades away, and the building's location is now much clearer."
-      },
-      {
-        "quizId": "q2",
-        "unlocks": "Level 3",
-        "question": "Which clue best helps you distinguish Foundation Building from places like the museum, cafe, or research labs?",
-        "options": [
-          "A. It is known mainly for exhibits and campus history displays",
-          "B. It is centered on coffee, social events, and informal hangouts",
-          "C. It is associated with classrooms, daily study routines, and students moving between lessons",
-          "D. It is primarily filled with advanced scientific laboratories"
-        ],
-        "correctAnswerIndex": 3,
-        "successMessage": "Exactly. The final route and the NFC position are now fully revealed."
-      }
-    ]
+    "quizzes": {
+      "freshman": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What best describes the role of Foundation Building at XJTLU?",
+          "options": [
+            "A. A campus sports arena for training and competitions",
+            "B. A starting point for learning, classes, and daily academic routines",
+            "C. The university's main museum and exhibition hall",
+            "D. A research laboratory reserved only for postgraduate students"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! The first layer fades away, and the building's location is now much clearer."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which clue best helps you distinguish Foundation Building from places like the museum, cafe, or research labs?",
+          "options": [
+            "A. It is known mainly for exhibits and campus history displays",
+            "B. It is centered on coffee, social events, and informal hangouts",
+            "C. It is associated with classrooms, daily study routines, and students moving between lessons",
+            "D. It is primarily filled with advanced scientific laboratories"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Exactly. The final route and the NFC position are now fully revealed."
+        }
+      ],
+      "senior": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What best describes the role of Foundation Building at XJTLU?",
+          "options": [
+            "A. A campus sports arena for training and competitions",
+            "B. A starting point for learning, classes, and daily academic routines",
+            "C. The university's main museum and exhibition hall",
+            "D. A research laboratory reserved only for postgraduate students"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! The first layer fades away, and the building's location is now much clearer."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which clue best helps you distinguish Foundation Building from places like the museum, cafe, or research labs?",
+          "options": [
+            "A. It is known mainly for exhibits and campus history displays",
+            "B. It is centered on coffee, social events, and informal hangouts",
+            "C. It is associated with classrooms, daily study routines, and students moving between lessons",
+            "D. It is primarily filled with advanced scientific laboratories"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Exactly. The final route and the NFC position are now fully revealed."
+        }
+      ],
+      "visitor": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What best describes the role of Foundation Building at XJTLU?",
+          "options": [
+            "A. A campus sports arena for training and competitions",
+            "B. A starting point for learning, classes, and daily academic routines",
+            "C. The university's main museum and exhibition hall",
+            "D. A research laboratory reserved only for postgraduate students"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! The first layer fades away, and the building's location is now much clearer."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which clue best helps you distinguish Foundation Building from places like the museum, cafe, or research labs?",
+          "options": [
+            "A. It is known mainly for exhibits and campus history displays",
+            "B. It is centered on coffee, social events, and informal hangouts",
+            "C. It is associated with classrooms, daily study routines, and students moving between lessons",
+            "D. It is primarily filled with advanced scientific laboratories"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Exactly. The final route and the NFC position are now fully revealed."
+        }
+      ]
+    }
   },
   {
     "locationId": "gym",
@@ -226,33 +516,91 @@
         "lv3_text": "Follow the final route images outside the GYM to reach the exact NFC position. The tag is placed at the clearly marked spot shown in the last clue image."
       }
     },
-    "quizzes": [
-      {
-        "quizId": "q1",
-        "unlocks": "Level 2",
-        "question": "What best describes the main role of the GYM at XJTLU?",
-        "options": [
-          "A. A museum space for preserving campus history",
-          "B. A place for exercise, sports practice, and physical training",
-          "C. A coffee bar for informal discussions",
-          "D. A library and administrative center"
-        ],
-        "correctAnswerIndex": 2,
-        "successMessage": "Correct! The rhythm of movement points you closer to the right building."
-      },
-      {
-        "quizId": "q2",
-        "unlocks": "Level 3",
-        "question": "Which detail most clearly helps you identify the GYM instead of an academic or social building?",
-        "options": [
-          "A. It is associated with courts, workouts, and sports activities",
-          "B. It is mainly used for exhibitions and historical displays",
-          "C. It is best known for coffee and casual conversation",
-          "D. It is filled with classrooms and daily lectures"
-        ],
-        "correctAnswerIndex": 1,
-        "successMessage": "Exactly. The final route is unlocked, and the exact tag location is now visible."
-      }
-    ]
+    "quizzes": {
+      "freshman": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What best describes the main role of the GYM at XJTLU?",
+          "options": [
+            "A. A museum space for preserving campus history",
+            "B. A place for exercise, sports practice, and physical training",
+            "C. A coffee bar for informal discussions",
+            "D. A library and administrative center"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! The rhythm of movement points you closer to the right building."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which detail most clearly helps you identify the GYM instead of an academic or social building?",
+          "options": [
+            "A. It is associated with courts, workouts, and sports activities",
+            "B. It is mainly used for exhibitions and historical displays",
+            "C. It is best known for coffee and casual conversation",
+            "D. It is filled with classrooms and daily lectures"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Exactly. The final route is unlocked, and the exact tag location is now visible."
+        }
+      ],
+      "senior": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What best describes the main role of the GYM at XJTLU?",
+          "options": [
+            "A. A museum space for preserving campus history",
+            "B. A place for exercise, sports practice, and physical training",
+            "C. A coffee bar for informal discussions",
+            "D. A library and administrative center"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! The rhythm of movement points you closer to the right building."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which detail most clearly helps you identify the GYM instead of an academic or social building?",
+          "options": [
+            "A. It is associated with courts, workouts, and sports activities",
+            "B. It is mainly used for exhibitions and historical displays",
+            "C. It is best known for coffee and casual conversation",
+            "D. It is filled with classrooms and daily lectures"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Exactly. The final route is unlocked, and the exact tag location is now visible."
+        }
+      ],
+      "visitor": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What best describes the main role of the GYM at XJTLU?",
+          "options": [
+            "A. A museum space for preserving campus history",
+            "B. A place for exercise, sports practice, and physical training",
+            "C. A coffee bar for informal discussions",
+            "D. A library and administrative center"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! The rhythm of movement points you closer to the right building."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which detail most clearly helps you identify the GYM instead of an academic or social building?",
+          "options": [
+            "A. It is associated with courts, workouts, and sports activities",
+            "B. It is mainly used for exhibitions and historical displays",
+            "C. It is best known for coffee and casual conversation",
+            "D. It is filled with classrooms and daily lectures"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Exactly. The final route is unlocked, and the exact tag location is now visible."
+        }
+      ]
+    }
   }
 ]
