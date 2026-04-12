@@ -41,3 +41,44 @@ export interface UserPosition {
   y: number;
   heading: number;
 }
+
+export type WardrobeCategoryId = 'all' | 'head' | 'face' | 'gear';
+
+export type WardrobeSlot = Exclude<WardrobeCategoryId, 'all'>;
+
+export type WardrobeIconName =
+  | 'badge-cent'
+  | 'captain-band'
+  | 'laurel-crown'
+  | 'mono-shades'
+  | 'star-lens'
+  | 'field-notes'
+  | 'campus-satchel'
+  | 'signal-kite';
+
+export interface WardrobeCategory {
+  id: WardrobeCategoryId;
+  label: string;
+  slot: WardrobeCategoryId;
+  icon: string;
+}
+
+export interface WardrobeItem {
+  id: string;
+  name: string;
+  category: WardrobeSlot;
+  price: number;
+  icon: WardrobeIconName;
+  description: string;
+  ownedByDefault?: boolean;
+  modelFile?: string | null;
+  previewOffset?: [number, number, number] | null;
+  previewRotation?: [number, number, number] | null;
+  previewScale?: [number, number, number] | null;
+}
+
+export interface WardrobeState {
+  balance: number;
+  ownedItemIds: string[];
+  equippedBySlot: Partial<Record<WardrobeSlot, string>>;
+}

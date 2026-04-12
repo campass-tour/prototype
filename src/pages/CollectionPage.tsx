@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Sparkles } from 'lucide-react';
 import MascotCard from '../components/collection/MascotCard';
 import CollectionProgressBar from '../components/collection/CollectionProgressBar';
 import CollectionSwiperModal from '../components/collection/CollectionSwiperModal';
@@ -36,7 +38,16 @@ export const CollectionPage: React.FC = () => {
           <h1 className="mt-1 text-4xl font-extrabold tracking-[-0.04em] text-[var(--color-text-main)] md:text-5xl">
             My Collection
           </h1>
+        </div>
 
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <Link
+            to="/collection/studio"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] px-4 py-3 text-sm font-semibold text-[var(--color-text-main)] shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl transition hover:bg-[var(--color-surface)]"
+          >
+            <Sparkles className="h-4 w-4 text-[var(--color-primary)]" />
+            <span>Open Dressing Room</span>
+          </Link>
         </div>
 
         <div className="mt-6 flex justify-start">

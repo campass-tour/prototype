@@ -12,6 +12,15 @@ type AssembleOptions = {
   cacheKey: string;
 };
 
+type AssembleWearableOptions = {
+  birdUrl: string;
+  wearableUrl: string;
+  wearableOffset?: Offset | null;
+  wearableRotation?: Offset | null;
+  wearableScale?: Offset | null;
+  cacheKey: string;
+};
+
 const loader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
 const exporter = new GLTFExporter();
@@ -25,6 +34,11 @@ loader.setDRACOLoader(dracoLoader);
 
 const normalizeOffset = (offset?: Offset | null): Offset =>
   offset && offset.length === 3 ? offset : [0, 0, 0];
+
+const normalizeScale = (scale?: Offset | null): Offset => {
+  if (scale && scale.length === 3) return scale;
+  return [1, 1, 1];
+};
 
 const loadScene = (url: string) =>
   new Promise<THREE.Group>((resolve, reject) => {
@@ -80,6 +94,45 @@ export const getAssembledModelUrl = ({
     buildingScene.position.set(offset[0], offset[1], offset[2]);
 
     root.add(buildingScene);
+    root.add(birdScene);
+
+    return exportSceneToUrl(root);
+  })();
+
+  assembledModelCache.set(key, promise);
+  return promise;
+};
+
+export const getAssembledWearableModelUrl = ({
+  birdUrl,
+  wearableUrl,
+  wearableOffset,
+  wearableRotation,
+  wearableScale,
+  cacheKey,
+}: AssembleWearableOptions) => {
+  const offset = normalizeOffset(wearableOffset);
+  const rotation = normalizeOffset(wearableRotation);
+  const scale = normalizeScale(wearableScale);
+  const key = `${cacheKey}|${birdUrl}|${wearableUrl}|${offset.join(',')}|${rotation.join(',')}|${scale.join(',')}`;
+  const cached = assembledModelCache.get(key);
+  if (cached) return cached;
+
+  const promise = (async () => {
+    const [birdScene, wearableScene] = await Promise.all([
+      loadScene(birdUrl),
+      loadScene(wearableUrl),
+    ]);
+
+    const root = new THREE.Group();
+
+    // Bird stays at origin. Wearable is placed relative to it.
+    birdScene.position.set(0, 0, 0);
+    wearableScene.position.set(offset[0], offset[1], offset[2]);
+    wearableScene.rotation.set(rotation[0], rotation[1], rotation[2]);
+    wearableScene.scale.set(scale[0], scale[1], scale[2]);
+
+    root.add(wearableScene);
     root.add(birdScene);
 
     return exportSceneToUrl(root);

@@ -1,0 +1,55 @@
+{
+  "categories": [
+    {
+      "id": "all",
+      "label": "All",
+      "slot": "all",
+      "icon": "LayoutGrid"
+    },
+    {
+      "id": "head",
+      "label": "Head",
+      "slot": "head",
+      "icon": "Sparkles"
+    },
+    {
+      "id": "face",
+      "label": "Face",
+      "slot": "face",
+      "icon": "ScanFace"
+    },
+    {
+      "id": "gear",
+      "label": "Gear",
+      "slot": "gear",
+      "icon": "Package2"
+    }
+  ],
+  "items": [
+    {
+      "id": "mono-shades",
+      "name": "Mono Shades",
+      "category": "face",
+      "price": 0,
+      "icon": "mono-shades",
+      "description": "The current wearable prototype for the bird studio.",
+      "ownedByDefault": true,
+      "modelFile": "sunglasses.glb",
+      "previewOffset": [
+        0,
+        0,
+        0
+      ],
+      "previewRotation": [
+        0,
+        0,
+        0
+      ],
+      "previewScale": [
+        1,
+        1,
+        1
+      ]
+    }
+  ]
+}

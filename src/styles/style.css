@@ -280,6 +280,44 @@ p {
   margin: 0;
 }
 
+.studio-stage-shell {
+  min-height: clamp(24rem, 45svh, 42rem);
+}
+
+.studio-stage-badge {
+  transform: translate3d(0, 0, 0);
+}
+
+.studio-balance-figure {
+  animation: studio-balance-roll 360ms ease-out;
+}
+
+.studio-action-bar {
+  position: sticky;
+  bottom: var(--spacing-3);
+  z-index: var(--z-overlay);
+  border-radius: var(--radius-pill);
+  padding: var(--spacing-3);
+  margin: 0 var(--spacing-3);
+}
+
+@keyframes studio-balance-roll {
+  0% {
+    opacity: 0;
+    transform: translateY(-20%);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(8%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 code, .counter {
   font-family: var(--mono);
   display: inline-flex;
