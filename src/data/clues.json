@@ -419,84 +419,84 @@
         {
           "quizId": "q1",
           "unlocks": "Level 2",
-          "question": "What best describes the role of Foundation Building at XJTLU?",
+          "question": "As a new student, what would you most likely use Foundation Building for in your first weeks on campus?",
           "options": [
-            "A. A campus sports arena for training and competitions",
-            "B. A starting point for learning, classes, and daily academic routines",
-            "C. The university's main museum and exhibition hall",
-            "D. A research laboratory reserved only for postgraduate students"
+            "A. Attending regular classes and getting used to campus learning routines",
+            "B. Visiting a major sports venue for team training",
+            "C. Exploring historical exhibitions about the university",
+            "D. Entering restricted scientific labs for advanced experiments"
           ],
-          "correctAnswerIndex": 2,
-          "successMessage": "Correct! The first layer fades away, and the building's location is now much clearer."
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct! You're thinking like a newcomer. The next clue now points you closer to Foundation Building."
         },
         {
           "quizId": "q2",
           "unlocks": "Level 3",
-          "question": "Which clue best helps you distinguish Foundation Building from places like the museum, cafe, or research labs?",
+          "question": "Which scene would make a freshman most confident they have arrived at Foundation Building?",
           "options": [
-            "A. It is known mainly for exhibits and campus history displays",
-            "B. It is centered on coffee, social events, and informal hangouts",
-            "C. It is associated with classrooms, daily study routines, and students moving between lessons",
-            "D. It is primarily filled with advanced scientific laboratories"
+            "A. Display cases introducing the university's history",
+            "B. Corridors with classrooms and students heading between lessons",
+            "C. Rows of workout machines and indoor courts",
+            "D. A social cafe atmosphere with drinks and casual chats"
           ],
-          "correctAnswerIndex": 3,
-          "successMessage": "Exactly. The final route and the NFC position are now fully revealed."
+          "correctAnswerIndex": 2,
+          "successMessage": "Exactly. You picked the most recognizable study scene, and the final NFC route is now revealed."
         }
       ],
       "senior": [
         {
           "quizId": "q1",
           "unlocks": "Level 2",
-          "question": "What best describes the role of Foundation Building at XJTLU?",
+          "question": "For senior students, what makes Foundation Building stand out from more specialized campus spaces?",
           "options": [
-            "A. A campus sports arena for training and competitions",
-            "B. A starting point for learning, classes, and daily academic routines",
-            "C. The university's main museum and exhibition hall",
-            "D. A research laboratory reserved only for postgraduate students"
+            "A. It supports broad day-to-day teaching rather than niche research or sports functions",
+            "B. It mainly hosts varsity competitions and fitness sessions",
+            "C. It focuses on preserving archives and campus heritage",
+            "D. It is intended mostly for exhibition visitors instead of students"
           ],
-          "correctAnswerIndex": 2,
-          "successMessage": "Correct! The first layer fades away, and the building's location is now much clearer."
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct. That broader academic role is the key pattern, and Level 2 is now unlocked."
         },
         {
           "quizId": "q2",
           "unlocks": "Level 3",
-          "question": "Which clue best helps you distinguish Foundation Building from places like the museum, cafe, or research labs?",
+          "question": "Which flow of movement is most typical around Foundation Building during a normal class day?",
           "options": [
-            "A. It is known mainly for exhibits and campus history displays",
-            "B. It is centered on coffee, social events, and informal hangouts",
-            "C. It is associated with classrooms, daily study routines, and students moving between lessons",
-            "D. It is primarily filled with advanced scientific laboratories"
+            "A. Students rotating between lectures, classrooms, and short preparation breaks",
+            "B. Athletes arriving for drills and court bookings",
+            "C. Visitors quietly moving through curated exhibits",
+            "D. Researchers entering controlled lab spaces"
           ],
-          "correctAnswerIndex": 3,
-          "successMessage": "Exactly. The final route and the NFC position are now fully revealed."
+          "correctAnswerIndex": 1,
+          "successMessage": "Exactly. That everyday class-flow gives it away, and the exact NFC position is now visible."
         }
       ],
       "visitor": [
         {
           "quizId": "q1",
           "unlocks": "Level 2",
-          "question": "What best describes the role of Foundation Building at XJTLU?",
+          "question": "If you were visiting campus for the first time, how would you best understand Foundation Building?",
           "options": [
-            "A. A campus sports arena for training and competitions",
-            "B. A starting point for learning, classes, and daily academic routines",
-            "C. The university's main museum and exhibition hall",
-            "D. A research laboratory reserved only for postgraduate students"
+            "A. A core teaching building tied to introductory learning and everyday classes",
+            "B. A performance hall mainly used for ceremonies and concerts",
+            "C. A recreation center focused on sports and training",
+            "D. A heritage museum preserving institutional memory"
           ],
-          "correctAnswerIndex": 2,
-          "successMessage": "Correct! The first layer fades away, and the building's location is now much clearer."
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct. You identified its public-facing role well, and the regional clue is now clearer."
         },
         {
           "quizId": "q2",
           "unlocks": "Level 3",
-          "question": "Which clue best helps you distinguish Foundation Building from places like the museum, cafe, or research labs?",
+          "question": "Which description would help a visitor separate Foundation Building from landmark spaces like the museum or gym?",
           "options": [
-            "A. It is known mainly for exhibits and campus history displays",
-            "B. It is centered on coffee, social events, and informal hangouts",
-            "C. It is associated with classrooms, daily study routines, and students moving between lessons",
-            "D. It is primarily filled with advanced scientific laboratories"
+            "A. It is a place defined by teaching rooms, study routines, and students moving between classes",
+            "B. It is best known for preserving university artifacts and timelines",
+            "C. It is dominated by sports courts and physical training facilities",
+            "D. It mainly serves coffee and social gatherings"
           ],
-          "correctAnswerIndex": 3,
-          "successMessage": "Exactly. The final route and the NFC position are now fully revealed."
+          "correctAnswerIndex": 1,
+          "successMessage": "Exactly. That visitor-friendly description points to the right building, and the final route is unlocked."
         }
       ]
     }
@@ -521,84 +521,84 @@
         {
           "quizId": "q1",
           "unlocks": "Level 2",
-          "question": "What best describes the main role of the GYM at XJTLU?",
+          "question": "As a freshman, what would you most likely expect to do at the GYM?",
           "options": [
-            "A. A museum space for preserving campus history",
-            "B. A place for exercise, sports practice, and physical training",
-            "C. A coffee bar for informal discussions",
-            "D. A library and administrative center"
+            "A. Join workouts, sports practice, or general physical training",
+            "B. Read archives about the university's past",
+            "C. Attend most of your daily academic lectures",
+            "D. Meet friends mainly for drinks and casual conversation"
           ],
-          "correctAnswerIndex": 2,
-          "successMessage": "Correct! The rhythm of movement points you closer to the right building."
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct! That active first impression leads you closer to the right sports building."
         },
         {
           "quizId": "q2",
           "unlocks": "Level 3",
-          "question": "Which detail most clearly helps you identify the GYM instead of an academic or social building?",
+          "question": "Which detail would make a new student immediately think, 'This must be the GYM'?",
           "options": [
-            "A. It is associated with courts, workouts, and sports activities",
-            "B. It is mainly used for exhibitions and historical displays",
-            "C. It is best known for coffee and casual conversation",
-            "D. It is filled with classrooms and daily lectures"
+            "A. Indoor courts, workout spaces, and people doing sports activities",
+            "B. Long corridors of classrooms and lecture rooms",
+            "C. Quiet exhibitions telling the campus story",
+            "D. A cafe-style area built around drinks and chatting"
           ],
           "correctAnswerIndex": 1,
-          "successMessage": "Exactly. The final route is unlocked, and the exact tag location is now visible."
+          "successMessage": "Exactly. The sports cues are unmistakable, and the exact tag location is now visible."
         }
       ],
       "senior": [
         {
           "quizId": "q1",
           "unlocks": "Level 2",
-          "question": "What best describes the main role of the GYM at XJTLU?",
+          "question": "From a senior student's perspective, what most clearly defines the GYM on campus?",
           "options": [
-            "A. A museum space for preserving campus history",
-            "B. A place for exercise, sports practice, and physical training",
-            "C. A coffee bar for informal discussions",
-            "D. A library and administrative center"
+            "A. A sports-focused facility built around exercise, training, and active use",
+            "B. A general teaching building for routine coursework",
+            "C. A cultural landmark used for exhibitions and archives",
+            "D. A mainly administrative hub for paperwork and services"
           ],
-          "correctAnswerIndex": 2,
-          "successMessage": "Correct! The rhythm of movement points you closer to the right building."
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct. You identified the building by function, and the next clue is now open."
         },
         {
           "quizId": "q2",
           "unlocks": "Level 3",
-          "question": "Which detail most clearly helps you identify the GYM instead of an academic or social building?",
+          "question": "Which campus pattern would help an experienced student distinguish the GYM from academic buildings fastest?",
           "options": [
-            "A. It is associated with courts, workouts, and sports activities",
-            "B. It is mainly used for exhibitions and historical displays",
-            "C. It is best known for coffee and casual conversation",
-            "D. It is filled with classrooms and daily lectures"
+            "A. Traffic shaped by training sessions, sports bookings, and active recreation",
+            "B. Crowds moving according to lecture timetables and classroom changes",
+            "C. Visitors spending time with exhibitions and memorial displays",
+            "D. Students gathering primarily for coffee breaks"
           ],
           "correctAnswerIndex": 1,
-          "successMessage": "Exactly. The final route is unlocked, and the exact tag location is now visible."
+          "successMessage": "Exactly. That usage pattern is unique to the GYM, and the final route is now unlocked."
         }
       ],
       "visitor": [
         {
           "quizId": "q1",
           "unlocks": "Level 2",
-          "question": "What best describes the main role of the GYM at XJTLU?",
+          "question": "As a campus visitor, which description would help you identify the GYM first?",
           "options": [
-            "A. A museum space for preserving campus history",
-            "B. A place for exercise, sports practice, and physical training",
-            "C. A coffee bar for informal discussions",
-            "D. A library and administrative center"
+            "A. A sports and fitness venue used for exercise and training",
+            "B. A museum space preserving university milestones",
+            "C. A teaching building mainly used for classes",
+            "D. A social area centered on food and drinks"
           ],
-          "correctAnswerIndex": 2,
-          "successMessage": "Correct! The rhythm of movement points you closer to the right building."
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct. That is the clearest visitor-facing description, and Level 2 is now revealed."
         },
         {
           "quizId": "q2",
           "unlocks": "Level 3",
-          "question": "Which detail most clearly helps you identify the GYM instead of an academic or social building?",
+          "question": "As a visitor walking around campus, which visual feature would most strongly suggest you are near the GYM?",
           "options": [
-            "A. It is associated with courts, workouts, and sports activities",
-            "B. It is mainly used for exhibitions and historical displays",
-            "C. It is best known for coffee and casual conversation",
-            "D. It is filled with classrooms and daily lectures"
+            "A. A yellow-and-blue exterior that stands out from nearby buildings",
+            "B. Exhibition boards introducing university history",
+            "C. Streams of students moving between lectures",
+            "D. Small groups gathering with drinks for casual conversation"
           ],
           "correctAnswerIndex": 1,
-          "successMessage": "Exactly. The final route is unlocked, and the exact tag location is now visible."
+          "successMessage": "Exactly. That yellow-and-blue exterior is the key visitor clue, and the exact NFC location is now visible."
         }
       ]
     }
