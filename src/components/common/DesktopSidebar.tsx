@@ -1,12 +1,11 @@
-import React from 'react';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, type LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import type { TabId } from './MainLayout';
 // import { SideDrawer } from './SideDrawer';
 
 interface DesktopSidebarProps {
-  tabs: { id: TabId; label: string; icon: React.ElementType }[];
+  tabs: { id: TabId; label: string; icon: LucideIcon }[];
   activeTab: TabId;
   isDarkMode: boolean;
   toggleDarkMode: () => void;

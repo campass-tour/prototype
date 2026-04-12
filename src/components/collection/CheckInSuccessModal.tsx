@@ -1,16 +1,9 @@
-﻿import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Backpack, Map as MapIcon } from 'lucide-react';
-import '@google/model-viewer';
 import LottieLib from 'lottie-react';
-import defaultModelUrl from '../../assets/model/default-model.glb?url';
 import { getLocationData } from '../../constants/locations';
 import { SummonARButton } from '../photo/SummonARButton';
-
-// Provide a small React wrapper that renders the `model-viewer` web component
-const ModelViewer: React.FC<any> = (props) => React.createElement('model-viewer', props);
-
-// Dynamically load all .glb models in the assets folder
-const glbModels = import.meta.glob('../../assets/model/*.glb', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+import AssembledModelViewer from './AssembledModelViewer';
 
 type CheckInSuccessModalProps = {
   open: boolean;
@@ -69,17 +62,7 @@ export default function CheckInSuccessModal({
   const safeTotal = total > 0 ? total : 1;
   const percentage = Math.min((displayedCurrent / safeTotal) * 100, 100);
 
-  // Determine model dynamically using location assets mapping
   const locData = getLocationData(checkinId);
-  const modelFile = locData?.model;
-  let modelSrc = defaultModelUrl;
-  if (modelFile) {
-    const path = `../../assets/model/${modelFile}`;
-    modelSrc = glbModels[path] || defaultModelUrl;
-  } else if (checkinId) {
-    const fallbackPath = `../../assets/model/${checkinId}-model.glb`;
-    modelSrc = glbModels[fallbackPath] || defaultModelUrl;
-  }
 
   // Resolve lottie-react default vs named export at runtime
   const Lottie = (LottieLib as any)?.default || LottieLib;
@@ -108,21 +91,23 @@ export default function CheckInSuccessModal({
           <div className="absolute bottom-4 left-1/2 h-8 w-3/4 -translate-x-1/2 rounded-full bg-[var(--color-primary)]/20 blur-xl animate-pulse" />
           <div className="absolute bottom-6 left-1/2 h-2 w-1/2 -translate-x-1/2 rounded-full bg-[var(--color-accent)]/30 blur-sm" />
 
-          {modelSrc && (
-            <div className="absolute inset-0 z-10" style={{ perspective: '800px' }}>
-              <ModelViewer
-                src={modelSrc}
-                auto-rotate="true"
-                camera-controls="true"
-                disable-zoom="true"
-                rotation-per-second="30deg"
-                interaction-prompt="none"
-                exposure="1.2"
-                shadow-intensity="1"
-                style={{ width: '100%', height: '120%', transform: 'translateY(-10%)', outline: 'none' }}
-              />
-            </div>
-          )}
+          <div className="absolute inset-0 z-10" style={{ perspective: '800px' }}>
+            <AssembledModelViewer
+              buildingId={checkinId}
+              buildingModelFile={locData?.model}
+              buildingOffset={locData?.buildingOffset}
+              modelViewerProps={{
+                'auto-rotate': 'true',
+                'camera-controls': 'true',
+                'disable-zoom': 'true',
+                'rotation-per-second': '30deg',
+                'interaction-prompt': 'none',
+                exposure: '1.2',
+                'shadow-intensity': '1',
+              }}
+              style={{ width: '100%', height: '120%', transform: 'translateY(-10%)', outline: 'none' }}
+            />
+          </div>
         </div>
 
         <div className="text-center relative z-10">

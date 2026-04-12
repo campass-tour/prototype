@@ -10,7 +10,14 @@ const messages = messagesData as unknown as Message[];
 const locationsData_raw = locationsData as unknown as Location[];
 const lores = loresData as unknown as LocationLore[];
 const userPositionData_raw = userPositionData as unknown as UserPosition;
-const locationAssets = locationAssetsData as unknown as Array<{ id: string; icon?: string | null; image?: string | null; model?: string | null; mascotName?: string | null }>;
+const locationAssets = locationAssetsData as unknown as Array<{
+  id: string;
+  icon?: string | null;
+  image?: string | null;
+  model?: string | null;
+  mascotName?: string | null;
+  buildingOffset?: [number, number, number] | null;
+}>;
 
 // 将 GPS 坐标转换为图片百分比坐标
 const locations = locationsData_raw.map((loc) => {

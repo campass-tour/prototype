@@ -1,20 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { Backpack, Sparkles } from 'lucide-react';
-import '@google/model-viewer';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, EffectCards, Keyboard } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-cards';
-import defaultModelUrl from '../../assets/model/default-model.glb?url';
 import { LOCATIONS, getLocationData } from '../../constants/locations';
 import { getUnlockedCollectibles } from '../../lib/storage';
-
-const ModelViewer = 'model-viewer' as any;
-
-// Dynamically load all .glb models in the assets folder
-const glbModels = import.meta.glob('../../assets/model/*.glb', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+import AssembledModelViewer from './AssembledModelViewer';
 
 type CollectionSwiperModalProps = {
   open: boolean;
@@ -79,37 +73,34 @@ export default function CollectionSwiperModal({
           initialSlide={safeInitialIndex}
           className="w-full h-[520px]"
         >
-          {displayList.map((item) => {
-            const modelFile = item.model;
-            const targetModelPath = modelFile ? `../../assets/model/${modelFile}` : `../../assets/model/${item.id}-model.glb`;
-            const modelSrc = glbModels[targetModelPath] || defaultModelUrl;
+          {displayList.map((item) => (
+            <SwiperSlide key={item.id} className="flex items-center justify-center">
+              <div className="w-full h-full overflow-hidden rounded-[24px] border border-[var(--color-primary)]/30 bg-[var(--color-surface)]/95 shadow-[var(--shadow-card)] backdrop-blur-xl flex flex-col">
+                
+                {/* Close button - only on the top card actually processes click easily, but we put it relative to the wrapping div to be higher z-index anyway */}
+                <div className="flex-1 flex flex-col p-6">
+                  <div className="relative mx-auto mb-6 flex h-64 w-full items-center justify-center rounded-2xl bg-[var(--color-primary)]/5 shadow-inner overflow-visible">
+                    <div className="absolute bottom-4 left-1/2 h-8 w-3/4 -translate-x-1/2 rounded-full bg-[var(--color-primary)]/20 blur-xl animate-pulse" />
+                    <div className="absolute bottom-6 left-1/2 h-2 w-1/2 -translate-x-1/2 rounded-full bg-[var(--color-accent)]/30 blur-sm" />
 
-            return (
-              <SwiperSlide key={item.id} className="flex items-center justify-center">
-                <div className="w-full h-full overflow-hidden rounded-[24px] border border-[var(--color-primary)]/30 bg-[var(--color-surface)]/95 shadow-[var(--shadow-card)] backdrop-blur-xl flex flex-col">
-                  
-                  {/* Close button - only on the top card actually processes click easily, but we put it relative to the wrapping div to be higher z-index anyway */}
-                  <div className="flex-1 flex flex-col p-6">
-                    <div className="relative mx-auto mb-6 flex h-64 w-full items-center justify-center rounded-2xl bg-[var(--color-primary)]/5 shadow-inner overflow-visible">
-                      <div className="absolute bottom-4 left-1/2 h-8 w-3/4 -translate-x-1/2 rounded-full bg-[var(--color-primary)]/20 blur-xl animate-pulse" />
-                      <div className="absolute bottom-6 left-1/2 h-2 w-1/2 -translate-x-1/2 rounded-full bg-[var(--color-accent)]/30 blur-sm" />
-
-                      {modelSrc && (
-                        <div className="absolute inset-0 z-10" style={{ perspective: '800px' }}>
-                          <ModelViewer
-                            src={modelSrc}
-                            auto-rotate="true"
-                            camera-controls="true"
-                            disable-zoom="true"
-                            rotation-per-second="30deg"
-                            interaction-prompt="none"
-                            exposure="1.2"
-                            shadow-intensity="1"
-                            style={{ width: '100%', height: '120%', transform: 'translateY(-10%)', outline: 'none' }}
-                          />
-                        </div>
-                      )}
+                    <div className="absolute inset-0 z-10" style={{ perspective: '800px' }}>
+                      <AssembledModelViewer
+                        buildingId={item.id}
+                        buildingModelFile={item.model}
+                        buildingOffset={item.buildingOffset}
+                        modelViewerProps={{
+                          'auto-rotate': 'true',
+                          'camera-controls': 'true',
+                          'disable-zoom': 'true',
+                          'rotation-per-second': '30deg',
+                          'interaction-prompt': 'none',
+                          exposure: '1.2',
+                          'shadow-intensity': '1',
+                        }}
+                        style={{ width: '100%', height: '120%', transform: 'translateY(-10%)', outline: 'none' }}
+                      />
                     </div>
+                  </div>
 
                     <div className="text-center relative z-10 flex-1">
                       <p className="inline-block rounded-full bg-[var(--color-primary)]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--color-primary)] shadow-sm">
@@ -146,9 +137,8 @@ export default function CollectionSwiperModal({
                     </div>
                   </div>
                 </div>
-              </SwiperSlide>
-            );
-          })}
+            </SwiperSlide>
+          ))}
         </Swiper>
         
         {/* Global Close Button */}

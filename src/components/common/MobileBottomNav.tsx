@@ -1,10 +1,10 @@
-import React from 'react';
+import type { LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import type { TabId } from './MainLayout';
 
 interface MobileBottomNavProps {
-  tabs: { id: TabId; label: string; icon: React.ElementType }[];
+  tabs: { id: TabId; label: string; icon: LucideIcon }[];
   activeTab: TabId;
 }
 

@@ -17,5 +17,6 @@ export const getLocationData = (id: string) => {
     image: assets?.image || null,
     icon: assets?.icon || null,
     model: assets?.model || null,
+    buildingOffset: assets?.buildingOffset || null,
   };
 };
