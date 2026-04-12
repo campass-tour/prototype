@@ -581,6 +581,36 @@ code {
   user-select: none;
 }
 
+@keyframes sidebar-spring-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-18px) scale(0.98);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(2px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes sidebar-spring-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(18px) scale(0.98);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-2px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
 /* -------------------------------------------------------------------------- */
 /* Polaroid Card Component Styles                                              */
 /* Put visual styles used by PolaroidCard.tsx here so component stays CSS-only */
