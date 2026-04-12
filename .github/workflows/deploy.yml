@@ -38,6 +38,14 @@ jobs:
         run: |
           npm ci || (rm -f package-lock.json && npm install --include=optional)
 
+      - name: Ensure rolldown linux binding
+        if: runner.os == 'Linux'
+        run: |
+          VERSION=$(node -p "require('./node_modules/rolldown/package.json').optionalDependencies?.['@rolldown/binding-linux-x64-gnu'] || ''")
+          if [ -n "$VERSION" ]; then
+            npm install --no-save "@rolldown/binding-linux-x64-gnu@$VERSION"
+          fi
+
       - name: Build project
         run: npm run build
 
