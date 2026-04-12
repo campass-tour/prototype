@@ -35,6 +35,12 @@ const roles: { id: UserRole; icon: React.ReactNode; label: string; description: 
 
 export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, onClose }) => {
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
+  const [portalContainer] = useState<HTMLDivElement | null>(() => {
+    if (typeof document === 'undefined') return null;
+    const el = document.createElement('div');
+    el.setAttribute('data-role-selection-modal-root', 'true');
+    return el;
+  });
 
   const modalRef = useRef<HTMLDivElement | null>(null);
   const confirmButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -46,15 +52,40 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, 
     // Save active element to restore focus later
     previousActiveElement.current = document.activeElement as HTMLElement | null;
 
+    // Ensure portal container exists in DOM so we can inert other body children safely.
+    if (portalContainer && !document.body.contains(portalContainer)) {
+      document.body.appendChild(portalContainer);
+    }
+
     // Lock body scroll
     const prevBodyOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    // Hide and disable pointer events for main app container(s)
-    const appRoot = document.getElementById('root') || document.getElementById('app') || document.querySelector('body > div');
-    if (appRoot && appRoot instanceof HTMLElement) {
-      appRoot.setAttribute('aria-hidden', 'true');
-      appRoot.style.pointerEvents = 'none';
+    // Lock the rest of the screen (including other portals) until confirm.
+    // Use `inert` + pointer-events on all body children except this modal's portal container.
+    const disabledBodyChildren: Array<{
+      el: HTMLElement;
+      prevPointerEvents: string;
+      prevAriaHidden: string | null;
+      prevInert: boolean;
+    }> = [];
+
+    for (const child of Array.from(document.body.children)) {
+      if (!portalContainer) continue;
+      if (child === portalContainer) continue;
+      if (!(child instanceof HTMLElement)) continue;
+
+      disabledBodyChildren.push({
+        el: child,
+        prevPointerEvents: child.style.pointerEvents,
+        prevAriaHidden: child.getAttribute('aria-hidden'),
+        prevInert: Boolean((child as any).inert) || child.hasAttribute('inert'),
+      });
+
+      child.setAttribute('aria-hidden', 'true');
+      (child as any).inert = true;
+      child.setAttribute('inert', '');
+      child.style.pointerEvents = 'none';
     }
 
     // Focus management: try confirm button first, then first focusable
@@ -113,10 +144,25 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, 
     return () => {
       // restore body scroll
       document.body.style.overflow = prevBodyOverflow || '';
-      // restore app root
-      if (appRoot && appRoot instanceof HTMLElement) {
-        appRoot.removeAttribute('aria-hidden');
-        appRoot.style.pointerEvents = '';
+
+      // restore disabled body children
+      for (const item of disabledBodyChildren) {
+        item.el.style.pointerEvents = item.prevPointerEvents;
+        if (item.prevAriaHidden === null) item.el.removeAttribute('aria-hidden');
+        else item.el.setAttribute('aria-hidden', item.prevAriaHidden);
+
+        if (!item.prevInert) {
+          (item.el as any).inert = false;
+          item.el.removeAttribute('inert');
+        } else {
+          (item.el as any).inert = true;
+          item.el.setAttribute('inert', '');
+        }
+      }
+
+      // remove portal container from DOM
+      if (portalContainer && portalContainer.parentNode) {
+        portalContainer.parentNode.removeChild(portalContainer);
       }
       // restore focus
       if (previousActiveElement.current) {
@@ -125,7 +171,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, 
       document.removeEventListener('keydown', onKeyDown, true);
       document.removeEventListener('pointerdown', onPointerDown, true);
     };
-  }, [isOpen]);
+  }, [isOpen, portalContainer]);
 
   if (!isOpen) return null;
 
@@ -136,13 +182,44 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, 
     }
   };
 
+  const stopEventPropagation = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+  };
+
   return createPortal(
-    <div className="fixed inset-0 flex items-center justify-center p-4" style={{ zIndex: 'var(--z-overlay)' }} role="presentation" onMouseDown={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ zIndex: 'var(--z-overlay)' }}
+      role="presentation"
+      data-role-selection-modal="true"
+      onMouseDown={stopEventPropagation}
+      onClick={stopEventPropagation}
+      onTouchStart={stopEventPropagation}
+      onTouchEnd={stopEventPropagation}
+    >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} />
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onMouseDown={stopEventPropagation}
+        onClick={stopEventPropagation}
+        onTouchStart={stopEventPropagation}
+        onTouchEnd={stopEventPropagation}
+      />
 
       {/* Modal Content */}
-      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="role-selection-title" tabIndex={-1} className="relative w-full max-w-md bg-[var(--role-modal-bg)] rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-300" style={{ zIndex: 'var(--z-modal)' }}>
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="role-selection-title"
+        tabIndex={-1}
+        className="relative w-full max-w-md bg-[var(--role-modal-bg)] rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-300"
+        style={{ zIndex: 'var(--z-modal)' }}
+        onMouseDown={stopEventPropagation}
+        onClick={stopEventPropagation}
+        onTouchStart={stopEventPropagation}
+        onTouchEnd={stopEventPropagation}
+      >
         <h2 id="role-selection-title" className="text-2xl font-bold text-center text-[var(--color-text-main)] mb-2">
           Who are you exploring as today?
         </h2>
@@ -206,6 +283,6 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, 
         </div>
       </div>
     </div>,
-    document.body
+    portalContainer || document.body
   );
 };

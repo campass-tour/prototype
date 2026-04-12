@@ -59,6 +59,10 @@ export const MapPin: React.FC<MapPinProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       const target = event.target as HTMLElement;
+
+      if (target.closest('[data-role-selection-modal="true"]') || document.querySelector('[data-role-selection-modal="true"]')) {
+        return;
+      }
       
       // Ignore clicks on danmaku or its modal or image viewer
       if (target.closest('.danmaku-item') || target.closest('.danmaku-modal-overlay') || target.closest('.image-viewer-overlay')) {
