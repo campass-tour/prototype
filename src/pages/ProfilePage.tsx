@@ -7,9 +7,9 @@ import { UtilitiesSettings } from '../components/profile/UtilitiesSettings';
 const ProfilePage: React.FC = () => {
   return (
     <div className="w-full bg-[var(--color-background)] min-h-[100svh] pb-32">
-      <div className="w-full max-w-7xl mx-auto px-2 md:px-6 pt-0 flex flex-col">
-        <ProfileHeader />
+      <ProfileHeader />
 
+      <div className="mx-auto flex w-full max-w-7xl flex-col px-2 md:px-6">
         <div className="w-full -mt-1 md:-mt-2 relative z-10">
           <StatsDashboard />
 
@@ -22,7 +22,7 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="md:hidden" style={{ height: 'calc(56px + env(safe-area-inset-bottom))' }} />
+      <div className="md:hidden" style={{ height: 'calc(80px + env(safe-area-inset-bottom))' }} />
     </div>
   );
 };

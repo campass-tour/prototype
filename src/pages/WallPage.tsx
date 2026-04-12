@@ -56,7 +56,7 @@ export const WallPage: React.FC = () => {
                     The Wall
                   </h1>
                   <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[var(--wall-hero-copy)]">
-                    <span>Fragments of campus memory, confessions, and inside jokes.</span>
+                   
                     <span className="hidden h-1 w-1 rounded-full bg-[var(--wall-hero-meta)] sm:inline-block" />
                     <span className="font-medium text-[var(--wall-hero-meta)]">
                       {filteredMessages.length} whispers visible now

@@ -36,9 +36,7 @@ export const CollectionPage: React.FC = () => {
           <h1 className="mt-1 text-4xl font-extrabold tracking-[-0.04em] text-[var(--color-text-main)] md:text-5xl">
             My Collection
           </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--collection-hero-copy)] md:text-[15px]">
-            A digital archive of your campus journey.
-          </p>
+
         </div>
 
         <div className="mt-6 flex justify-start">
