@@ -3,12 +3,10 @@ import { Compass, MessageSquare, Heart } from 'lucide-react';
 
 export const StatsDashboard: React.FC = () => {
   return (
-    <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] py-6 px-6 shadow-[var(--shadow-card)] w-full border border-[var(--border)]">
-      <div className="grid grid-cols-3 divide-x divide-gray-100">
-        
-        {/* Exploration Progress */}
-        <div className="flex flex-col items-center text-center px-2">
-          <div className="text-[var(--color-primary)] mb-2 bg-[var(--color-primary)]/10 p-2.5 rounded-full">
+    <section className="w-full py-2">
+      <div className="grid grid-cols-3">
+        <div className="flex flex-col items-center px-2 text-center">
+          <div className="mb-2 rounded-full bg-[var(--profile-stat-icon-bg)] p-2.5 text-[var(--profile-stat-icon-explore)]">
             <Compass size={22} />
           </div>
           <span className="text-xl md:text-2xl font-bold text-[var(--color-text-main)] mt-1">
@@ -19,9 +17,8 @@ export const StatsDashboard: React.FC = () => {
           </span>
         </div>
 
-        {/* Echoes / Messages sent */}
-        <div className="flex flex-col items-center text-center px-2">
-          <div className="text-[#00C4CC] mb-2 bg-[#00C4CC]/10 p-2.5 rounded-full">
+        <div className="flex flex-col items-center px-2 text-center border-x border-[var(--profile-stat-divider)]">
+          <div className="mb-2 rounded-full bg-[var(--profile-stat-icon-bg)] p-2.5 text-[var(--profile-stat-icon-echoes)]">
             <MessageSquare size={22} />
           </div>
           <span className="text-xl md:text-2xl font-bold text-[var(--color-text-main)] mt-1">
@@ -32,9 +29,8 @@ export const StatsDashboard: React.FC = () => {
           </span>
         </div>
 
-        {/* Likes Received */}
-        <div className="flex flex-col items-center text-center px-2">
-          <div className="text-[#FF4081] mb-2 bg-[#FF4081]/10 p-2.5 rounded-full">
+        <div className="flex flex-col items-center px-2 text-center">
+          <div className="mb-2 rounded-full bg-[var(--profile-stat-icon-bg)] p-2.5 text-[var(--profile-stat-icon-likes)]">
             <Heart size={22} />
           </div>
           <span className="text-xl md:text-2xl font-bold text-[var(--color-text-main)] mt-1">
@@ -44,8 +40,7 @@ export const StatsDashboard: React.FC = () => {
             Likes
           </span>
         </div>
-
       </div>
-    </div>
+    </section>
   );
 };

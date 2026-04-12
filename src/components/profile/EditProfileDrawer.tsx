@@ -90,7 +90,7 @@ const EditProfileDrawer: React.FC<EditProfileDrawerProps> = ({ isOpen, onClose }
             </label>
             <button
               onClick={() => setRoleModalOpen(true)}
-              className="w-full flex items-center justify-between border border-gray-300 rounded-lg px-4 py-3 text-[var(--color-text-main)] hover:bg-gray-50 transition-colors bg-[var(--color-background)]"
+              className="w-full flex items-center justify-between border rounded-lg px-4 py-3 text-[var(--color-text-main)] bg-[var(--role-card-bg)] border-[var(--role-card-border)] hover:border-[var(--role-card-border-active)] hover:bg-[var(--role-card-hover)] transition-colors"
             >
               <div className="flex items-center gap-2">
                 <User size={18} className="text-[var(--color-primary)]" />

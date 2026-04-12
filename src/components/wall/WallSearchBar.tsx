@@ -52,7 +52,7 @@ export const WallSearchBar: React.FC<WallSearchBarProps> = ({
           placeholder={placeholder}
           aria-label="Search messages"
           className={cn(
-            'h-11 w-full rounded-full border border-transparent bg-transparent pl-11 pr-11 text-sm text-[var(--color-text-main)] placeholder:text-[var(--wall-control-muted)] outline-none transition-[box-shadow,background-color] focus-visible:ring-0',
+            'h-11 w-full rounded-full border border-[var(--wall-search-input-border)] bg-[var(--wall-search-input-bg)] pl-11 pr-11 text-sm font-medium text-[var(--wall-search-input-text)] placeholder:text-[var(--wall-search-placeholder)] outline-none transition-[box-shadow,background-color,border-color] focus:border-[var(--wall-search-input-border)] focus-visible:ring-0',
             inputClassName
           )}
         />
@@ -62,7 +62,7 @@ export const WallSearchBar: React.FC<WallSearchBarProps> = ({
             onClick={onClear}
             aria-label="Clear search"
             className={cn(
-              'absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-[var(--wall-control-muted)] transition-colors hover:bg-[var(--wall-control-hover)] hover:text-[var(--color-text-main)]',
+              'absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-[var(--wall-control-muted)] transition-colors hover:bg-[var(--wall-search-clear-hover)] hover:text-[var(--wall-search-input-text)]',
               clearButtonClassName
             )}
           >

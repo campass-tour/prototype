@@ -142,7 +142,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, 
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} />
 
       {/* Modal Content */}
-      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="role-selection-title" tabIndex={-1} className="relative w-full max-w-md bg-[var(--color-surface)] rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-300" style={{ zIndex: 'var(--z-modal)' }}>
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="role-selection-title" tabIndex={-1} className="relative w-full max-w-md bg-[var(--role-modal-bg)] rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-300" style={{ zIndex: 'var(--z-modal)' }}>
         <h2 id="role-selection-title" className="text-2xl font-bold text-center text-[var(--color-text-main)] mb-2">
           Who are you exploring as today?
         </h2>
@@ -157,8 +157,10 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({ isOpen, 
               <button
                 key={role.id}
                 onClick={() => setSelectedRole(role.id)}
-                className={`relative flex items-center p-4 rounded-xl border-2 transition-all duration-300 text-left overflow-hidden ${
-                  isSelected ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/5 scale-[1.02] shadow-md' : 'border-gray-200 hover:border-[var(--color-primary)]/50 hover:bg-gray-50'
+                className={`relative flex items-center p-4 rounded-xl border-2 transition-all duration-300 text-left overflow-hidden bg-[var(--role-card-bg)] ${
+                  isSelected
+                    ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/5 scale-[1.02] shadow-md'
+                    : 'border-[var(--role-card-border)] hover:border-[var(--role-card-border-active)] hover:bg-[var(--role-card-hover)]'
                 }`}
               >
                 {/* Background accent for selected */}

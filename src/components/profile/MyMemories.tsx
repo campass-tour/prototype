@@ -19,24 +19,24 @@ export const MyMemories: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
   return (
-    <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] p-6 shadow-[var(--shadow-card)] w-full border border-[var(--border)]">
-      <h3 className="text-lg md:text-xl font-bold text-[var(--color-text-main)] mb-4 flex items-center gap-2 m-0">
+    <section className="w-full px-[var(--profile-memory-pad-x)] py-[var(--profile-memory-pad-y)]">
+      <h3 className="m-0 mb-5 flex items-center gap-2 text-lg font-bold text-[var(--color-text-main)] md:text-xl">
         <BookHeart size={20} className="text-[var(--color-accent)]" />
         Memories & Echoes
       </h3>
 
       {userMessages.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center text-center py-10">
-          <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-[var(--color-state-disabled)]/50">
-            <svg className="w-6 h-6 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h11"></path></svg>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-[var(--profile-content-divider)] py-10 text-center">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--profile-content-divider)] bg-[var(--profile-empty-icon-bg)]">
+            <svg className="h-6 w-6 text-[var(--profile-empty-icon)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h11"></path></svg>
           </div>
           <p className="text-[var(--color-text-secondary)] text-sm md:text-base max-w-[300px]">
             You haven't posted any memories yet.
           </p>
         </div>
       ) : (
-        <div className="max-h-[52vh] overflow-auto pr-4 px-4 pb-4 pt-4">
-          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4" style={{ columnGap: '1.5rem' }}>
+        <div className="max-h-[72vh] overflow-auto px-6 md:px-10 pt-6 md:pt-8">
+          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4" style={{ columnGap: '2.5rem' }}>
             {userMessages.map((msg, idx) => (
               <div className="mb-6" key={msg.id}>
                 <PolaroidCard
@@ -60,12 +60,12 @@ export const MyMemories: React.FC = () => {
           </div>
         </div>
       )}
-      {/* MessageDetailModal for selected card */}
-      <MessageDetailModal 
+
+      <MessageDetailModal
         item={selectedItem} 
         onClose={() => setSelectedItem(null)}
         showDeleteIcon={selectedItem?.originalMessage.author.username === 'silly bird'}
       />
-    </div>
+    </section>
   );
 };

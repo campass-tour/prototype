@@ -7,53 +7,51 @@ export const ProfileHeader: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   return (
-    <div className="w-full bg-[var(--color-surface)] shadow-[var(--shadow-card)] rounded-[var(--radius-card)] px-0 py-0 mb-2 flex flex-col relative overflow-hidden border border-[var(--border)]">
-      {/* Cover Photo (more compact on desktop) */}
-      <div className="h-28 md:h-36 w-full bg-gradient-to-r from-[#e0c3fc] to-[#8ec5fc]">
+    <section className="relative -mx-2 overflow-hidden md:-mx-6">
+      <div className="relative h-44 w-full overflow-hidden bg-[linear-gradient(120deg,var(--profile-hero-gradient-start)_0%,var(--profile-hero-gradient-end)_100%)] md:h-52">
         <LazyLoadImage
           src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop"
           alt="Cover"
-          className="w-full h-full object-cover opacity-60 mix-blend-overlay"
+          className="h-full w-full object-cover opacity-62 mix-blend-overlay"
           effect="blur"
         />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-[linear-gradient(to_bottom,transparent,var(--color-background))]" />
       </div>
-      <div className="px-4 pb-4 md:px-6 relative flex flex-col md:flex-row md:items-center text-center md:text-left">
-        {/* Avatar Area */}
-        <div className="relative -mt-14 md:-mt-12 mb-3 md:mb-0 inline-block mx-auto md:mr-4">
-          <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-white p-1 shadow-[0_0_16px_rgba(156,125,217,0.45)] flex items-center justify-center object-cover">
-             <LazyLoadImage
+
+      <div className="relative z-10 -mt-10 px-3 pb-5 md:-mt-12 md:px-7 md:pb-7">
+        <div className="flex flex-col items-center text-center md:flex-row md:items-center md:text-left">
+          <div className="relative mb-3 inline-block md:mb-0 md:mr-6">
+            <div className="flex h-28 w-28 items-center justify-center rounded-full border border-[var(--profile-avatar-border)] bg-[var(--profile-avatar-ring-bg)] p-1.5 shadow-[var(--profile-avatar-shadow)] md:h-32 md:w-32">
+              <LazyLoadImage
                 src="https://p.sda1.dev/32/b4ea84ad54daf342c6979fafe2e2f544/profile.png"
                 alt="Avatar"
-                className="w-full h-full rounded-full object-cover"
+                className="h-full w-full rounded-full object-cover"
                 effect="blur"
               />
-          </div>
-          {/* Edit Entry */}
-          <button 
-            onClick={() => setIsDrawerOpen(true)}
-            className="absolute bottom-1 right-1 md:bottom-1 md:right-1 w-8 h-8 rounded-full bg-[var(--color-surface)] border border-[var(--color-state-disabled)] shadow-sm flex items-center justify-center text-[var(--color-text-main)] hover:bg-[var(--color-background)] transition-colors z-10"
-            aria-label="Edit Profile"
-          >
-            <Pencil size={15} />
-          </button>
-        </div>
+            </div>
 
-        {/* Identity Info */}
-        <div className="flex flex-col items-center md:items-start md:flex-1">
-          <h1 className="text-xl md:text-2xl font-bold text-[var(--color-text-main)] leading-tight">
-            silly bird
-          </h1>
-          <div className="mt-1 inline-flex items-center px-3 py-1 rounded-full bg-[var(--color-accent)] text-white text-xs font-semibold tracking-wide uppercase">
-            Campus Rookie
+            <button
+              onClick={() => setIsDrawerOpen(true)}
+              className="absolute bottom-1 right-1 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-[var(--profile-edit-border)] bg-[var(--profile-edit-bg)] text-[var(--profile-edit-icon)] shadow-sm transition-colors hover:bg-[var(--profile-edit-hover)]"
+              aria-label="Edit Profile"
+            >
+              <Pencil size={15} />
+            </button>
+          </div>
+
+          <div className="flex flex-col items-center md:flex-1 md:items-start">
+            <h1 className="mt-1 text-3xl font-extrabold leading-tight tracking-[-0.03em] text-[var(--color-text-main)] md:text-4xl">
+              silly bird
+            </h1>
+            <div className="mt-2 inline-flex items-center rounded-full border border-[var(--profile-role-border)] bg-[var(--profile-role-bg)] px-3 py-1 text-xs font-semibold tracking-wide uppercase text-[var(--profile-role-text)]">
+              Campus Rookie
+            </div>
           </div>
         </div>
       </div>
 
-      <EditProfileDrawer 
-        isOpen={isDrawerOpen} 
-        onClose={() => setIsDrawerOpen(false)} 
-      />
-    </div>
+      <EditProfileDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+    </section>
   );
 };
 

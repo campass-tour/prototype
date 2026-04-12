@@ -94,10 +94,34 @@
   
   /* Shadows */
   --shadow-card: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  --glass-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  --glass-card-shadow-hover: 0 14px 38px rgba(0, 0, 0, 0.56);
+  --glass-card-border: rgba(255, 255, 255, 0.1);
+  --glass-card-bg: color-mix(in srgb, var(--color-surface) 86%, transparent);
+
+  --mascot-card-image-bg: color-mix(in srgb, var(--color-surface) 56%, transparent);
+  --mascot-halo-core: rgba(56, 150, 255, 0.36);
+  --mascot-halo-mid: rgba(75, 180, 255, 0.18);
+  --mascot-halo-edge: rgba(95, 145, 255, 0.08);
+  --mascot-figure-shadow: rgba(0, 0, 0, 0.38);
+  --mascot-figure-shadow-muted: rgba(0, 0, 0, 0.2);
+  --mascot-fallback-text: color-mix(in srgb, var(--color-text-main) 78%, transparent);
+  --mascot-badge-bg: color-mix(in srgb, var(--color-primary) 88%, transparent);
+  --mascot-badge-new-bg: color-mix(in srgb, var(--color-accent) 88%, transparent);
+  --mascot-badge-locked-bg: rgba(0, 0, 0, 0.45);
+  --mascot-badge-text: #ffffff;
+  --mascot-badge-locked-text: rgba(255, 255, 255, 0.92);
+  --mascot-overlay-bottom: rgba(0, 0, 0, 0.24);
+  --mascot-location-text: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
 
   /* Polaroid location token defaults (can be overridden by theme) */
-  --polaroid-location-bg: #f3f3f3;
-  --polaroid-location-text: var(--color-text-main);
+  --polaroid-location-bg: rgba(255, 255, 255, 0.05);
+  --polaroid-location-text: color-mix(in srgb, var(--color-text-main) 70%, transparent);
+  --polaroid-location-icon: color-mix(in srgb, var(--color-text-main) 58%, transparent);
+  --polaroid-body-text: color-mix(in srgb, var(--color-text-main) 78%, transparent);
+  --polaroid-image-bg: color-mix(in srgb, var(--color-surface-light) 82%, transparent);
+  --polaroid-avatar-bg: color-mix(in srgb, var(--color-text-main) 10%, var(--color-surface));
+  --polaroid-heart-color: #f87171;
 
   /* Message wall editorial/glass tokens */
   --wall-page-bg: var(--color-background);
@@ -143,6 +167,71 @@
   --wall-mobile-sticky-border: rgba(40, 21, 89, 0.06);
   --wall-mobile-search-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
   --wall-mobile-pill-bg: rgba(255, 255, 255, 0.78);
+
+  /* Collection editorial/capsule tokens */
+  --collection-hero-copy: color-mix(in srgb, var(--color-text-main) 68%, transparent);
+  --collection-capsule-bg: color-mix(in srgb, var(--color-surface) 86%, transparent);
+  --collection-capsule-border: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  --collection-capsule-shadow: 0 14px 34px rgba(18, 26, 40, 0.06);
+  --collection-progress-kicker: color-mix(in srgb, var(--color-primary) 48%, var(--color-text-secondary));
+  --collection-progress-copy: color-mix(in srgb, var(--color-text-main) 62%, transparent);
+  --collection-progress-track: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface-light));
+  --collection-progress-fill: var(--color-accent);
+  --collection-progress-ring-track: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  --collection-progress-ring-fill: var(--color-primary);
+  --collection-progress-ring-center: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  --collection-progress-ring-text: var(--color-text-main);
+  --collection-progress-ring-meta: color-mix(in srgb, var(--color-primary) 52%, var(--color-text-secondary));
+  --collection-progress-badge-bg: var(--color-primary);
+  --collection-progress-badge-text: #ffffff;
+  --collection-progress-badge-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 18%, transparent);
+
+  --role-card-border: rgba(212, 212, 216, 0.7);
+  --role-card-border-active: rgba(40, 21, 89, 0.45);
+  --role-card-hover: rgba(40, 21, 89, 0.08);
+  --role-card-bg: rgba(255, 255, 255, 0.85);
+  --role-modal-bg: rgba(255, 255, 255, 0.97);
+
+  /* Profile editorial tokens */
+  --profile-hero-gradient-start: color-mix(in srgb, var(--color-primary) 26%, #ffffff);
+  --profile-hero-gradient-end: color-mix(in srgb, var(--color-accent) 28%, #ffffff);
+  --profile-hero-border: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  --profile-avatar-ring-bg: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  --profile-avatar-border: color-mix(in srgb, var(--color-primary) 22%, #ffffff);
+  --profile-avatar-shadow: 0 14px 34px rgba(21, 19, 44, 0.18);
+  --profile-edit-bg: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  --profile-edit-border: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  --profile-edit-icon: var(--color-text-main);
+  --profile-edit-hover: color-mix(in srgb, var(--color-primary) 10%, #ffffff);
+  --profile-role-bg: color-mix(in srgb, var(--color-accent) 20%, #ffffff);
+  --profile-role-border: color-mix(in srgb, var(--color-accent) 36%, #ffffff);
+  --profile-role-text: color-mix(in srgb, var(--color-text-main) 86%, transparent);
+  --profile-stat-divider: color-mix(in srgb, var(--color-text-main) 12%, transparent);
+  --profile-stat-icon-bg: color-mix(in srgb, var(--color-surface) 74%, transparent);
+  --profile-stat-icon-explore: var(--color-primary);
+  --profile-stat-icon-echoes: var(--color-accent);
+  --profile-stat-icon-likes: #e95f8c;
+  --profile-content-divider: color-mix(in srgb, var(--color-text-main) 10%, transparent);
+  --profile-empty-icon-bg: color-mix(in srgb, var(--color-surface) 74%, transparent);
+  --profile-empty-icon: color-mix(in srgb, var(--color-text-secondary) 70%, transparent);
+  --profile-memory-pad-x: 0.7rem;
+  --profile-memory-pad-y: 0.55rem;
+  --profile-utility-bg: color-mix(in srgb, var(--color-surface) 84%, transparent);
+  --profile-utility-border: color-mix(in srgb, var(--color-text-main) 12%, transparent);
+  --profile-utility-hover: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  --profile-utility-icon-bg: color-mix(in srgb, var(--color-surface) 72%, transparent);
+  --profile-utility-icon: color-mix(in srgb, var(--color-text-secondary) 84%, transparent);
+  --profile-danger-icon-bg: color-mix(in srgb, #e95f8c 14%, transparent);
+  --profile-danger-icon: color-mix(in srgb, #e95f8c 84%, #000000);
+  --profile-danger-text: color-mix(in srgb, #e95f8c 80%, #000000);
+
+  /* Search / dropdown duel-theme tokens */
+  --wall-search-input-bg: rgba(255, 255, 255, 0.92);
+  --wall-search-input-border: rgba(40, 21, 89, 0.15);
+  --wall-search-input-text: var(--color-text-main);
+  --wall-search-placeholder: color-mix(in srgb, var(--color-text-main) 45%, transparent);
+  --wall-search-clear-hover: rgba(40, 21, 89, 0.08);
+  --wall-search-divider: rgba(40, 21, 89, 0.15);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -278,6 +367,110 @@ code {
   --color-text-secondary: #a3a3a3;
   --color-state-disabled: #333333;
 
+  --glass-card-bg: rgba(18, 18, 22, 0.72);
+  --glass-card-border: rgba(255, 255, 255, 0.1);
+  --glass-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --glass-card-shadow-hover: 0 16px 44px rgba(0, 0, 0, 0.62);
+
+  --mascot-card-image-bg: rgba(255, 255, 255, 0.02);
+  --mascot-halo-core: rgba(58, 154, 255, 0.42);
+  --mascot-halo-mid: rgba(52, 130, 255, 0.22);
+  --mascot-halo-edge: rgba(78, 118, 255, 0.08);
+  --mascot-figure-shadow: rgba(0, 0, 0, 0.52);
+  --mascot-figure-shadow-muted: rgba(0, 0, 0, 0.35);
+  --mascot-fallback-text: rgba(245, 245, 245, 0.78);
+  --mascot-badge-bg: rgba(157, 122, 235, 0.9);
+  --mascot-badge-new-bg: rgba(0, 229, 238, 0.9);
+  --mascot-badge-locked-bg: rgba(0, 0, 0, 0.5);
+  --mascot-badge-text: #ffffff;
+  --mascot-badge-locked-text: rgba(255, 255, 255, 0.92);
+  --mascot-overlay-bottom: rgba(0, 0, 0, 0.36);
+  --mascot-location-text: rgba(255, 255, 255, 0.72);
+
+  --polaroid-location-bg: rgba(255, 255, 255, 0.06);
+  --polaroid-location-text: rgba(255, 255, 255, 0.72);
+  --polaroid-location-icon: rgba(255, 255, 255, 0.66);
+  --polaroid-body-text: rgba(255, 255, 255, 0.78);
+  --polaroid-image-bg: rgba(255, 255, 255, 0.03);
+  --polaroid-avatar-bg: rgba(255, 255, 255, 0.12);
+  --polaroid-heart-color: #fb7185;
+
+  /* Wall/search overrides */
+  --wall-control-surface: rgba(18, 18, 22, 0.72);
+  --wall-control-border: rgba(255, 255, 255, 0.12);
+  --wall-control-shadow: 0 18px 46px rgba(0, 0, 0, 0.55);
+  --wall-control-muted: rgba(245, 245, 245, 0.7);
+  --wall-control-hover: rgba(255, 255, 255, 0.08);
+  --wall-divider: rgba(255, 255, 255, 0.14);
+  --wall-pill-text: rgba(245, 245, 245, 0.86);
+
+  --wall-search-input-bg: rgba(25, 24, 32, 0.85);
+  --wall-search-input-border: rgba(255, 255, 255, 0.12);
+  --wall-search-input-text: #f5f5f5;
+  --wall-search-placeholder: color-mix(in srgb, #f5f5f5 65%, transparent);
+  --wall-search-clear-hover: rgba(255, 255, 255, 0.12);
+  --wall-search-divider: rgba(255, 255, 255, 0.2);
+
+  --wall-select-bg: rgba(255, 255, 255, 0.04);
+  --wall-select-border: rgba(255, 255, 255, 0.18);
+  --wall-select-border-strong: rgba(255, 255, 255, 0.28);
+  --wall-select-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  --wall-select-shadow-hover: 0 14px 30px rgba(5, 5, 10, 0.35);
+  --wall-select-icon-bg: rgba(255, 255, 255, 0.05);
+  --wall-select-icon-text: var(--color-accent);
+  --wall-select-kicker: color-mix(in srgb, #f5f5f5 60%, transparent);
+  --wall-dropdown-bg: rgba(18, 18, 22, 0.9);
+  --wall-dropdown-border: rgba(255, 255, 255, 0.12);
+  --wall-dropdown-shadow: 0 24px 50px rgba(0, 0, 0, 0.9);
+  --wall-dropdown-text: #f5f5f5;
+  --wall-dropdown-meta: rgba(245, 245, 245, 0.75);
+  --wall-dropdown-hover: rgba(255, 255, 255, 0.06);
+  --wall-dropdown-icon-bg: rgba(255, 255, 255, 0.05);
+  --wall-dropdown-icon-border: rgba(255, 255, 255, 0.12);
+  --wall-dropdown-icon-text: rgba(255, 255, 255, 0.7);
+  --wall-dropdown-active-bg: rgba(255, 255, 255, 0.08);
+  --wall-dropdown-active-text: #ffffff;
+  --wall-dropdown-active-meta: rgba(255, 255, 255, 0.7);
+  --wall-dropdown-active-icon-bg: rgba(255, 255, 255, 0.16);
+  --wall-dropdown-active-icon-text: #ffffff;
+  --role-card-border: rgba(255, 255, 255, 0.15);
+  --role-card-border-active: rgba(255, 255, 255, 0.4);
+  --role-card-hover: rgba(255, 255, 255, 0.08);
+  --role-card-bg: rgba(18, 18, 22, 0.72);
+  --role-modal-bg: rgba(18, 18, 22, 0.92);
+
+  --profile-hero-gradient-start: rgba(88, 74, 128, 0.78);
+  --profile-hero-gradient-end: rgba(27, 118, 126, 0.78);
+  --profile-hero-border: rgba(255, 255, 255, 0.14);
+  --profile-avatar-ring-bg: rgba(18, 18, 22, 0.8);
+  --profile-avatar-border: rgba(255, 255, 255, 0.2);
+  --profile-avatar-shadow: 0 16px 36px rgba(0, 0, 0, 0.56);
+  --profile-edit-bg: rgba(30, 30, 35, 0.9);
+  --profile-edit-border: rgba(255, 255, 255, 0.18);
+  --profile-edit-icon: rgba(245, 245, 245, 0.88);
+  --profile-edit-hover: rgba(255, 255, 255, 0.12);
+  --profile-role-bg: rgba(0, 229, 238, 0.16);
+  --profile-role-border: rgba(0, 229, 238, 0.3);
+  --profile-role-text: rgba(225, 252, 254, 0.92);
+  --profile-stat-divider: rgba(255, 255, 255, 0.16);
+  --profile-stat-icon-bg: rgba(255, 255, 255, 0.06);
+  --profile-stat-icon-explore: rgba(191, 175, 246, 0.96);
+  --profile-stat-icon-echoes: rgba(0, 229, 238, 0.92);
+  --profile-stat-icon-likes: rgba(255, 131, 184, 0.96);
+  --profile-content-divider: rgba(255, 255, 255, 0.14);
+  --profile-empty-icon-bg: rgba(255, 255, 255, 0.04);
+  --profile-empty-icon: rgba(255, 255, 255, 0.48);
+  --profile-memory-pad-x: 0.7rem;
+  --profile-memory-pad-y: 0.55rem;
+  --profile-utility-bg: rgba(255, 255, 255, 0.03);
+  --profile-utility-border: rgba(255, 255, 255, 0.14);
+  --profile-utility-hover: rgba(255, 255, 255, 0.08);
+  --profile-utility-icon-bg: rgba(255, 255, 255, 0.05);
+  --profile-utility-icon: rgba(255, 255, 255, 0.72);
+  --profile-danger-icon-bg: rgba(255, 128, 165, 0.14);
+  --profile-danger-icon: rgba(255, 155, 188, 0.94);
+  --profile-danger-text: rgba(255, 155, 188, 0.95);
+
   /* Polaroid location overrides for dark mode */
   --polaroid-location-bg: rgba(255,255,255,0.04);
   --polaroid-location-text: var(--color-text-main);
@@ -400,17 +593,19 @@ code {
 .polaroid-wrapper:hover { transform: scale(1.05); }
 
 .polaroid-card-inner {
-  background: var(--color-surface);
+  background: var(--glass-card-bg);
   padding: 12px 12px 24px 12px;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(0,0,0,0.04);
+  border: 1px solid var(--glass-card-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .polaroid-image {
   width: 100%;
-  background: #f3f3f3;
+  background: var(--polaroid-image-bg);
   border-radius: 6px;
   margin-bottom: 12px;
   overflow: hidden;
@@ -506,9 +701,9 @@ img.w-12.h-12 {
 }
 
 .polaroid-text {
-  color: var(--color-text-main);
+  color: var(--polaroid-body-text);
   font-size: 1rem;
-  line-height: 1.4;
+  line-height: 1.625;
   font-family: 'Caveat', 'Comic Sans MS', cursive, sans-serif;
 }
 
@@ -527,25 +722,29 @@ img.w-12.h-12 {
   justify-content: center;
   font-size: 12px;
   color: var(--color-text-secondary);
-  background: #e9e9e9;
+  background: var(--polaroid-avatar-bg);
 }
 
 .polaroid-location {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-family: var(--font-family-en);
+  font-size: 10px;
   font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--polaroid-location-text);
   background: var(--polaroid-location-bg);
   border-radius: 9999px;
-  padding: 4px 8px;
+  border: 1px solid var(--glass-card-border);
+  padding: 4px 10px;
 }
 
 .polaroid-map-pin {
   width: 12px;
   height: 12px;
-  color: var(--color-primary);
+  color: var(--polaroid-location-icon);
 }
 
 .polaroid-time {
@@ -563,7 +762,7 @@ img.w-12.h-12 {
   transition: background-color 0.12s, color 0.12s;
 }
 .polaroid-like:hover { background: var(--color-background); }
-.polaroid-like .heart { color: #f87171; }
+.polaroid-like .heart { color: var(--polaroid-heart-color); }
 
 .heart { width: 16px; height: 16px; }
 
