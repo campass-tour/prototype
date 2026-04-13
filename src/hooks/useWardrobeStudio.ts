@@ -40,9 +40,14 @@ export function useWardrobeStudio() {
   );
 
   const slotPriority: WardrobeSlot[] = ['head', 'face', 'gear'];
-  const firstEquippedId =
-    slotPriority.map((slot) => equippedBySlot[slot]).find((value) => value) ?? null;
-  const previewItem = selectedItem ?? getItemById(firstEquippedId);
+  const storedEquippedBySlot = getWardrobeEquippedBySlot();
+  const previewEquippedBySlot: WardrobeEquippedBySlot = { ...storedEquippedBySlot };
+  if (selectedItem) {
+    previewEquippedBySlot[selectedItem.category] = selectedItem.id;
+  }
+  const previewItems = slotPriority
+    .map((slot) => getItemById(previewEquippedBySlot[slot] ?? null))
+    .filter((item): item is WardrobeItem => item !== null);
   const selectedOwned = !!selectedItem && ownedItemIds.includes(selectedItem.id);
   const selectedEquipped = !!selectedItem && equippedBySlot[selectedItem.category] === selectedItem.id;
 
@@ -108,7 +113,7 @@ export function useWardrobeStudio() {
     handlePrimaryAction,
     handleResetView,
     handleSelectItem,
-    previewItem,
+    previewItems,
     resetViewKey,
     selectedCategory,
     selectedEquipped,

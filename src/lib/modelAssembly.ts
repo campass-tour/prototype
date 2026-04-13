@@ -29,6 +29,12 @@ type AssembleWearableOptions = {
   cacheKey: string;
 };
 
+type AssembleWearablesOptions = {
+  birdUrl: string;
+  wearables: WearableAttachment[];
+  cacheKey: string;
+};
+
 const loader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
 const exporter = new GLTFExporter();
@@ -210,6 +216,60 @@ export const getAssembledWearableModelBlob = ({
     root.add(wearableScene);
     root.add(birdScene);
 
+    return exportSceneToBlob(root);
+  });
+
+  assembledModelCache.set(key, promise);
+  evictOldCacheEntries();
+  promise.catch(() => {
+    assembledModelCache.delete(key);
+  });
+  return promise;
+};
+
+export const getAssembledWearablesModelBlob = ({
+  birdUrl,
+  wearables,
+  cacheKey,
+}: AssembleWearablesOptions) => {
+  const wearableKey = wearables
+    .map((wearable) => {
+      const wearableOffset = normalizeOffset(wearable.wearableOffset);
+      const wearableRotation = normalizeOffset(wearable.wearableRotation);
+      const wearableScale = normalizeScale(wearable.wearableScale);
+      return `${wearable.wearableUrl}|${wearableOffset.join(',')}|${wearableRotation.join(',')}|${wearableScale.join(',')}`;
+    })
+    .join(';');
+  const key = `${cacheKey}|${birdUrl}|${wearableKey}`;
+  const cached = assembledModelCache.get(key);
+  if (cached) {
+    touchCacheKey(key, cached);
+    return cached;
+  }
+
+  const promise = runWithConcurrencyLimit(async () => {
+    const [birdScene, ...wearableScenes] = await Promise.all([
+      loadScene(birdUrl),
+      ...wearables.map((wearable) => loadScene(wearable.wearableUrl)),
+    ]);
+
+    const root = new THREE.Group();
+    birdScene.position.set(0, 0, 0);
+
+    wearableScenes.forEach((wearableScene, index) => {
+      const spec = wearables[index];
+      if (!spec) return;
+      const wearableOffset = normalizeOffset(spec.wearableOffset);
+      const wearableRotation = normalizeOffset(spec.wearableRotation);
+      const wearableScale = normalizeScale(spec.wearableScale);
+
+      wearableScene.position.set(wearableOffset[0], wearableOffset[1], wearableOffset[2]);
+      wearableScene.rotation.set(wearableRotation[0], wearableRotation[1], wearableRotation[2]);
+      wearableScene.scale.set(wearableScale[0], wearableScale[1], wearableScale[2]);
+      root.add(wearableScene);
+    });
+
+    root.add(birdScene);
     return exportSceneToBlob(root);
   });
 

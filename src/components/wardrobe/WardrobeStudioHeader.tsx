@@ -6,7 +6,7 @@ type WardrobeStudioHeaderProps = {
 };
 
 export default function WardrobeStudioHeader({
-  equippedCount,
+  equippedCount: _equippedCount,
 }: WardrobeStudioHeaderProps) {
   return (
     <header className="rounded-[var(--radius-card)] border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] p-5 text-left shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl">
@@ -22,9 +22,7 @@ export default function WardrobeStudioHeader({
         </div>
 
         <div className="flex items-center gap-3 self-start">
-          <div className="rounded-full border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] px-4 py-2 text-sm font-semibold text-[var(--color-text-main)] shadow-[var(--collection-capsule-shadow)]">
-            Equipped {equippedCount}
-          </div>
+
           <Link
             to="/collection"
             className="inline-flex items-center gap-2 rounded-full border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] px-4 py-2 text-sm font-semibold text-[var(--color-text-main)] shadow-[var(--collection-capsule-shadow)]"

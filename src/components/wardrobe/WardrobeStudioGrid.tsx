@@ -28,7 +28,7 @@ export default function WardrobeStudioGrid({
   }
 
   return (
-    <div className="no-scrollbar flex gap-3 overflow-x-auto pb-1 md:grid md:grid-cols-3 md:gap-3 md:overflow-visible xl:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 pb-1 md:grid-cols-3 xl:grid-cols-4">
       {items.map((item) => {
         const isSelected = selectedItemId === item.id;
 
@@ -37,7 +37,7 @@ export default function WardrobeStudioGrid({
             key={item.id}
             type="button"
             onClick={() => onSelectItem(item)}
-            className={`flex w-[min(46vw,10.5rem)] flex-none aspect-square flex-col justify-between rounded-[var(--radius-card)] border p-3 text-left transition md:w-auto md:flex-auto ${
+            className={`flex aspect-square min-w-0 w-full flex-col justify-between rounded-[var(--radius-card)] border p-3 text-left transition ${
               isSelected
                 ? 'border-[var(--color-primary)] bg-[var(--collection-progress-ring-center)] shadow-[var(--collection-capsule-shadow)]'
                 : 'border-[var(--collection-capsule-border)] bg-[var(--color-surface)]'

@@ -6,6 +6,7 @@ type WardrobeStudioActionBarProps = {
   canAfford: boolean;
   selectedItem: WardrobeItem | null;
   onPrimaryAction: () => void;
+  className?: string;
 };
 
 const actionLabelMap = {
@@ -21,9 +22,12 @@ export default function WardrobeStudioActionBar({
   canAfford,
   selectedItem,
   onPrimaryAction,
+  className = '',
 }: WardrobeStudioActionBarProps) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-[var(--radius-pill)] border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] px-4 py-3 shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl">
+    <div
+      className={`flex items-center justify-between gap-3 rounded-[var(--radius-pill)] border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] px-4 py-3 shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl ${className}`}
+    >
       <div className="min-w-0 text-left">
         <p className="truncate text-sm font-semibold text-[var(--color-text-main)]">
           {selectedItem ? selectedItem.name : 'Select an item'}
@@ -39,7 +43,7 @@ export default function WardrobeStudioActionBar({
         type="button"
         onClick={onPrimaryAction}
         disabled={disabled}
-        className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition ${
+        className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition sm:px-5 ${
           action === 'unequip'
             ? 'border-[var(--collection-capsule-border)] bg-transparent text-[var(--color-text-main)]'
             : 'border-[var(--color-primary)] bg-[var(--color-primary)] text-[var(--color-surface)]'

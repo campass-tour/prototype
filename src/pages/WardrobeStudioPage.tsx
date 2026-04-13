@@ -1,5 +1,6 @@
+import { ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import WardrobeStudioActionBar from '../components/wardrobe/WardrobeStudioActionBar';
-import WardrobeStudioCredits from '../components/wardrobe/WardrobeStudioCredits';
 import WardrobeStudioGrid from '../components/wardrobe/WardrobeStudioGrid';
 import WardrobeStudioHeader from '../components/wardrobe/WardrobeStudioHeader';
 import WardrobeStudioStage from '../components/wardrobe/WardrobeStudioStage';
@@ -17,7 +18,7 @@ export default function WardrobeStudioPage() {
     handlePrimaryAction,
     handleResetView,
     handleSelectItem,
-    previewItem,
+    previewItems,
     resetViewKey,
     selectedCategory,
     selectedItem,
@@ -26,26 +27,32 @@ export default function WardrobeStudioPage() {
   } = useWardrobeStudio();
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 bg-[var(--wall-page-bg)] px-2 pb-32 pt-4 md:gap-6 md:px-6 md:pb-10 md:pt-8">
-      <div className="flex flex-col gap-3 md:gap-4">
-        <WardrobeStudioHeader equippedCount={equippedItems.length} />
-        <div className="flex items-center justify-between">
-          <WardrobeStudioCredits credits={credits} />
-        </div>
+    <div className="mx-auto flex h-full min-h-0 w-full max-w-7xl flex-col gap-3 overflow-x-hidden bg-[var(--wall-page-bg)] pb-0 pt-1 md:overflow-y-auto md:gap-6 md:px-6 md:pb-10 md:pt-8">
+      <div className="flex items-center px-1 md:hidden">
+        <Link
+          to="/collection"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] text-[var(--color-text-main)] shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl"
+          aria-label="Exit wardrobe studio"
+        >
+          <ArrowLeft className="h-5 w-5 text-[var(--color-primary)]" />
+        </Link>
       </div>
 
-      {/* Mobile: stage (40svh) + scrollable wardrobe panel below. */}
-      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1.45fr)_minmax(22rem,1fr)] lg:gap-6 -mx-2 px-2 lg:mx-0 lg:px-0">
-        <div className="w-full lg:sticky lg:top-8 lg:self-start">
+      <div className="hidden flex-col gap-3 md:flex md:gap-4">
+        <WardrobeStudioHeader equippedCount={equippedItems.length} />
+      </div>
+
+      <div className="grid h-[calc(100svh-14rem-env(safe-area-inset-bottom))] min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)] gap-3 px-1 lg:h-auto lg:grid-cols-[minmax(0,1.45fr)_minmax(22rem,1fr)] lg:grid-rows-1 lg:items-start lg:gap-6 lg:px-0">
+        <div className="min-h-0 flex-1 lg:sticky lg:top-8 lg:self-start">
           <WardrobeStudioStage
-            previewItem={previewItem}
+            credits={credits}
+            previewItems={previewItems}
             resetViewKey={resetViewKey}
             onResetView={handleResetView}
           />
         </div>
 
-        {/* The wardrobe panel is fixed-height on mobile so the grid can scroll inside it, leaving tabs pinned. */}
-        <section className="flex h-[45svh] min-h-64 flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] p-4 shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl lg:h-auto">
+        <section className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] p-3 shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl md:p-4 lg:h-[min(68svh,48rem)]">
           <div className="shrink-0">
             <WardrobeStudioTabs
               selectedCategory={selectedCategory}
@@ -53,7 +60,7 @@ export default function WardrobeStudioPage() {
             />
           </div>
 
-          <div className="mt-3 flex-1 overflow-y-auto pr-1 -mr-1">
+          <div className="mt-3 flex-1 overflow-y-auto pr-1 -mr-1 pb-[calc(6.5rem+env(safe-area-inset-bottom))] lg:pb-0">
             <WardrobeStudioGrid
               items={filteredItems}
               selectedItemId={selectedItemId}
@@ -73,14 +80,14 @@ export default function WardrobeStudioPage() {
         </section>
       </div>
 
-      {/* Mobile: keep the action bar outside the 1/4 panel so it never disappears. */}
-      <div className="lg:hidden">
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(80px+env(safe-area-inset-bottom)+0.5rem)] z-[var(--z-overlay)] px-4 lg:hidden">
         <WardrobeStudioActionBar
           action={action}
           disabled={actionDisabled}
           canAfford={canAfford}
           selectedItem={selectedItem}
           onPrimaryAction={handlePrimaryAction}
+          className="pointer-events-auto mx-auto w-full max-w-7xl"
         />
       </div>
     </div>

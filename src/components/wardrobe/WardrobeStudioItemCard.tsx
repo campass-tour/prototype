@@ -21,7 +21,7 @@ export default function WardrobeStudioItemCard({
     <button
       type="button"
       onClick={() => onSelect(item)}
-      className={`flex w-[min(46vw,10.5rem)] flex-none aspect-square flex-col justify-between rounded-[var(--radius-card)] border p-3 text-left transition md:w-auto md:flex-auto ${
+      className={`flex aspect-square min-w-0 w-full flex-col justify-between rounded-[var(--radius-card)] border p-3 text-left transition ${
         isSelected
           ? 'border-[var(--color-primary)] bg-[var(--collection-progress-ring-center)] shadow-[var(--collection-capsule-shadow)]'
           : 'border-[var(--collection-capsule-border)] bg-[var(--color-surface)]'

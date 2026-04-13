@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import '@google/model-viewer';
 import type { WardrobeItem } from '../../types';
-import { getAssembledWearableModelBlob } from '../../lib/modelAssembly';
+import { getAssembledWearablesModelBlob } from '../../lib/modelAssembly';
 
 const clothingModels = import.meta.glob('../../assets/model/clothes/*.glb', {
   query: '?url',
@@ -13,7 +13,7 @@ const ModelViewer = 'model-viewer' as any;
 
 type WardrobeStudioModelViewerProps = {
   birdUrl: string;
-  previewItem: WardrobeItem | null;
+  previewItems: WardrobeItem[];
   resetViewKey: number;
   modelViewerProps?: Record<string, unknown>;
   style?: React.CSSProperties;
@@ -21,15 +21,29 @@ type WardrobeStudioModelViewerProps = {
 
 export default function WardrobeStudioModelViewer({
   birdUrl,
-  previewItem,
+  previewItems,
   resetViewKey,
   modelViewerProps,
   style,
 }: WardrobeStudioModelViewerProps) {
-  const wearableUrl = useMemo(() => {
-    if (!previewItem?.modelFile) return null;
-    return clothingModels[`../../assets/model/clothes/${previewItem.modelFile}`] ?? null;
-  }, [previewItem]);
+  const wearables = useMemo(
+    () =>
+      previewItems
+        .map((item) => {
+          if (!item.modelFile) return null;
+          const wearableUrl = clothingModels[`../../assets/model/clothes/${item.modelFile}`] ?? null;
+          if (!wearableUrl) return null;
+          return {
+            id: item.id,
+            wearableUrl,
+            wearableOffset: item.previewOffset,
+            wearableRotation: item.previewRotation,
+            wearableScale: item.previewScale,
+          };
+        })
+        .filter((wearable): wearable is NonNullable<typeof wearable> => wearable !== null),
+    [previewItems]
+  );
 
   const [assembledBlob, setAssembledBlob] = useState<Blob | null>(null);
   const [assembledSrc, setAssembledSrc] = useState<string | null>(null);
@@ -38,15 +52,16 @@ export default function WardrobeStudioModelViewer({
     let active = true;
     setAssembledBlob(null);
 
-    if (!wearableUrl || !previewItem) return () => { active = false; };
+    if (wearables.length === 0) {
+      return () => {
+        active = false;
+      };
+    }
 
-    getAssembledWearableModelBlob({
+    getAssembledWearablesModelBlob({
       birdUrl,
-      wearableUrl,
-      wearableOffset: previewItem.previewOffset,
-      wearableRotation: previewItem.previewRotation,
-      wearableScale: previewItem.previewScale,
-      cacheKey: `wardrobe:${previewItem.id}`,
+      wearables,
+      cacheKey: `wardrobe:${wearables.map((wearable) => wearable.id).join(',')}`,
     })
       .then((blob: Blob) => {
         if (active) setAssembledBlob(blob);
@@ -58,7 +73,7 @@ export default function WardrobeStudioModelViewer({
     return () => {
       active = false;
     };
-  }, [birdUrl, wearableUrl, previewItem, resetViewKey]);
+  }, [birdUrl, wearables, resetViewKey]);
 
   useEffect(() => {
     if (!assembledBlob) {
@@ -74,7 +89,7 @@ export default function WardrobeStudioModelViewer({
     };
   }, [assembledBlob]);
 
-  const src = wearableUrl ? (assembledSrc || birdUrl) : birdUrl;
+  const src = wearables.length > 0 ? (assembledSrc || birdUrl) : birdUrl;
 
   return (
     <ModelViewer
