@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import '@google/model-viewer';
 import type { WardrobeItem } from '../../types';
-import { getAssembledWearableModelUrl } from '../../lib/modelAssembly';
+import { getAssembledWearableModelBlob } from '../../lib/modelAssembly';
 
 const clothingModels = import.meta.glob('../../assets/model/clothes/*.glb', {
   query: '?url',
@@ -31,15 +31,16 @@ export default function WardrobeStudioModelViewer({
     return clothingModels[`../../assets/model/clothes/${previewItem.modelFile}`] ?? null;
   }, [previewItem]);
 
+  const [assembledBlob, setAssembledBlob] = useState<Blob | null>(null);
   const [assembledSrc, setAssembledSrc] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
-    setAssembledSrc(null);
+    setAssembledBlob(null);
 
     if (!wearableUrl || !previewItem) return () => { active = false; };
 
-    getAssembledWearableModelUrl({
+    getAssembledWearableModelBlob({
       birdUrl,
       wearableUrl,
       wearableOffset: previewItem.previewOffset,
@@ -47,17 +48,31 @@ export default function WardrobeStudioModelViewer({
       wearableScale: previewItem.previewScale,
       cacheKey: `wardrobe:${previewItem.id}`,
     })
-      .then((url) => {
-        if (active) setAssembledSrc(url);
+      .then((blob: Blob) => {
+        if (active) setAssembledBlob(blob);
       })
       .catch(() => {
-        if (active) setAssembledSrc(null);
+        if (active) setAssembledBlob(null);
       });
 
     return () => {
       active = false;
     };
   }, [birdUrl, wearableUrl, previewItem, resetViewKey]);
+
+  useEffect(() => {
+    if (!assembledBlob) {
+      setAssembledSrc(null);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(assembledBlob);
+    setAssembledSrc(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [assembledBlob]);
 
   const src = wearableUrl ? (assembledSrc || birdUrl) : birdUrl;
 
@@ -66,6 +81,7 @@ export default function WardrobeStudioModelViewer({
       key={`wardrobe-mv-${resetViewKey}`}
       src={src}
       style={style}
+      loading="lazy"
       {...modelViewerProps}
     />
   );

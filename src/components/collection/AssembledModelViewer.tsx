@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import '@google/model-viewer';
-import { getAssembledModelUrl } from '../../lib/modelAssembly';
+import { getAssembledModelBlob } from '../../lib/modelAssembly';
 import { WARDROBE_ITEMS } from '../../constants/wardrobeCatalog';
 import { getWardrobeEquippedBySlot } from '../../lib/wardrobeStudioStorage';
 
@@ -55,6 +55,7 @@ type AssembledModelViewerProps = {
   className?: string;
   style?: React.CSSProperties;
   modelViewerProps?: Record<string, unknown>;
+  enabled?: boolean;
 };
 
 export default function AssembledModelViewer({
@@ -65,6 +66,7 @@ export default function AssembledModelViewer({
   className,
   style,
   modelViewerProps,
+  enabled = true,
 }: AssembledModelViewerProps) {
   const buildingUrl = useMemo(
     () => resolveBuildingUrl(buildingId, buildingModelFile),
@@ -74,11 +76,14 @@ export default function AssembledModelViewer({
     () => resolveBirdUrl(birdModelFile),
     [birdModelFile]
   );
+  const [assembledBlob, setAssembledBlob] = useState<Blob | null>(null);
   const [assembledSrc, setAssembledSrc] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
-    setAssembledSrc(null);
+    setAssembledBlob(null);
+
+    if (!enabled) return () => { active = false; };
 
     const equippedBySlot = getWardrobeEquippedBySlot();
     const slotPriority = ['head', 'face', 'gear'] as const;
@@ -101,24 +106,38 @@ export default function AssembledModelViewer({
       })
       .filter((value): value is NonNullable<typeof value> => value !== null);
 
-    getAssembledModelUrl({
+    getAssembledModelBlob({
       birdUrl: resolvedBirdUrl,
       buildingUrl,
       buildingOffset,
       wearables,
       cacheKey: buildingId,
     })
-      .then((url) => {
-        if (active) setAssembledSrc(url);
+      .then((blob: Blob) => {
+        if (active) setAssembledBlob(blob);
       })
       .catch(() => {
-        if (active) setAssembledSrc(null);
+        if (active) setAssembledBlob(null);
       });
 
     return () => {
       active = false;
     };
-  }, [buildingId, buildingUrl, buildingOffset, resolvedBirdUrl]);
+  }, [buildingId, buildingUrl, buildingOffset, resolvedBirdUrl, enabled]);
+
+  useEffect(() => {
+    if (!assembledBlob) {
+      setAssembledSrc(null);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(assembledBlob);
+    setAssembledSrc(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [assembledBlob]);
 
   const finalSrc = assembledSrc || buildingUrl || getDefaultModelUrl();
 
@@ -127,6 +146,7 @@ export default function AssembledModelViewer({
       className={className}
       style={style}
       src={finalSrc}
+      loading="lazy"
       {...modelViewerProps}
     />
   );

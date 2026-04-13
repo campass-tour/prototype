@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Backpack, Sparkles } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, EffectCards, Keyboard } from 'swiper/modules';
@@ -26,6 +26,9 @@ export default function CollectionSwiperModal({
   onEnterAR,
 }: CollectionSwiperModalProps) {
   const swiperRef = useRef<SwiperType | null>(null);
+  const idleTaskRef = useRef<number | null>(null);
+  const fallbackTimerRef = useRef<number | null>(null);
+  const slideTimerRef = useRef<number | null>(null);
   
   // We want to show all UNLOCKED items, plus maybe the clicked one if it isn't recorded as unlocked yet
   // though typically it would be recorded right before opening.
@@ -43,15 +46,106 @@ export default function CollectionSwiperModal({
   // Find index of clicked item to start the swiper at the right place
   const initialIndex = displayList.findIndex(item => item.id === initialCheckinId);
   const safeInitialIndex = initialIndex >= 0 ? initialIndex : 0;
+  const displayIds = useMemo(() => displayList.map((item) => item.id), [displayList]);
+  const [activeIndex, setActiveIndex] = useState(safeInitialIndex);
+  const [enabledSet, setEnabledSet] = useState<Set<string>>(() => new Set());
+
+  const clearPendingSchedule = () => {
+    if (idleTaskRef.current !== null && typeof window !== 'undefined' && 'cancelIdleCallback' in window) {
+      (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleTaskRef.current);
+      idleTaskRef.current = null;
+    }
+    if (fallbackTimerRef.current !== null) {
+      clearTimeout(fallbackTimerRef.current);
+      fallbackTimerRef.current = null;
+    }
+  };
+
+  const scheduleNext = (callback: () => void) => {
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      idleTaskRef.current = (
+        window as Window & { requestIdleCallback: (cb: () => void, options?: { timeout: number }) => number }
+      ).requestIdleCallback(callback, { timeout: 250 });
+      return;
+    }
+    fallbackTimerRef.current = setTimeout(callback, 40);
+  };
 
   useEffect(() => {
     if (swiperRef.current && open) {
       // Small timeout to allow DOM to render before sliding
-      setTimeout(() => {
+      slideTimerRef.current = setTimeout(() => {
         swiperRef.current?.slideTo(safeInitialIndex, 0);
       }, 50);
     }
+
+    return () => {
+      if (slideTimerRef.current !== null) {
+        clearTimeout(slideTimerRef.current);
+        slideTimerRef.current = null;
+      }
+    };
   }, [open, safeInitialIndex]);
+
+  useEffect(() => {
+    if (!open) {
+      clearPendingSchedule();
+      setEnabledSet(new Set());
+      return;
+    }
+
+    setActiveIndex(safeInitialIndex);
+  }, [open, safeInitialIndex]);
+
+  useEffect(() => {
+    if (!open || displayIds.length === 0) return;
+
+    clearPendingSchedule();
+    let cancelled = false;
+    const immediateIndexes = [activeIndex, activeIndex - 1, activeIndex + 1].filter(
+      (index) => index >= 0 && index < displayIds.length
+    );
+    const immediateIdSet = new Set(immediateIndexes.map((index) => displayIds[index]));
+    setEnabledSet((prev) => {
+      const next = new Set(prev);
+      immediateIdSet.forEach((id) => next.add(id));
+      return next;
+    });
+
+    const remainingIndexes = Array.from({ length: displayIds.length }, (_, index) => index)
+      .filter((index) => !immediateIndexes.includes(index))
+      .sort((left, right) => {
+        const leftDistance = Math.abs(left - activeIndex);
+        const rightDistance = Math.abs(right - activeIndex);
+        return leftDistance - rightDistance;
+      });
+
+    let pointer = 0;
+    const prefetchNext = () => {
+      if (cancelled) return;
+      const index = remainingIndexes[pointer];
+      pointer += 1;
+      if (index === undefined) return;
+
+      const id = displayIds[index];
+      if (id) {
+        setEnabledSet((prev) => {
+          if (prev.has(id)) return prev;
+          const next = new Set(prev);
+          next.add(id);
+          return next;
+        });
+      }
+      scheduleNext(prefetchNext);
+    };
+
+    scheduleNext(prefetchNext);
+
+    return () => {
+      cancelled = true;
+      clearPendingSchedule();
+    };
+  }, [activeIndex, displayIds, open]);
 
   if (!open) return null;
 
@@ -69,7 +163,13 @@ export default function CollectionSwiperModal({
           }}
           navigation={true}
           modules={[EffectCards, Navigation, Keyboard]}
-          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+            setActiveIndex(swiper.activeIndex);
+          }}
+          onSlideChange={(swiper) => {
+            setActiveIndex(swiper.activeIndex);
+          }}
           initialSlide={safeInitialIndex}
           className="w-full h-[520px]"
         >
@@ -89,6 +189,7 @@ export default function CollectionSwiperModal({
                         buildingModelFile={item.model}
                         birdModelFile={item.birdModel}
                         buildingOffset={item.buildingOffset}
+                        enabled={enabledSet.has(item.id)}
                         modelViewerProps={{
                           'auto-rotate': 'true',
                           'camera-controls': 'true',

@@ -1,11 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { X, Camera } from 'lucide-react';
 import '@google/model-viewer';
 import ARUnsupportedPrompt from './ARUnsupportedPrompt';
 import { getLocationData } from '../../constants/locations';
+import { getAssembledModelBlob } from '../../lib/modelAssembly';
+import { WARDROBE_ITEMS } from '../../constants/wardrobeCatalog';
+import { getWardrobeEquippedBySlot } from '../../lib/wardrobeStudioStorage';
 
 // Dynamically load all .glb models in the assets folder
 const glbModels = import.meta.glob('../../assets/model/*.glb', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+const clothingModels = import.meta.glob('../../assets/model/clothes/*.glb', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
 
 // Get first available fallback model from glbModels
 const getDefaultModelUrl = () => {
@@ -28,7 +32,47 @@ export default function ARModelViewer({
 }: ARModelViewerProps) {
   const [isReady, setIsReady] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
+  const [isAssembling, setIsAssembling] = useState(false);
+  const [assembledBlob, setAssembledBlob] = useState<Blob | null>(null);
+  const [assembledSrc, setAssembledSrc] = useState<string | null>(null);
   const modelViewerRef = useRef<any>(null);
+
+  const locData = useMemo(
+    () => (checkinId ? getLocationData(checkinId) : null),
+    [checkinId]
+  );
+
+  const resolveBuildingUrl = (buildingId?: string, modelFile?: string | null) => {
+    if (buildingId) {
+      const direct = glbModels[`../../assets/model/${buildingId}.glb`];
+      if (direct) return direct;
+    }
+
+    if (modelFile) {
+      const configured = glbModels[`../../assets/model/${modelFile}`];
+      if (configured) return configured;
+    }
+
+    if (buildingId) {
+      const legacy = glbModels[`../../assets/model/${buildingId}-model.glb`];
+      if (legacy) return legacy;
+    }
+
+    return getDefaultModelUrl();
+  };
+
+  const resolveBirdUrl = (birdModelFile?: string | null) => {
+    if (birdModelFile) {
+      const configured = glbModels[`../../assets/model/${birdModelFile}`];
+      if (configured) return configured;
+    }
+    return glbModels['../../assets/model/bird.glb'] || getDefaultModelUrl();
+  };
+
+  const fallbackModelSrc = useMemo(
+    () => resolveBuildingUrl(checkinId, locData?.model),
+    [checkinId, locData?.model]
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -55,19 +99,80 @@ export default function ARModelViewer({
     return () => clearTimeout(timer);
   }, [open]);
 
-  if (!open) return null;
+  useEffect(() => {
+    let active = true;
+    setAssembledBlob(null);
 
-  // Determine model dynamically using unified assets mapping
-  const locData = checkinId ? getLocationData(checkinId) : null;
-  const modelFile = locData?.model;
-  let modelSrc = getDefaultModelUrl();
-  if (modelFile) {
-    const path = `../../assets/model/${modelFile}`;
-    modelSrc = glbModels[path] || getDefaultModelUrl();
-  } else if (checkinId) {
-    const fallbackPath = `../../assets/model/${checkinId}-model.glb`;
-    modelSrc = glbModels[fallbackPath] || getDefaultModelUrl();
-  }
+    if (!open || !checkinId) {
+      setIsAssembling(false);
+      return () => {
+        active = false;
+      };
+    }
+
+    const buildingUrl = resolveBuildingUrl(checkinId, locData?.model);
+    const birdUrl = resolveBirdUrl(locData?.birdModel);
+    const equippedBySlot = getWardrobeEquippedBySlot();
+    const slotPriority = ['head', 'face', 'gear'] as const;
+    const wearables = slotPriority
+      .map((slot) => equippedBySlot[slot])
+      .map((itemId) => (itemId ? WARDROBE_ITEMS.find((item) => item.id === itemId) ?? null : null))
+      .filter((item) => item?.modelFile)
+      .map((item) => {
+        const modelFile = item?.modelFile ?? null;
+        const wearableUrl = modelFile
+          ? clothingModels[`../../assets/model/clothes/${modelFile}`] ?? null
+          : null;
+        if (!wearableUrl || !item) return null;
+        return {
+          wearableUrl,
+          wearableOffset: item.previewOffset,
+          wearableRotation: item.previewRotation,
+          wearableScale: item.previewScale,
+        };
+      })
+      .filter((value): value is NonNullable<typeof value> => value !== null);
+
+    setIsAssembling(true);
+    getAssembledModelBlob({
+      birdUrl,
+      buildingUrl,
+      buildingOffset: locData?.buildingOffset,
+      wearables,
+      cacheKey: `ar:${checkinId}`,
+    })
+      .then((blob: Blob) => {
+        if (!active) return;
+        setAssembledBlob(blob);
+        setIsAssembling(false);
+      })
+      .catch(() => {
+        if (!active) return;
+        setAssembledBlob(null);
+        setIsAssembling(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [open, checkinId, locData]);
+
+  useEffect(() => {
+    if (!assembledBlob) {
+      setAssembledSrc(null);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(assembledBlob);
+    setAssembledSrc(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [assembledBlob]);
+
+  if (!open) return null;
+  const modelSrc = assembledSrc || fallbackModelSrc || getDefaultModelUrl();
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-[var(--color-background)] animate-in fade-in duration-300" style={{ zIndex: 'var(--z-overlay)' }}>
@@ -93,6 +198,11 @@ export default function ARModelViewer({
         <ARUnsupportedPrompt />
       ) : (
         <div className="relative w-full h-full flex-1">
+          {isAssembling && (
+            <div className="pointer-events-none absolute top-20 left-1/2 z-10 -translate-x-1/2 rounded-full bg-black/35 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+              Preparing mascot model...
+            </div>
+          )}
           {/* @ts-expect-error: model-viewer is a custom web component not recognized by TypeScript */}
           <model-viewer
             ref={modelViewerRef}

@@ -29,6 +29,7 @@ export default function CheckInSuccessModal({
   onEnterAR,
 }: CheckInSuccessModalProps) {
   const [lottieData, setLottieData] = useState<unknown>(null);
+  const [enableModel, setEnableModel] = useState(false);
   // For progress bar animation
   const [displayedCurrent, setDisplayedCurrent] = useState(current - 1 >= 0 ? current - 1 : 0);
 
@@ -42,6 +43,41 @@ export default function CheckInSuccessModal({
         .then((data) => setLottieData(data))
         .catch((err) => console.log('Lottie load failed, fallback will be used', err));
     }
+  }, [open]);
+
+  useEffect(() => {
+    let idleId: number | null = null;
+    let timerId: number | null = null;
+
+    if (!open) {
+      setEnableModel(false);
+      return;
+    }
+
+    // Defer heavy model assembly until idle to keep modal first paint smooth.
+    const enableWhenIdle = () => {
+      setEnableModel(true);
+    };
+
+    if ('requestIdleCallback' in window) {
+      idleId = (
+        window as Window & {
+          requestIdleCallback: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+        }
+      ).requestIdleCallback(() => enableWhenIdle(), { timeout: 250 });
+    } else {
+      timerId = setTimeout(enableWhenIdle, 40);
+    }
+
+    return () => {
+      if (idleId !== null && 'cancelIdleCallback' in window) {
+        (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
+      }
+      if (timerId !== null) {
+        clearTimeout(timerId);
+      }
+      setEnableModel(false);
+    };
   }, [open]);
 
   // Animate progress bar: show old value, then after short delay, animate to new value
@@ -97,6 +133,7 @@ export default function CheckInSuccessModal({
               buildingModelFile={locData?.model}
               birdModelFile={locData?.birdModel}
               buildingOffset={locData?.buildingOffset}
+              enabled={enableModel}
               modelViewerProps={{
                 'auto-rotate': 'true',
                 'camera-controls': 'true',

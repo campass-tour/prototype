@@ -32,7 +32,11 @@ type AssembleWearableOptions = {
 const loader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
 const exporter = new GLTFExporter();
-const assembledModelCache = new Map<string, Promise<string>>();
+const assembledModelCache = new Map<string, Promise<Blob>>();
+const ASSEMBLED_MODEL_CACHE_LIMIT = 32;
+const MAX_CONCURRENT_ASSEMBLIES = 1;
+const assemblyWaitQueue: Array<() => void> = [];
+let activeAssemblies = 0;
 
 // Respect Vite base path so decoder files resolve in dev and production.
 const decoderBasePath = `${import.meta.env.BASE_URL}draco/`;
@@ -58,19 +62,47 @@ const loadScene = (url: string) =>
     );
   });
 
-const exportSceneToUrl = (scene: THREE.Object3D) =>
-  new Promise<string>((resolve, reject) => {
+const touchCacheKey = (key: string, value: Promise<Blob>) => {
+  assembledModelCache.delete(key);
+  assembledModelCache.set(key, value);
+};
+
+const evictOldCacheEntries = () => {
+  while (assembledModelCache.size > ASSEMBLED_MODEL_CACHE_LIMIT) {
+    const oldestKey = assembledModelCache.keys().next().value as string | undefined;
+    if (!oldestKey) return;
+    assembledModelCache.delete(oldestKey);
+  }
+};
+
+const runWithConcurrencyLimit = async <T>(task: () => Promise<T>) => {
+  if (activeAssemblies >= MAX_CONCURRENT_ASSEMBLIES) {
+    await new Promise<void>((resolve) => {
+      assemblyWaitQueue.push(resolve);
+    });
+  }
+
+  activeAssemblies += 1;
+  try {
+    return await task();
+  } finally {
+    activeAssemblies = Math.max(0, activeAssemblies - 1);
+    const next = assemblyWaitQueue.shift();
+    if (next) next();
+  }
+};
+
+const exportSceneToBlob = (scene: THREE.Object3D) =>
+  new Promise<Blob>((resolve, reject) => {
     exporter.parse(
       scene,
       (result: ArrayBuffer | object) => {
         try {
           if (result instanceof ArrayBuffer) {
-            const blob = new Blob([result], { type: 'model/gltf-binary' });
-            resolve(URL.createObjectURL(blob));
+            resolve(new Blob([result], { type: 'model/gltf-binary' }));
             return;
           }
-          const blob = new Blob([JSON.stringify(result)], { type: 'model/gltf+json' });
-          resolve(URL.createObjectURL(blob));
+          resolve(new Blob([JSON.stringify(result)], { type: 'model/gltf+json' }));
         } catch (error) {
           reject(error);
         }
@@ -80,7 +112,7 @@ const exportSceneToUrl = (scene: THREE.Object3D) =>
     );
   });
 
-export const getAssembledModelUrl = ({
+export const getAssembledModelBlob = ({
   birdUrl,
   buildingUrl,
   buildingOffset,
@@ -98,9 +130,12 @@ export const getAssembledModelUrl = ({
     .join(';');
   const key = `${cacheKey}|${birdUrl}|${buildingUrl}|${offset.join(',')}|${wearableKey}`;
   const cached = assembledModelCache.get(key);
-  if (cached) return cached;
+  if (cached) {
+    touchCacheKey(key, cached);
+    return cached;
+  }
 
-  const promise = (async () => {
+  const promise = runWithConcurrencyLimit(async () => {
     const wearableSpecs = wearables ?? [];
     const [birdScene, buildingScene, ...wearableScenes] = await Promise.all([
       loadScene(birdUrl),
@@ -129,14 +164,18 @@ export const getAssembledModelUrl = ({
     root.add(buildingScene);
     root.add(birdScene);
 
-    return exportSceneToUrl(root);
-  })();
+    return exportSceneToBlob(root);
+  });
 
   assembledModelCache.set(key, promise);
+  evictOldCacheEntries();
+  promise.catch(() => {
+    assembledModelCache.delete(key);
+  });
   return promise;
 };
 
-export const getAssembledWearableModelUrl = ({
+export const getAssembledWearableModelBlob = ({
   birdUrl,
   wearableUrl,
   wearableOffset,
@@ -149,9 +188,12 @@ export const getAssembledWearableModelUrl = ({
   const scale = normalizeScale(wearableScale);
   const key = `${cacheKey}|${birdUrl}|${wearableUrl}|${offset.join(',')}|${rotation.join(',')}|${scale.join(',')}`;
   const cached = assembledModelCache.get(key);
-  if (cached) return cached;
+  if (cached) {
+    touchCacheKey(key, cached);
+    return cached;
+  }
 
-  const promise = (async () => {
+  const promise = runWithConcurrencyLimit(async () => {
     const [birdScene, wearableScene] = await Promise.all([
       loadScene(birdUrl),
       loadScene(wearableUrl),
@@ -168,9 +210,13 @@ export const getAssembledWearableModelUrl = ({
     root.add(wearableScene);
     root.add(birdScene);
 
-    return exportSceneToUrl(root);
-  })();
+    return exportSceneToBlob(root);
+  });
 
   assembledModelCache.set(key, promise);
+  evictOldCacheEntries();
+  promise.catch(() => {
+    assembledModelCache.delete(key);
+  });
   return promise;
 };
