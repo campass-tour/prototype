@@ -30,22 +30,33 @@ export default function CollectionSwiperModal({
   const fallbackTimerRef = useRef<number | null>(null);
   const slideTimerRef = useRef<number | null>(null);
   
-  // We want to show all UNLOCKED items, plus maybe the clicked one if it isn't recorded as unlocked yet
-  // though typically it would be recorded right before opening.
-  const unlockedData = getUnlockedCollectibles();
-  
-  // Use map to guarantee we keep the designed order in LOCATIONS, but only for unlocked ones
-  let displayList = LOCATIONS.filter(loc => unlockedData[loc.id] || loc.id === initialCheckinId).map(loc => getLocationData(loc.id)!);
-  
-  // Failsafe in case nothing is found but it's open
-  if (displayList.length === 0 && initialCheckinId) {
-    const fallback = getLocationData(initialCheckinId);
-    if (fallback) displayList = [fallback];
-  }
+  // We want to show all UNLOCKED items, plus maybe the clicked one if it isn't recorded as unlocked yet.
+  const unlockedData = useMemo(() => getUnlockedCollectibles(), [open]);
 
-  // Find index of clicked item to start the swiper at the right place
-  const initialIndex = displayList.findIndex(item => item.id === initialCheckinId);
-  const safeInitialIndex = initialIndex >= 0 ? initialIndex : 0;
+  // Keep the designed order in LOCATIONS, but only for unlocked ones.
+  const displayList = useMemo(() => {
+    const filtered = LOCATIONS.filter(
+      (loc) => unlockedData[loc.id] || loc.id === initialCheckinId
+    )
+      .map((loc) => getLocationData(loc.id))
+      .filter(
+        (item): item is NonNullable<ReturnType<typeof getLocationData>> => Boolean(item)
+      );
+
+    if (filtered.length === 0 && initialCheckinId) {
+      const fallback = getLocationData(initialCheckinId);
+      return fallback ? [fallback] : [];
+    }
+
+    return filtered;
+  }, [initialCheckinId, unlockedData]);
+
+  // Find index of clicked item to start the swiper at the right place.
+  const safeInitialIndex = useMemo(() => {
+    const initialIndex = displayList.findIndex((item) => item.id === initialCheckinId);
+    return initialIndex >= 0 ? initialIndex : 0;
+  }, [displayList, initialCheckinId]);
+
   const displayIds = useMemo(() => displayList.map((item) => item.id), [displayList]);
   const [activeIndex, setActiveIndex] = useState(safeInitialIndex);
   const [enabledSet, setEnabledSet] = useState<Set<string>>(() => new Set());

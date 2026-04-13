@@ -1,6 +1,6 @@
 import { Inbox } from 'lucide-react';
 import type { WardrobeItem } from '../../types';
-import { WardrobeStudioItemImage } from './WardrobeStudioIcons';
+import WardrobeStudioItemCard from './WardrobeStudioItemCard';
 
 type WardrobeStudioGridProps = {
   items: WardrobeItem[];
@@ -33,31 +33,12 @@ export default function WardrobeStudioGrid({
         const isSelected = selectedItemId === item.id;
 
         return (
-          <button
+          <WardrobeStudioItemCard
             key={item.id}
-            type="button"
-            onClick={() => onSelectItem(item)}
-            className={`flex aspect-square min-w-0 w-full flex-col justify-between rounded-[var(--radius-card)] border p-3 text-left transition ${
-              isSelected
-                ? 'border-[var(--color-primary)] bg-[var(--collection-progress-ring-center)] shadow-[var(--collection-capsule-shadow)]'
-                : 'border-[var(--collection-capsule-border)] bg-[var(--color-surface)]'
-            }`}
-            aria-pressed={isSelected}
-          >
-            <div className="flex items-start justify-between gap-2">
-              <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-[var(--wall-select-icon-bg)]">
-                <WardrobeStudioItemImage
-                  imageFile={item.icon}
-                  alt={item.name}
-                  className="h-full w-full object-contain"
-                />
-              </span>
-            </div>
-
-            <div>
-              <p className="text-sm font-semibold text-[var(--color-text-main)]">{item.name}</p>
-            </div>
-          </button>
+            item={item}
+            isSelected={isSelected}
+            onSelect={onSelectItem}
+          />
         );
       })}
     </div>

@@ -27,11 +27,11 @@ export default function WardrobeStudioPage() {
   } = useWardrobeStudio();
 
   return (
-    <div className="mx-auto flex h-full min-h-0 w-full max-w-7xl flex-col gap-3 overflow-x-hidden bg-[var(--wall-page-bg)] pb-0 pt-1 md:overflow-y-auto md:gap-6 md:px-6 md:pb-10 md:pt-8">
+    <div className="mx-auto flex min-h-0 w-full max-w-7xl flex-col gap-3 overflow-x-hidden bg-[var(--wall-page-bg)] pb-0 pt-1 md:overflow-y-auto md:gap-6 md:px-6 md:pb-10 md:pt-8">
       <div className="flex items-center px-1 md:hidden">
         <Link
           to="/collection"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] text-[var(--color-text-main)] shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] p-0 text-[var(--color-text-main)] shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl"
           aria-label="Exit wardrobe studio"
         >
           <ArrowLeft className="h-5 w-5 text-[var(--color-primary)]" />
@@ -42,7 +42,7 @@ export default function WardrobeStudioPage() {
         <WardrobeStudioHeader equippedCount={equippedItems.length} />
       </div>
 
-      <div className="grid h-[calc(100svh-14rem-env(safe-area-inset-bottom))] min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)] gap-3 px-1 lg:h-auto lg:grid-cols-[minmax(0,1.45fr)_minmax(22rem,1fr)] lg:grid-rows-1 lg:items-start lg:gap-6 lg:px-0">
+      <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)] gap-3 px-1 lg:h-auto lg:grid-cols-[minmax(0,1.45fr)_minmax(22rem,1fr)] lg:grid-rows-1 lg:items-start lg:gap-6 lg:px-0">
         <div className="min-h-0 flex-1 lg:sticky lg:top-8 lg:self-start">
           <WardrobeStudioStage
             credits={credits}

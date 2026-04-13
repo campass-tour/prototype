@@ -49,10 +49,10 @@ export const WallPage: React.FC = () => {
             <>
               <section className="relative mb-8 pt-6 text-left md:mb-10 md:pt-10">
                 <div className="relative max-w-3xl">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--wall-kicker)]">
+                  <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--wall-kicker)]">
                     XJTLU CAMPUS LORE
                   </p>
-                  <h1 className="mt-1 text-4xl font-extrabold tracking-[-0.04em] text-[var(--color-text-main)] md:text-5xl">
+                  <h1 className="mt-0.5 text-3xl font-extrabold tracking-tight text-[var(--color-text-main)] md:mt-1 md:text-4xl">
                     The Wall
                   </h1>
                   <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[var(--wall-hero-copy)]">
