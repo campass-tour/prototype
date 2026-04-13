@@ -108,8 +108,7 @@
     "author": { "username": "SweetTooth" },
     "likes": 36,
     "timestamp": "2026-04-06T07:54:00.000Z"
-  }
-  ,
+  },
   {
     "id": "msg_14",
     "locationId": "cb",
@@ -283,5 +282,53 @@
     "author": { "username": "afterclassmove" },
     "likes": 11,
     "timestamp": "2026-04-08T21:10:00.000Z"
+  },
+  {
+    "id": "msg_35",
+    "locationId": "bs",
+    "content": "BS is easier to recognize than I expected. It is a useful checkpoint when walking across campus.",
+    "author": { "username": "CampusWalker", "avatarUrl": "https://i.pravatar.cc/150?u=campuswalker_bs" },
+    "likes": 16,
+    "timestamp": "2026-04-08T09:15:00.000Z"
+  },
+  {
+    "id": "msg_36",
+    "locationId": "bs",
+    "content": "Passed by BS after class today. The area feels organized and fits the academic atmosphere really well.",
+    "author": { "username": "StudyMode", "avatarUrl": "https://i.pravatar.cc/150?u=studymode_bs" },
+    "likes": 11,
+    "timestamp": "2026-04-08T10:20:00.000Z"
+  },
+  {
+    "id": "msg_37",
+    "locationId": "bs",
+    "content": "BS works well as a landmark if you are still learning the campus layout. I usually use it to judge nearby directions.",
+    "author": { "username": "FreshmanMap", "avatarUrl": "https://i.pravatar.cc/150?u=freshmanmap_bs" },
+    "likes": 9,
+    "timestamp": "2026-04-08T11:05:00.000Z"
+  },
+  {
+    "id": "msg_38",
+    "locationId": "hs",
+    "content": "HS stands out as a clear campus landmark. It is one of those places that helps you know where you are immediately.",
+    "author": { "username": "PlaceFinder", "avatarUrl": "https://i.pravatar.cc/150?u=placefinder_hs" },
+    "likes": 13,
+    "timestamp": "2026-04-08T09:40:00.000Z"
+  },
+  {
+    "id": "msg_39",
+    "locationId": "hs",
+    "content": "I think HS is a good stop for first-time visitors because it is easy to remember and easy to spot.",
+    "author": { "username": "VisitorNote", "avatarUrl": "https://i.pravatar.cc/150?u=visitornote_hs" },
+    "likes": 10,
+    "timestamp": "2026-04-08T10:55:00.000Z"
+  },
+  {
+    "id": "msg_40",
+    "locationId": "hs",
+    "content": "The building itself is simple, but it works really well as a location marker when exploring nearby areas.",
+    "author": { "username": "CampusGuide", "avatarUrl": "https://i.pravatar.cc/150?u=campusguide_hs" },
+    "likes": 8,
+    "timestamp": "2026-04-08T11:35:00.000Z"
   }
 ]
