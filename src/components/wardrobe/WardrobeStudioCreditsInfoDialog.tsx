@@ -43,10 +43,18 @@ export default function WardrobeStudioCreditsInfoDialog({
     }
 
     const previousOverflow = document.body.style.overflow;
+    const modalAttr = 'data-wardrobe-credits-dialog-open';
+    const previousModalAttr = document.body.getAttribute(modalAttr);
     document.body.style.overflow = 'hidden';
+    document.body.setAttribute(modalAttr, 'true');
 
     return () => {
       document.body.style.overflow = previousOverflow;
+      if (previousModalAttr === null) {
+        document.body.removeAttribute(modalAttr);
+      } else {
+        document.body.setAttribute(modalAttr, previousModalAttr);
+      }
     };
   }, [isOpen]);
 
@@ -55,7 +63,7 @@ export default function WardrobeStudioCreditsInfoDialog({
   }
 
   return createPortal(
-    <div className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[var(--z-overlay)] flex items-center justify-center p-4">
       <button
         type="button"
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"

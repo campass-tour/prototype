@@ -250,6 +250,10 @@ body {
   margin: 0;
 }
 
+body[data-wardrobe-credits-dialog-open='true'] [data-wardrobe-action-bar='true'] {
+  display: none;
+}
+
 h1, h2 {
   font-family: var(--heading);
   font-weight: 500;

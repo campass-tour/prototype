@@ -68,7 +68,7 @@ export default function WardrobeStudioPage() {
             />
           </div>
 
-          <div className="mt-3 hidden shrink-0 lg:block">
+          <div className="mt-3 hidden shrink-0 lg:block" data-wardrobe-action-bar="true">
             <WardrobeStudioActionBar
               action={action}
               disabled={actionDisabled}
@@ -80,7 +80,10 @@ export default function WardrobeStudioPage() {
         </section>
       </div>
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(80px+env(safe-area-inset-bottom)+0.5rem)] z-[var(--z-overlay)] px-4 lg:hidden">
+      <div
+        className="pointer-events-none fixed inset-x-0 bottom-[calc(80px+env(safe-area-inset-bottom)+0.5rem)] z-[var(--z-overlay)] px-4 lg:hidden"
+        data-wardrobe-action-bar="true"
+      >
         <WardrobeStudioActionBar
           action={action}
           disabled={actionDisabled}
