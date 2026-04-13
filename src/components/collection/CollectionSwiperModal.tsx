@@ -87,6 +87,7 @@ export default function CollectionSwiperModal({
                       <AssembledModelViewer
                         buildingId={item.id}
                         buildingModelFile={item.model}
+                        birdModelFile={item.birdModel}
                         buildingOffset={item.buildingOffset}
                         modelViewerProps={{
                           'auto-rotate': 'true',

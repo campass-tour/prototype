@@ -3,7 +3,8 @@
     "id": "cb",
     "icon": "cb-icon.ico",
     "image": "cb-image.png",
-    "model": "cb-model.glb",
+    "model": "cb.glb",
+    "birdModel": "bird.glb",
     "mascotName": "CB Bird",
     "buildingOffset": [0, 0, 0]
   },
@@ -11,7 +12,8 @@
     "id": "sb",
     "icon": null,
     "image": null,
-    "model": "sb-model.glb",
+    "model": "sb.glb",
+    "birdModel": "bird.glb",
     "mascotName": "Science Building Mascot",
     "buildingOffset": [0, 0, 0]
   },
@@ -20,6 +22,7 @@
     "icon": null,
     "image": null,
     "model": null,
+    "birdModel": "bird.glb",
     "mascotName": "Museum Mascot",
     "buildingOffset": [0, 0, 0]
   },
@@ -28,6 +31,7 @@
     "icon": null,
     "image": null,
     "model": null,
+    "birdModel": "bird.glb",
     "mascotName": "Hui Mascot",
     "buildingOffset": [0, 0, 0]
   },
@@ -35,7 +39,8 @@
     "id": "fb",
     "icon": "fb-icon.ico",
     "image": "fb-image.png",
-    "model": "fb-model.glb",
+    "model": "fb.glb",
+    "birdModel": "bird.glb",
     "mascotName": "FB Bird",
     "buildingOffset": [0, 0, 0]
   },
@@ -43,7 +48,8 @@
     "id": "gym",
     "icon": "gym-icon.ico",
     "image": "gym-image.png",
-    "model": "gym-model.glb",
+    "model": "gym.glb",
+    "birdModel": "bird.glb",
     "mascotName": "GYM Mascot",
     "buildingOffset": [0, 0, 0]
   }

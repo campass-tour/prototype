@@ -2,7 +2,6 @@ import { Suspense, useEffect, useMemo } from 'react';
 import type { CSSProperties } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Bounds, OrbitControls, useGLTF } from '@react-three/drei';
-import defaultModelUrl from '../../assets/model/default-model.glb?url';
 
 // Dynamically load all .glb models in the assets folder
 const glbModels = import.meta.glob('../../assets/model/*.glb', {
@@ -11,7 +10,13 @@ const glbModels = import.meta.glob('../../assets/model/*.glb', {
   eager: true,
 }) as Record<string, string>;
 
-const birdUrl = glbModels['../../assets/model/bird.glb'] || defaultModelUrl;
+// Get first available fallback model
+const getDefaultModelUrl = () => {
+  const keys = Object.keys(glbModels);
+  return keys.length > 0 ? glbModels[keys[0]] : '';
+};
+
+const birdUrl = glbModels['../../assets/model/bird.glb'] || getDefaultModelUrl();
 
 const resolveBuildingUrl = (buildingId: string, modelFile?: string | null) => {
   const direct = glbModels[`../../assets/model/${buildingId}.glb`];
@@ -23,7 +28,7 @@ const resolveBuildingUrl = (buildingId: string, modelFile?: string | null) => {
   }
 
   const legacy = glbModels[`../../assets/model/${buildingId}-model.glb`];
-  return legacy || defaultModelUrl;
+  return legacy || getDefaultModelUrl();
 };
 
 const MeshModel = ({ url }: { url: string }) => {

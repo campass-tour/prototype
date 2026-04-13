@@ -2,11 +2,16 @@ import { useState, useEffect, useRef } from 'react';
 import { X, Camera } from 'lucide-react';
 import '@google/model-viewer';
 import ARUnsupportedPrompt from './ARUnsupportedPrompt';
-import defaultModelUrl from '../../assets/model/default-model.glb?url';
 import { getLocationData } from '../../constants/locations';
 
 // Dynamically load all .glb models in the assets folder
 const glbModels = import.meta.glob('../../assets/model/*.glb', { query: '?url', import: 'default', eager: true }) as Record<string, string>;
+
+// Get first available fallback model from glbModels
+const getDefaultModelUrl = () => {
+  const keys = Object.keys(glbModels);
+  return keys.length > 0 ? glbModels[keys[0]] : '';
+};
 
 type ARModelViewerProps = {
   open: boolean;
@@ -55,13 +60,13 @@ export default function ARModelViewer({
   // Determine model dynamically using unified assets mapping
   const locData = checkinId ? getLocationData(checkinId) : null;
   const modelFile = locData?.model;
-  let modelSrc = defaultModelUrl;
+  let modelSrc = getDefaultModelUrl();
   if (modelFile) {
     const path = `../../assets/model/${modelFile}`;
-    modelSrc = glbModels[path] || defaultModelUrl;
+    modelSrc = glbModels[path] || getDefaultModelUrl();
   } else if (checkinId) {
     const fallbackPath = `../../assets/model/${checkinId}-model.glb`;
-    modelSrc = glbModels[fallbackPath] || defaultModelUrl;
+    modelSrc = glbModels[fallbackPath] || getDefaultModelUrl();
   }
 
   return (

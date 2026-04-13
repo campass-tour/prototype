@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Backpack, Map as MapIcon } from 'lucide-react';
 import LottieLib from 'lottie-react';
 import { getLocationData } from '../../constants/locations';
@@ -95,6 +95,7 @@ export default function CheckInSuccessModal({
             <AssembledModelViewer
               buildingId={checkinId}
               buildingModelFile={locData?.model}
+              birdModelFile={locData?.birdModel}
               buildingOffset={locData?.buildingOffset}
               modelViewerProps={{
                 'auto-rotate': 'true',

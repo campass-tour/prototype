@@ -15,6 +15,7 @@ const locationAssets = locationAssetsData as unknown as Array<{
   icon?: string | null;
   image?: string | null;
   model?: string | null;
+  birdModel?: string | null;
   mascotName?: string | null;
   buildingOffset?: [number, number, number] | null;
 }>;

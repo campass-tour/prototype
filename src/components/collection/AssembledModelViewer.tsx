@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import '@google/model-viewer';
-import defaultModelUrl from '../../assets/model/default-model.glb?url';
 import { getAssembledModelUrl } from '../../lib/modelAssembly';
 import { WARDROBE_ITEMS } from '../../constants/wardrobeCatalog';
 import { getWardrobeEquippedBySlot } from '../../lib/wardrobeStudioStorage';
@@ -18,7 +17,13 @@ const clothingModels = import.meta.glob('../../assets/model/clothes/*.glb', {
   eager: true,
 }) as Record<string, string>;
 
-const birdUrl = glbModels['../../assets/model/bird.glb'] || defaultModelUrl;
+// Get first available fallback model
+const getDefaultModelUrl = () => {
+  const keys = Object.keys(glbModels);
+  return keys.length > 0 ? glbModels[keys[0]] : '';
+};
+
+const birdUrl = glbModels['../../assets/model/bird.glb'] || getDefaultModelUrl();
 const ModelViewer = 'model-viewer' as any;
 
 const resolveBuildingUrl = (buildingId: string, modelFile?: string | null) => {
@@ -31,12 +36,21 @@ const resolveBuildingUrl = (buildingId: string, modelFile?: string | null) => {
   }
 
   const legacy = glbModels[`../../assets/model/${buildingId}-model.glb`];
-  return legacy || defaultModelUrl;
+  return legacy || getDefaultModelUrl();
+};
+
+const resolveBirdUrl = (birdModelFile?: string | null) => {
+  if (birdModelFile) {
+    const configured = glbModels[`../../assets/model/${birdModelFile}`];
+    if (configured) return configured;
+  }
+  return birdUrl;
 };
 
 type AssembledModelViewerProps = {
   buildingId: string;
   buildingModelFile?: string | null;
+  birdModelFile?: string | null;
   buildingOffset?: [number, number, number] | null;
   className?: string;
   style?: React.CSSProperties;
@@ -46,6 +60,7 @@ type AssembledModelViewerProps = {
 export default function AssembledModelViewer({
   buildingId,
   buildingModelFile,
+  birdModelFile,
   buildingOffset,
   className,
   style,
@@ -54,6 +69,10 @@ export default function AssembledModelViewer({
   const buildingUrl = useMemo(
     () => resolveBuildingUrl(buildingId, buildingModelFile),
     [buildingId, buildingModelFile]
+  );
+  const resolvedBirdUrl = useMemo(
+    () => resolveBirdUrl(birdModelFile),
+    [birdModelFile]
   );
   const [assembledSrc, setAssembledSrc] = useState<string | null>(null);
 
@@ -83,7 +102,7 @@ export default function AssembledModelViewer({
       .filter((value): value is NonNullable<typeof value> => value !== null);
 
     getAssembledModelUrl({
-      birdUrl,
+      birdUrl: resolvedBirdUrl,
       buildingUrl,
       buildingOffset,
       wearables,
@@ -99,9 +118,9 @@ export default function AssembledModelViewer({
     return () => {
       active = false;
     };
-  }, [buildingId, buildingUrl, buildingOffset]);
+  }, [buildingId, buildingUrl, buildingOffset, resolvedBirdUrl]);
 
-  const finalSrc = assembledSrc || buildingUrl || defaultModelUrl;
+  const finalSrc = assembledSrc || buildingUrl || getDefaultModelUrl();
 
   return (
     <ModelViewer
