@@ -5,10 +5,18 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 type Offset = [number, number, number];
 
+type WearableAttachment = {
+  wearableUrl: string;
+  wearableOffset?: Offset | null;
+  wearableRotation?: Offset | null;
+  wearableScale?: Offset | null;
+};
+
 type AssembleOptions = {
   birdUrl: string;
   buildingUrl: string;
   buildingOffset?: Offset | null;
+  wearables?: WearableAttachment[] | null;
   cacheKey: string;
 };
 
@@ -76,22 +84,47 @@ export const getAssembledModelUrl = ({
   birdUrl,
   buildingUrl,
   buildingOffset,
+  wearables,
   cacheKey,
 }: AssembleOptions) => {
   const offset = normalizeOffset(buildingOffset);
-  const key = `${cacheKey}|${birdUrl}|${buildingUrl}|${offset.join(',')}`;
+  const wearableKey = (wearables ?? [])
+    .map((wearable) => {
+      const wearableOffset = normalizeOffset(wearable.wearableOffset);
+      const wearableRotation = normalizeOffset(wearable.wearableRotation);
+      const wearableScale = normalizeScale(wearable.wearableScale);
+      return `${wearable.wearableUrl}|${wearableOffset.join(',')}|${wearableRotation.join(',')}|${wearableScale.join(',')}`;
+    })
+    .join(';');
+  const key = `${cacheKey}|${birdUrl}|${buildingUrl}|${offset.join(',')}|${wearableKey}`;
   const cached = assembledModelCache.get(key);
   if (cached) return cached;
 
   const promise = (async () => {
-    const [birdScene, buildingScene] = await Promise.all([
+    const wearableSpecs = wearables ?? [];
+    const [birdScene, buildingScene, ...wearableScenes] = await Promise.all([
       loadScene(birdUrl),
       loadScene(buildingUrl),
+      ...wearableSpecs.map((wearable) => loadScene(wearable.wearableUrl)),
     ]);
 
     const root = new THREE.Group();
     birdScene.position.set(0, 0, 0);
     buildingScene.position.set(offset[0], offset[1], offset[2]);
+
+    wearableScenes.forEach((wearableScene, index) => {
+      const spec = wearableSpecs[index];
+      if (!spec) return;
+      const wearableOffset = normalizeOffset(spec.wearableOffset);
+      const wearableRotation = normalizeOffset(spec.wearableRotation);
+      const wearableScale = normalizeScale(spec.wearableScale);
+
+      wearableScene.position.set(wearableOffset[0], wearableOffset[1], wearableOffset[2]);
+      wearableScene.rotation.set(wearableRotation[0], wearableRotation[1], wearableRotation[2]);
+      wearableScene.scale.set(wearableScale[0], wearableScale[1], wearableScale[2]);
+
+      root.add(wearableScene);
+    });
 
     root.add(buildingScene);
     root.add(birdScene);

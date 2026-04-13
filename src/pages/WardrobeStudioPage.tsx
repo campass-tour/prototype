@@ -34,8 +34,8 @@ export default function WardrobeStudioPage() {
         </div>
       </div>
 
-      {/* Mobile: stage (3/4) + wardrobe panel (1/4). Desktop keeps split layout. */}
-      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1.45fr)_minmax(22rem,1fr)] lg:gap-6">
+      {/* Mobile: stage (40svh) + scrollable wardrobe panel below. */}
+      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1.45fr)_minmax(22rem,1fr)] lg:gap-6 -mx-2 px-2 lg:mx-0 lg:px-0">
         <div className="w-full lg:sticky lg:top-8 lg:self-start">
           <WardrobeStudioStage
             previewItem={previewItem}
@@ -44,15 +44,16 @@ export default function WardrobeStudioPage() {
           />
         </div>
 
-        <section className="flex h-[35svh] min-h-40 flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] p-4 shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl lg:h-auto">
-          <div>
+        {/* The wardrobe panel is fixed-height on mobile so the grid can scroll inside it, leaving tabs pinned. */}
+        <section className="flex h-[45svh] min-h-64 flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] p-4 shadow-[var(--collection-capsule-shadow)] backdrop-blur-xl lg:h-auto">
+          <div className="shrink-0">
             <WardrobeStudioTabs
               selectedCategory={selectedCategory}
               onSelectCategory={setSelectedCategory}
             />
           </div>
 
-          <div className="mt-3 flex-1">
+          <div className="mt-3 flex-1 overflow-y-auto pr-1 -mr-1">
             <WardrobeStudioGrid
               items={filteredItems}
               selectedItemId={selectedItemId}
@@ -60,7 +61,7 @@ export default function WardrobeStudioPage() {
             />
           </div>
 
-          <div className="mt-3 hidden lg:block">
+          <div className="mt-3 hidden shrink-0 lg:block">
             <WardrobeStudioActionBar
               action={action}
               disabled={actionDisabled}

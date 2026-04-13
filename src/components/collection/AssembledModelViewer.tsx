@@ -2,9 +2,17 @@ import { useEffect, useMemo, useState } from 'react';
 import '@google/model-viewer';
 import defaultModelUrl from '../../assets/model/default-model.glb?url';
 import { getAssembledModelUrl } from '../../lib/modelAssembly';
+import { WARDROBE_ITEMS } from '../../constants/wardrobeCatalog';
+import { getWardrobeEquippedBySlot } from '../../lib/wardrobeStudioStorage';
 
 // Dynamically load all .glb models in the assets folder
 const glbModels = import.meta.glob('../../assets/model/*.glb', {
+  query: '?url',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
+
+const clothingModels = import.meta.glob('../../assets/model/clothes/*.glb', {
   query: '?url',
   import: 'default',
   eager: true,
@@ -53,10 +61,32 @@ export default function AssembledModelViewer({
     let active = true;
     setAssembledSrc(null);
 
+    const equippedBySlot = getWardrobeEquippedBySlot();
+    const slotPriority = ['head', 'face', 'gear'] as const;
+    const wearables = slotPriority
+      .map((slot) => equippedBySlot[slot])
+      .map((itemId) => (itemId ? WARDROBE_ITEMS.find((item) => item.id === itemId) ?? null : null))
+      .filter((item) => item?.modelFile)
+      .map((item) => {
+        const modelFile = item?.modelFile ?? null;
+        const wearableUrl = modelFile
+          ? clothingModels[`../../assets/model/clothes/${modelFile}`] ?? null
+          : null;
+        if (!wearableUrl || !item) return null;
+        return {
+          wearableUrl,
+          wearableOffset: item.previewOffset,
+          wearableRotation: item.previewRotation,
+          wearableScale: item.previewScale,
+        };
+      })
+      .filter((value): value is NonNullable<typeof value> => value !== null);
+
     getAssembledModelUrl({
       birdUrl,
       buildingUrl,
       buildingOffset,
+      wearables,
       cacheKey: buildingId,
     })
       .then((url) => {
