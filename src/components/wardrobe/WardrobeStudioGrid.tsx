@@ -28,7 +28,7 @@ export default function WardrobeStudioGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-3 pb-1 md:grid-cols-3 xl:grid-cols-4">
+    <div className="grid grid-cols-3 gap-2 pb-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
       {items.map((item) => {
         const isSelected = selectedItemId === item.id;
 

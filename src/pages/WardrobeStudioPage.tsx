@@ -42,7 +42,7 @@ export default function WardrobeStudioPage() {
         <WardrobeStudioHeader equippedCount={equippedItems.length} />
       </div>
 
-      <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)] gap-3 px-1 lg:h-auto lg:grid-cols-[minmax(0,1.45fr)_minmax(22rem,1fr)] lg:grid-rows-1 lg:items-start lg:gap-6 lg:px-0">
+      <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,0.8fr)_minmax(0,1.2fr)] gap-3 px-1 lg:h-auto lg:grid-cols-[minmax(0,1.45fr)_minmax(22rem,1fr)] lg:grid-rows-1 lg:items-start lg:gap-6 lg:px-0">
         <div className="min-h-0 flex-1 lg:sticky lg:top-8 lg:self-start">
           <WardrobeStudioStage
             credits={credits}

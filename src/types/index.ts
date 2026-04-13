@@ -69,3 +69,40 @@ export interface WardrobeItem {
 }
 
 export type WardrobeEquippedBySlot = Partial<Record<WardrobeSlot, string>>;
+
+export interface WardrobeCreditsEarnRule {
+  id: string;
+  icon: string;
+  title: string;
+  description: string;
+  reward: number;
+}
+
+export interface WardrobeCreditsTransactionEntry {
+  id: string;
+  action: string;
+  amount: number;
+  timeLabel: string;
+}
+
+export interface WardrobeCreditsPrimaryAction {
+  icon: string;
+  label: string;
+  ariaLabel: string;
+  route: string;
+}
+
+export interface WardrobeCreditsInfoContent {
+  helpButtonAriaLabel: string;
+  headerIcon: string;
+  title: string;
+  closeButtonAriaLabel: string;
+  howToEarnTitle: string;
+  transactionHistoryTitle: string;
+  emptyTransactionHistoryLabel: string;
+  creditsLabel: string;
+  creditsCompactLabel: string;
+  rules: WardrobeCreditsEarnRule[];
+  transactionHistory: WardrobeCreditsTransactionEntry[];
+  primaryAction: WardrobeCreditsPrimaryAction;
+}
