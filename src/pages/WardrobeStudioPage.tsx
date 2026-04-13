@@ -24,6 +24,8 @@ export default function WardrobeStudioPage() {
     selectedItem,
     selectedItemId,
     setSelectedCategory,
+    ownedItemIds,
+    equippedBySlot,
   } = useWardrobeStudio();
 
   return (
@@ -64,6 +66,8 @@ export default function WardrobeStudioPage() {
             <WardrobeStudioGrid
               items={filteredItems}
               selectedItemId={selectedItemId}
+              ownedItemIds={ownedItemIds}
+              equippedBySlot={equippedBySlot}
               onSelectItem={handleSelectItem}
             />
           </div>

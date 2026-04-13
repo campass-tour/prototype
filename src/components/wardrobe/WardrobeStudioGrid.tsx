@@ -1,16 +1,20 @@
+import type { WardrobeEquippedBySlot, WardrobeItem } from '../../types';
 import { Inbox } from 'lucide-react';
-import type { WardrobeItem } from '../../types';
 import WardrobeStudioItemCard from './WardrobeStudioItemCard';
 
 type WardrobeStudioGridProps = {
   items: WardrobeItem[];
   selectedItemId: string | null;
+  ownedItemIds: string[];
+  equippedBySlot: WardrobeEquippedBySlot;
   onSelectItem: (item: WardrobeItem) => void;
 };
 
 export default function WardrobeStudioGrid({
   items,
   selectedItemId,
+  ownedItemIds,
+  equippedBySlot,
   onSelectItem,
 }: WardrobeStudioGridProps) {
   if (items.length === 0) {
@@ -28,15 +32,19 @@ export default function WardrobeStudioGrid({
   }
 
   return (
-    <div className="grid grid-cols-3 gap-2 pb-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+    <div className="grid grid-cols-3 gap-2 pb-1 sm:grid-cols-3 md:grid-cols-2 md:gap-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       {items.map((item) => {
         const isSelected = selectedItemId === item.id;
+        const isEquipped = equippedBySlot[item.category] === item.id;
+        const isOwned = ownedItemIds.includes(item.id);
+        const statusLabel = isEquipped ? 'Equipped' : isOwned ? 'Owned' : 'Locked';
 
         return (
           <WardrobeStudioItemCard
             key={item.id}
             item={item}
             isSelected={isSelected}
+            statusLabel={statusLabel}
             onSelect={onSelectItem}
           />
         );

@@ -1,5 +1,12 @@
 import { useEffect } from 'react';
-import { X } from 'lucide-react';
+import {
+  Coins,
+  Heart,
+  MapPin,
+  MessageCircle,
+  Rocket,
+  X,
+} from 'lucide-react';
 import { createPortal } from 'react-dom';
 import type { WardrobeCreditsInfoContent } from '../../types';
 
@@ -12,6 +19,14 @@ type WardrobeStudioCreditsInfoDialogProps = {
 
 function formatCreditAmount(amount: number): string {
   return `${amount >= 0 ? '+' : ''}${amount}`;
+}
+
+function renderNamedIcon(iconName: string, className: string) {
+  if (iconName === 'heart') return <Heart className={className} />;
+  if (iconName === 'mapPin') return <MapPin className={className} />;
+  if (iconName === 'messageCircle') return <MessageCircle className={className} />;
+  if (iconName === 'rocket') return <Rocket className={className} />;
+  return <Coins className={className} />;
 }
 
 export default function WardrobeStudioCreditsInfoDialog({
@@ -79,8 +94,8 @@ export default function WardrobeStudioCreditsInfoDialog({
       >
         <header className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-lg" aria-hidden="true">
-              {content.headerIcon}
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[var(--wall-select-icon-bg)] text-[var(--color-primary)]">
+              {renderNamedIcon(content.headerIcon, 'h-4 w-4')}
             </span>
             <h2 className="text-base font-bold">{content.title}</h2>
           </div>
@@ -104,8 +119,8 @@ export default function WardrobeStudioCreditsInfoDialog({
                 key={rule.id}
                 className="grid grid-cols-[auto_1fr_auto] items-start gap-2 rounded-[var(--radius-button)] border border-[var(--collection-capsule-border)] bg-[var(--color-surface)] px-3 py-2"
               >
-                <span className="text-base leading-none" aria-hidden="true">
-                  {rule.icon}
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[var(--wall-select-icon-bg)] text-[var(--color-primary)]">
+                  {renderNamedIcon(rule.icon, 'h-4 w-4')}
                 </span>
                 <div className="min-w-0">
                   <p className="text-sm font-semibold">{rule.title}</p>
@@ -153,7 +168,7 @@ export default function WardrobeStudioCreditsInfoDialog({
           aria-label={content.primaryAction.ariaLabel}
           onClick={onPrimaryAction}
         >
-          <span aria-hidden="true">{content.primaryAction.icon}</span>
+          {renderNamedIcon(content.primaryAction.icon, 'h-4 w-4')}
           <span>{content.primaryAction.label}</span>
         </button>
       </div>

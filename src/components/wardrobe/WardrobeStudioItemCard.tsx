@@ -1,4 +1,6 @@
 import type { WardrobeItem } from '../../types';
+import { Coins } from 'lucide-react';
+import { cn } from '../../lib/utils';
 import { WardrobeStudioItemImage } from './WardrobeStudioIcons';
 
 type WardrobeStudioItemCardProps = {
@@ -15,39 +17,53 @@ export default function WardrobeStudioItemCard({
   isSelected,
   statusLabel,
   onSelect,
-  showDescription = true,
 }: WardrobeStudioItemCardProps) {
   return (
     <button
       type="button"
       onClick={() => onSelect(item)}
-      className={`flex aspect-square min-w-0 w-full flex-col items-center justify-center gap-0.5 rounded-[var(--radius-card)] border p-0 text-center transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] md:items-start md:gap-3 md:px-3 md:py-3 md:text-left ${
+      className={cn(
+        'group relative flex w-full flex-col overflow-hidden rounded-[var(--radius-card)] border px-2 py-3 text-left transition-all duration-300 gap-3',
+        'hover:-translate-y-1 hover:shadow-[var(--shadow-card)]',
         isSelected
-          ? 'border-[var(--color-primary)] bg-[var(--collection-progress-ring-center)] shadow-[var(--collection-capsule-shadow)]'
-          : 'border-[var(--collection-capsule-border)] bg-[var(--color-surface)]'
-      }`}
+          ? 'border-[var(--color-primary)] bg-[var(--collection-progress-ring-center)] shadow-[var(--shadow-card)] ring-1 ring-[var(--color-primary)]'
+          : 'border-[var(--collection-capsule-border)] bg-[var(--color-surface)] hover:border-[var(--color-primary)]'
+      )}
       aria-pressed={isSelected}
+      aria-label={item.name}
     >
-      <div className="flex w-full items-center justify-center gap-0.5 md:justify-between">
-        <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-transparent md:h-14 md:w-14 md:rounded-2xl md:bg-[var(--wall-select-icon-bg)]">
-          <WardrobeStudioItemImage
-            imageFile={item.icon}
-            alt={item.name}
-            className="h-full w-full object-contain"
-          />
-          </span>
-        {statusLabel ? (
-          <span className="hidden rounded-full bg-[var(--wall-select-bg)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--collection-progress-kicker)] md:inline-flex">
-            {statusLabel}
-          </span>
-        ) : null}
+      {/* Top right tag (ONLY shown if Locked) */}
+      {statusLabel === 'Locked' && (
+        <span
+          className="absolute right-3 top-3 z-10 rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase"
+          style={{
+            background: 'var(--mascot-badge-locked-bg)',
+            color: 'var(--mascot-badge-locked-text)',
+          }}
+        >
+          {statusLabel}
+        </span>
+      )}
+
+      {/* Image Area */}
+      <div
+        className="flex w-full flex-1 items-center justify-center rounded-xl p-3 transition-transform duration-300 group-hover:scale-[1.02] sm:p-4"
+        style={{ background: 'var(--mascot-card-image-bg)' }}
+      >
+        <WardrobeStudioItemImage
+          imageFile={item.icon}
+          alt={item.name}
+          className="h-full w-full object-contain drop-shadow-md"
+        />
       </div>
 
-      <div className="hidden w-full text-center md:block md:text-left">
-        <p className="text-sm font-semibold text-[var(--color-text-main)]">{item.name}</p>
-        {showDescription ? (
-          <p className="mt-1 line-clamp-2 text-xs text-[var(--collection-progress-copy)]">{item.description}</p>
-        ) : null}
+      {/* Info Area */}
+      <div className="mt-4 hidden w-full justify-center sm:flex">
+        <div className="flex items-center gap-1.5"
+             style={{ color: 'var(--color-primary)' }}>
+          <Coins className="h-4 w-4" />
+          <span className="text-sm font-bold tabular-nums leading-none">{item.price}</span>
+        </div>
       </div>
     </button>
   );
