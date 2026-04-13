@@ -1,18 +1,16 @@
 import { Inbox } from 'lucide-react';
-import type { WardrobeItem, WardrobeState } from '../../types';
-import { WardrobeStudioItemIcon } from './WardrobeStudioIcons';
+import type { WardrobeItem } from '../../types';
+import { WardrobeStudioItemImage } from './WardrobeStudioIcons';
 
 type WardrobeStudioGridProps = {
   items: WardrobeItem[];
   selectedItemId: string | null;
-  studioState: WardrobeState;
   onSelectItem: (item: WardrobeItem) => void;
 };
 
 export default function WardrobeStudioGrid({
   items,
   selectedItemId,
-  studioState,
   onSelectItem,
 }: WardrobeStudioGridProps) {
   if (items.length === 0) {
@@ -33,8 +31,6 @@ export default function WardrobeStudioGrid({
     <div className="no-scrollbar flex gap-3 overflow-x-auto pb-1 md:grid md:grid-cols-3 md:gap-3 md:overflow-visible xl:grid-cols-4">
       {items.map((item) => {
         const isSelected = selectedItemId === item.id;
-        const isOwned = studioState.ownedItemIds.includes(item.id);
-        const isEquipped = studioState.equippedBySlot[item.category] === item.id;
 
         return (
           <button
@@ -49,17 +45,17 @@ export default function WardrobeStudioGrid({
             aria-pressed={isSelected}
           >
             <div className="flex items-start justify-between gap-2">
-              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[var(--wall-select-icon-bg)] text-[var(--color-primary)]">
-                <WardrobeStudioItemIcon icon={item.icon} className="h-5 w-5" />
-              </span>
-              <span className="rounded-full bg-[var(--wall-select-bg)] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--collection-progress-kicker)]">
-                {isEquipped ? 'Equipped' : isOwned ? 'Owned' : 'Locked'}
+              <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-[var(--wall-select-icon-bg)]">
+                <WardrobeStudioItemImage
+                  imageFile={item.icon}
+                  alt={item.name}
+                  className="h-full w-full object-contain"
+                />
               </span>
             </div>
 
             <div>
               <p className="text-sm font-semibold text-[var(--color-text-main)]">{item.name}</p>
-              <p className="mt-1 line-clamp-2 text-xs text-[var(--collection-progress-copy)]">{item.description}</p>
             </div>
           </button>
         );

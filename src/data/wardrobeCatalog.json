@@ -27,29 +27,31 @@
   ],
   "items": [
     {
-      "id": "mono-shades",
-      "name": "Mono Shades",
+      "id": "sunglasses",
+      "name": "Sunglasses",
       "category": "face",
       "price": 0,
-      "icon": "mono-shades",
+      "icon": "clothes/sunglasses.png",
       "description": "The current wearable prototype for the bird studio.",
-      "ownedByDefault": true,
-      "modelFile": "sunglasses.glb",
+      "ownedByDefault": false,
+      "modelFile": "sunglasses.glb"
+
+    },
+    {
+      "id": "cap",
+      "name": "Cap",
+      "category": "head",
+      "price": 10,
+      "icon": "clothes/cap.png",
+      "description": "The current wearable prototype for the bird studio.",
+      "ownedByDefault": false,
+      "modelFile": "cap.glb",
       "previewOffset": [
         0,
-        0,
+        -0.01,
         0
-      ],
-      "previewRotation": [
-        0,
-        0,
-        0
-      ],
-      "previewScale": [
-        1,
-        1,
-        1
       ]
+
     }
   ]
 }

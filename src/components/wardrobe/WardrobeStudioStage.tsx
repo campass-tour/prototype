@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Dice5, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import birdModelUrl from '../../assets/model/bird.glb?url';
 import type { WardrobeItem } from '../../types';
 import WardrobeStudioModelViewer from './WardrobeStudioModelViewer';
@@ -8,14 +8,12 @@ type WardrobeStudioStageProps = {
   previewItem: WardrobeItem | null;
   resetViewKey: number;
   onResetView: () => void;
-  onRandomLook: () => void;
 };
 
 export default function WardrobeStudioStage({
   previewItem,
   resetViewKey,
   onResetView,
-  onRandomLook,
 }: WardrobeStudioStageProps) {
   useEffect(() => {
     // Preload the bird model (model-viewer will also cache after first load).
@@ -40,14 +38,6 @@ export default function WardrobeStudioStage({
           >
             <RotateCcw className="h-4 w-4 text-[var(--color-primary)]" />
             <span>Reset View</span>
-          </button>
-          <button
-            type="button"
-            onClick={onRandomLook}
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--collection-capsule-border)] bg-[var(--collection-capsule-bg)] px-4 py-3 text-sm font-semibold text-[var(--color-text-main)]"
-          >
-            <Dice5 className="h-4 w-4 text-[var(--color-primary)]" />
-            <span>Random Look</span>
           </button>
         </div>
       </div>

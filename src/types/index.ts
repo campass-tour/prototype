@@ -46,16 +46,6 @@ export type WardrobeCategoryId = 'all' | 'head' | 'face' | 'gear';
 
 export type WardrobeSlot = Exclude<WardrobeCategoryId, 'all'>;
 
-export type WardrobeIconName =
-  | 'badge-cent'
-  | 'captain-band'
-  | 'laurel-crown'
-  | 'mono-shades'
-  | 'star-lens'
-  | 'field-notes'
-  | 'campus-satchel'
-  | 'signal-kite';
-
 export interface WardrobeCategory {
   id: WardrobeCategoryId;
   label: string;
@@ -68,7 +58,8 @@ export interface WardrobeItem {
   name: string;
   category: WardrobeSlot;
   price: number;
-  icon: WardrobeIconName;
+  /** Image path under `src/assets/image/` (e.g. `clothes/sunglasses.png`). */
+  icon: string;
   description: string;
   ownedByDefault?: boolean;
   modelFile?: string | null;
@@ -77,8 +68,4 @@ export interface WardrobeItem {
   previewScale?: [number, number, number] | null;
 }
 
-export interface WardrobeState {
-  balance: number;
-  ownedItemIds: string[];
-  equippedBySlot: Partial<Record<WardrobeSlot, string>>;
-}
+export type WardrobeEquippedBySlot = Partial<Record<WardrobeSlot, string>>;

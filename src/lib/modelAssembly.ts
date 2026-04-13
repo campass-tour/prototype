@@ -126,7 +126,7 @@ export const getAssembledWearableModelUrl = ({
 
     const root = new THREE.Group();
 
-    // Bird stays at origin. Wearable is placed relative to it.
+    // Bird stays at origin. Wearable is placed relative to it when offsets are provided.
     birdScene.position.set(0, 0, 0);
     wearableScene.position.set(offset[0], offset[1], offset[2]);
     wearableScene.rotation.set(rotation[0], rotation[1], rotation[2]);

@@ -1,8 +1,9 @@
-import WardrobeStudioActionBar from '../components/collection/WardrobeStudioActionBar';
-import WardrobeStudioGrid from '../components/collection/WardrobeStudioGrid';
-import WardrobeStudioHeader from '../components/collection/WardrobeStudioHeader';
-import WardrobeStudioStage from '../components/collection/WardrobeStudioStage';
-import WardrobeStudioTabs from '../components/collection/WardrobeStudioTabs';
+import WardrobeStudioActionBar from '../components/wardrobe/WardrobeStudioActionBar';
+import WardrobeStudioCredits from '../components/wardrobe/WardrobeStudioCredits';
+import WardrobeStudioGrid from '../components/wardrobe/WardrobeStudioGrid';
+import WardrobeStudioHeader from '../components/wardrobe/WardrobeStudioHeader';
+import WardrobeStudioStage from '../components/wardrobe/WardrobeStudioStage';
+import WardrobeStudioTabs from '../components/wardrobe/WardrobeStudioTabs';
 import { useWardrobeStudio } from '../hooks/useWardrobeStudio';
 
 export default function WardrobeStudioPage() {
@@ -10,10 +11,10 @@ export default function WardrobeStudioPage() {
     action,
     actionDisabled,
     canAfford,
+    credits,
     equippedItems,
     filteredItems,
     handlePrimaryAction,
-    handleRandomLook,
     handleResetView,
     handleSelectItem,
     previewItem,
@@ -22,12 +23,16 @@ export default function WardrobeStudioPage() {
     selectedItem,
     selectedItemId,
     setSelectedCategory,
-    studioState,
   } = useWardrobeStudio();
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 bg-[var(--wall-page-bg)] px-2 pb-32 pt-4 md:gap-6 md:px-6 md:pb-10 md:pt-8">
-      <WardrobeStudioHeader equippedCount={equippedItems.length} />
+      <div className="flex flex-col gap-3 md:gap-4">
+        <WardrobeStudioHeader equippedCount={equippedItems.length} />
+        <div className="flex items-center justify-between">
+          <WardrobeStudioCredits credits={credits} />
+        </div>
+      </div>
 
       {/* Mobile: stage (3/4) + wardrobe panel (1/4). Desktop keeps split layout. */}
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1.45fr)_minmax(22rem,1fr)] lg:gap-6">
@@ -36,7 +41,6 @@ export default function WardrobeStudioPage() {
             previewItem={previewItem}
             resetViewKey={resetViewKey}
             onResetView={handleResetView}
-            onRandomLook={handleRandomLook}
           />
         </div>
 
@@ -52,7 +56,6 @@ export default function WardrobeStudioPage() {
             <WardrobeStudioGrid
               items={filteredItems}
               selectedItemId={selectedItemId}
-              studioState={studioState}
               onSelectItem={handleSelectItem}
             />
           </div>

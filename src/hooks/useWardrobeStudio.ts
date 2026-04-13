@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
-import { WARDROBE_DEFAULT_STATE, WARDROBE_ITEMS } from '../constants/wardrobeCatalog';
-import { getWardrobeStudioState, setWardrobeStudioState } from '../lib/wardrobeStudioStorage';
-import type { WardrobeCategoryId, WardrobeItem, WardrobeState } from '../types';
+import { WARDROBE_DEFAULT_OWNED_ITEM_IDS, WARDROBE_ITEMS } from '../constants/wardrobeCatalog';
+import { WARDROBE_BALANCE } from '../constants/wardrobeBalance';
+import {
+  getWardrobeEquippedBySlot,
+  getWardrobeOwnedItemIds,
+  setWardrobeEquippedBySlot,
+  setWardrobeOwnedItemIds,
+} from '../lib/wardrobeStudioStorage';
+import type { WardrobeCategoryId, WardrobeEquippedBySlot, WardrobeItem, WardrobeSlot } from '../types';
 
 type StudioAction = 'buy' | 'equip' | 'unequip' | 'idle';
 
@@ -9,38 +15,45 @@ const getItemById = (itemId: string | null) =>
   itemId ? WARDROBE_ITEMS.find((item) => item.id === itemId) ?? null : null;
 
 export function useWardrobeStudio() {
-  const [studioState, setStudioState] = useState<WardrobeState>(WARDROBE_DEFAULT_STATE);
+  const [ownedItemIds, setOwnedItemIds] = useState<string[]>(WARDROBE_DEFAULT_OWNED_ITEM_IDS);
+  const [equippedBySlot, setEquippedBySlot] = useState<WardrobeEquippedBySlot>({});
   const [selectedCategory, setSelectedCategory] = useState<WardrobeCategoryId>('all');
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [resetViewKey, setResetViewKey] = useState(0);
 
   useEffect(() => {
-    setStudioState(getWardrobeStudioState());
+    setOwnedItemIds(getWardrobeOwnedItemIds(WARDROBE_DEFAULT_OWNED_ITEM_IDS));
+    setEquippedBySlot(getWardrobeEquippedBySlot());
   }, []);
 
   useEffect(() => {
-    setWardrobeStudioState(studioState);
-  }, [studioState]);
+    setWardrobeOwnedItemIds(ownedItemIds);
+  }, [ownedItemIds]);
+
+  useEffect(() => {
+    setWardrobeEquippedBySlot(equippedBySlot);
+  }, [equippedBySlot]);
 
   const selectedItem = getItemById(selectedItemId);
   const filteredItems = WARDROBE_ITEMS.filter(
     (item) => selectedCategory === 'all' || item.category === selectedCategory
   );
 
-  const previewItem = selectedItem ?? null;
-  const selectedOwned = !!selectedItem && studioState.ownedItemIds.includes(selectedItem.id);
-  const selectedEquipped = !!selectedItem && studioState.equippedBySlot[selectedItem.category] === selectedItem.id;
+  const slotPriority: WardrobeSlot[] = ['head', 'face', 'gear'];
+  const firstEquippedId =
+    slotPriority.map((slot) => equippedBySlot[slot]).find((value) => value) ?? null;
+  const previewItem = selectedItem ?? getItemById(firstEquippedId);
+  const selectedOwned = !!selectedItem && ownedItemIds.includes(selectedItem.id);
+  const selectedEquipped = !!selectedItem && equippedBySlot[selectedItem.category] === selectedItem.id;
 
-  const canAfford = !!selectedItem && studioState.balance >= selectedItem.price;
+  const canAfford = !!selectedItem && WARDROBE_BALANCE >= selectedItem.price;
   const action: StudioAction = !selectedItem
     ? 'idle'
-    : !selectedOwned && selectedItem.price > 0
-      ? 'buy'
-      : selectedEquipped
-        ? 'unequip'
-        : selectedOwned
-          ? 'equip'
-          : 'idle';
+    : selectedEquipped
+      ? 'unequip'
+      : selectedOwned
+        ? 'equip'
+        : 'buy';
 
   const actionDisabled = action === 'idle' || (action === 'buy' && !canAfford);
 
@@ -51,41 +64,29 @@ export function useWardrobeStudio() {
   const handlePrimaryAction = () => {
     if (!selectedItem) return;
 
-    if (!selectedOwned && action === 'buy') {
+    if (action === 'buy') {
       if (!canAfford) return;
-      setStudioState((current) => ({
-        balance: current.balance - selectedItem.price,
-        ownedItemIds: current.ownedItemIds.includes(selectedItem.id)
-          ? current.ownedItemIds
-          : [...current.ownedItemIds, selectedItem.id],
-        equippedBySlot: {
-          ...current.equippedBySlot,
-          [selectedItem.category]: selectedItem.id,
-        },
-      }));
+      setOwnedItemIds((current) =>
+        current.includes(selectedItem.id) ? current : [...current, selectedItem.id]
+      );
       return;
     }
 
     if (!selectedOwned) return;
 
     if (selectedEquipped) {
-      setStudioState((current) => {
-        const nextEquippedBySlot = { ...current.equippedBySlot };
+      setEquippedBySlot((current) => {
+        const nextEquippedBySlot = { ...current };
         delete nextEquippedBySlot[selectedItem.category];
-        return {
-          ...current,
-          equippedBySlot: nextEquippedBySlot,
-        };
+        return nextEquippedBySlot;
       });
+      setSelectedItemId(null);
       return;
     }
 
-    setStudioState((current) => ({
+    setEquippedBySlot((current) => ({
       ...current,
-      equippedBySlot: {
-        ...current.equippedBySlot,
-        [selectedItem.category]: selectedItem.id,
-      },
+      [selectedItem.category]: selectedItem.id,
     }));
   };
 
@@ -93,24 +94,7 @@ export function useWardrobeStudio() {
     setResetViewKey((value) => value + 1);
   };
 
-  const handleRandomLook = () => {
-    const ownedItems = WARDROBE_ITEMS.filter((item) => studioState.ownedItemIds.includes(item.id));
-    if (ownedItems.length === 0) return;
-
-    const randomItem = ownedItems[Math.floor(Math.random() * ownedItems.length)] ?? null;
-    if (!randomItem) return;
-
-    setSelectedItemId(randomItem.id);
-    setStudioState((current) => ({
-      ...current,
-      equippedBySlot: {
-        ...current.equippedBySlot,
-        [randomItem.category]: randomItem.id,
-      },
-    }));
-  };
-
-  const equippedItems = Object.values(studioState.equippedBySlot)
+  const equippedItems = Object.values(equippedBySlot)
     .map((itemId) => getItemById(itemId ?? null))
     .filter((item): item is WardrobeItem => item !== null);
 
@@ -118,10 +102,10 @@ export function useWardrobeStudio() {
     action,
     actionDisabled,
     canAfford,
+    credits: WARDROBE_BALANCE,
     equippedItems,
     filteredItems,
     handlePrimaryAction,
-    handleRandomLook,
     handleResetView,
     handleSelectItem,
     previewItem,
@@ -131,6 +115,7 @@ export function useWardrobeStudio() {
     selectedItem,
     selectedItemId,
     setSelectedCategory,
-    studioState,
+    ownedItemIds,
+    equippedBySlot,
   };
 }
