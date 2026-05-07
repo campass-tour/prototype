@@ -9,9 +9,10 @@ export type TabId = 'explore' | 'collection' | 'wall' | 'profile';
 interface MainLayoutProps {
   children: React.ReactNode;
   activeTab: TabId;
+  onCampassLogoClick?: () => void;
 }
 
-export function MainLayout({ children, activeTab }: MainLayoutProps) {
+export function MainLayout({ children, activeTab, onCampassLogoClick }: MainLayoutProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -50,6 +51,7 @@ export function MainLayout({ children, activeTab }: MainLayoutProps) {
         activeTab={activeTab}
         isDarkMode={isDarkMode}
         toggleDarkMode={toggleDarkMode}
+        onCampassLogoClick={onCampassLogoClick}
       />
 
       {/* Main Content Area Wrapper */}

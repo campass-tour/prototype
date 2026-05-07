@@ -15,6 +15,9 @@ import { unlockCollectible, getUnlockedCount } from './lib/storage';
 import './App.css';
 
 function App() {
+  const [isNfcFabVisible, setIsNfcFabVisible] = useState(false);
+  const [campassTapCount, setCampassTapCount] = useState(0);
+
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     const checkinId = params.get('checkin');
@@ -65,6 +68,12 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (campassTapCount < 5) return;
+    setIsNfcFabVisible(true);
+    setCampassTapCount(0);
+  }, [campassTapCount]);
+
   // Simple rendering logic based on state
   const renderContent = () => {
     switch (activeTab) {
@@ -82,7 +91,10 @@ function App() {
   };
 
   return (
-    <MainLayout activeTab={activeTab}>
+    <MainLayout
+      activeTab={activeTab}
+      onCampassLogoClick={() => setCampassTapCount((prev) => prev + 1)}
+    >
       <Suspense fallback={<div className="h-40 flex items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--color-primary)] border-t-transparent" /></div>}>
         {renderContent()}
 
@@ -94,7 +106,7 @@ function App() {
         />
       </Suspense>
 
-      {/* <NfcSimulatorFab /> */}
+      {isNfcFabVisible && <NfcSimulatorFab onClose={() => setIsNfcFabVisible(false)} />}
 
       <CheckInSuccessModal
         open={isCheckInModalOpen}

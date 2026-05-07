@@ -704,5 +704,106 @@
         }
       ]
     }
+  },
+  {
+    "locationId": "onestop",
+    "clues": {
+      "card1": {
+        "image_placeholder": "assets/clues/onestop-clue1.webp",
+        "lv1_text": "The portal for all your non-academic puzzles, where insurance, archives, and household registrations are solved in a single stop.",
+        "lv2_text": "Look within the 'brain and heart' of the university. It resides on the first floor of the Central Building."
+      },
+      "card2": {
+        "image_placeholder": [
+          "assets/clues/onestop-clue3-1.webp","assets/clues/onestop-clue3-2.webp","assets/clues/onestop-clue3-3.webp","assets/clues/onestop-clue3-4.webp"
+        ],
+        "lv3_text": "Find us at Room CB-115E, conveniently located to bridge the gap between students and the university."
+      }
+    },
+    "quizzes": {
+      "freshman": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "Which of the following is a primary service provided by the One-Stop Student Service Center?",
+          "options": [
+            "A. Course selection and grading",
+            "B. Household registration (Hukou) and archives",
+            "C. Lab equipment rental",
+            "D. Teaching assistant applications"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! They handle non-academic affairs to make your life easier. Level 2 revealed!"
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "If you need to visit One-Stop in person, which room should you go to in the Central Building?",
+          "options": [
+            "A. CB-G23",
+            "B. CB-115E",
+            "C. CB-425",
+            "D. CB-120"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Spot on! CB-115E is the place. The final location is now visible!"
+        }
+      ],
+      "senior": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "Since which year has the One-Stop Student Service Center been serving the XJTLU community?",
+          "options": [
+            "A. 2006",
+            "B. 2009",
+            "C. 2012",
+            "D. 2015"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Impressive memory! It has been a cornerstone since 2009. Level 2 clue unlocked!"
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which communication channel can you use to reach One-Stop if you cannot visit them in person?",
+          "options": [
+            "A. 0512-88161854",
+            "B. onestop@xjtlu.edu.cn",
+            "C. Both A and B",
+            "D. None of the above"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Exactly! They are always reachable via phone or email. The final coordinates are revealed!"
+        }
+      ],
+      "visitor": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What is the main goal of the One-Stop Student Service Center?",
+          "options": [
+            "A. To sell university merchandise",
+            "B. To create an efficient communication channel for students, parents, and departments",
+            "C. To manage the university's library books",
+            "D. To provide medical surgery services"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! It's all about efficiency and support. Level 2 clue unlocked!"
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "True or False: One-Stop is the first source for information regarding student scholarships and subsidies.",
+          "options": [
+            "A. True",
+            "B. False"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Perfect! You've grasped their core mission. The final secret is yours!"
+        }
+      ]
+    }
   }
+  
 ]

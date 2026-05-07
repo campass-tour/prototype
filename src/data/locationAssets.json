@@ -55,7 +55,7 @@
   },
   {
     "id": "eb",
-    "icon": "eb-icon.ico",
+    "icon": null,
     "image": "eb-image.png",
     "model": "eb.glb",
     "birdModel": "bird.glb",
