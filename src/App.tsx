@@ -6,7 +6,6 @@ import CheckInSuccessModal from './components/collection/CheckInSuccessModal';
 // Route-based code-splitting: load pages and heavy viewers only when needed
 const MapPage = lazy(() => import('./pages/MapPage'));
 const CollectionPage = lazy(() => import('./pages/CollectionPage'));
-const WardrobeStudioPage = lazy(() => import('./pages/WardrobeStudioPage'));
 const WallPage = lazy(() => import('./pages/WallPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const ARModelViewer = lazy(() => import('./components/photo/ARModelViewer'));
@@ -44,11 +43,7 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname.substring(1);
-  const activeTab = path.startsWith('collection')
-    ? 'collection'
-    : ['explore', 'wall', 'profile'].includes(path)
-      ? path as TabId
-      : 'explore';
+  const activeTab = ['explore', 'collection', 'wall', 'profile'].includes(path) ? path as TabId : 'explore';
 
   useEffect(() => {
     // 1. Detection: Check if URL contains checkin parameter
@@ -76,7 +71,7 @@ function App() {
       case 'explore':
         return <MapPage />;
       case 'collection':
-        return path === 'collection/studio' ? <WardrobeStudioPage /> : <CollectionPage />;
+        return <CollectionPage />;
       case 'wall':
         return <WallPage />;
       case 'profile':

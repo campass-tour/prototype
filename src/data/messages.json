@@ -158,7 +158,7 @@
     "author": { "username": "campusframes", "avatarUrl": "https://i.pravatar.cc/150?u=campusframes" },
     "likes": 19,
     "timestamp": "2026-04-08T09:20:00.000Z",
-    "imageUrl": "https://picui.ogmua.cn/s1/2026/04/08/69d62aad59634.webp"
+    "imageUrl": "https://free.boltp.com/2026/04/24/69eb12f3e87f8.webp"
   },
   {
     "id": "msg_20",
@@ -330,5 +330,55 @@
     "author": { "username": "CampusGuide", "avatarUrl": "https://i.pravatar.cc/150?u=campusguide_hs" },
     "likes": 8,
     "timestamp": "2026-04-08T11:35:00.000Z"
+  },
+  {
+    "id": "msg_41",
+    "locationId": "eb",
+    "content": "The light outside EB was really clean after the rain. Good spot for a quick campus photo.",
+    "author": { "username": "LabLens", "avatarUrl": "https://i.pravatar.cc/150?u=lablens_eb" },
+    "likes": 22,
+    "timestamp": "2026-04-09T09:20:00.000Z",
+    "imageUrl": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    "id": "msg_42",
+    "locationId": "eb",
+    "content": "Saw a group going over a prototype near EB today. The whole place feels very project-mode.",
+    "author": { "username": "BuildSprint" },
+    "likes": 17,
+    "timestamp": "2026-04-09T10:45:00.000Z"
+  },
+  {
+    "id": "msg_43",
+    "locationId": "eb",
+    "content": "EB is my usual meeting point before group work. Easy to find, and everyone knows where to wait.",
+    "author": { "username": "CircuitBreak", "avatarUrl": "https://i.pravatar.cc/150?u=circuitbreak_eb" },
+    "likes": 14,
+    "timestamp": "2026-04-09T13:10:00.000Z"
+  },
+  {
+    "id": "msg_44",
+    "locationId": "eb",
+    "content": "The tables nearby are perfect for checking slides one last time before a lab session.",
+    "author": { "username": "PreLabPanic" },
+    "likes": 11,
+    "timestamp": "2026-04-08T16:30:00.000Z"
+  },
+  {
+    "id": "msg_45",
+    "locationId": "eb",
+    "content": "Caught this angle of EB while walking to class. It looks more serious in photos than in real life.",
+    "author": { "username": "CampusFrames", "avatarUrl": "https://i.pravatar.cc/150?u=campusframes_eb" },
+    "likes": 28,
+    "timestamp": "2026-04-08T11:40:00.000Z",
+    "imageUrl": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    "id": "msg_46",
+    "locationId": "eb",
+    "content": "If you are looking for EB, follow the flow of students carrying laptops and project boards.",
+    "author": { "username": "RouteBuilder" },
+    "likes": 19,
+    "timestamp": "2026-04-07T15:05:00.000Z"
   }
 ]

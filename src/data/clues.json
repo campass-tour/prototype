@@ -602,5 +602,107 @@
         }
       ]
     }
+  },
+  {
+    "locationId": "eb",
+    "clues": {
+      "card1": {
+        "image_placeholder": "assets/clues/eb-clue1.webp",
+        "lv1_text": "A place where design ideas, technical experiments, and project work move from sketches into real prototypes.",
+        "lv2_text": "Head toward the Engineering Building area. Look for the academic space connected with labs, equipment, and hands-on making."
+      },
+      "card2": {
+        "image_placeholder": [
+          "assets/clues/eb-clue2.webp", "assets/clues/eb-clue3.webp"
+        ],
+        "lv3_text": "Follow the final route images around EB to reach the exact NFC position. The tag is placed at the clearly marked spot shown in the last clue image."
+      }
+    },
+    "quizzes": {
+      "freshman": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "As a freshman, what would you most likely associate EB with?",
+          "options": [
+            "A. Engineering labs, project work, and hands-on technical learning",
+            "B. Indoor courts, workout spaces, and sports training",
+            "C. Historical exhibitions about the university",
+            "D. Coffee, snacks, and informal social gatherings"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct! You connected EB with engineering work, and the next clue is revealed."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which scene would make a new student most confident they have found EB?",
+          "options": [
+            "A. Students discussing prototypes, technical drawings, or lab tasks",
+            "B. Athletes arriving with rackets and sports bags",
+            "C. Visitors walking past museum display cases",
+            "D. Groups ordering drinks at a cafe counter"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Exactly. Those engineering clues point to EB, and the final location is now visible."
+        }
+      ],
+      "senior": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "From a senior student's perspective, what most clearly defines EB?",
+          "options": [
+            "A. A practical engineering space for labs, coursework, and project development",
+            "B. A sports venue focused on fitness and team practice",
+            "C. A cultural space preserving campus history",
+            "D. A casual cafe space for drinks and social events"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct. That engineering role narrows the search, and Level 2 is now unlocked."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which campus pattern would help an experienced student distinguish EB fastest?",
+          "options": [
+            "A. Students carrying equipment, preparing experiments, or refining project work",
+            "B. Crowds gathering for training sessions and court reservations",
+            "C. Visitors spending time with curated heritage displays",
+            "D. Groups gathering mainly around food and drinks"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Exactly. That hands-on working pattern points to EB, and the exact NFC position is now unlocked."
+        }
+      ],
+      "visitor": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "As a visitor, which description would help you understand EB first?",
+          "options": [
+            "A. An academic building linked to engineering, labs, and applied project work",
+            "B. A dedicated sports venue for workouts and training",
+            "C. A museum preserving institutional memory",
+            "D. A social space centered on coffee and snacks"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct. That visitor-friendly description reveals the regional clue."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which clue would best separate EB from other campus landmarks?",
+          "options": [
+            "A. It is identified by engineering activity, lab work, and practical making",
+            "B. It is dominated by indoor courts and fitness rooms",
+            "C. It is known for exhibitions about the university's history",
+            "D. It mainly serves drinks and casual social gatherings"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Exactly. You separated EB by its engineering role, and the final route is unlocked."
+        }
+      ]
+    }
   }
 ]
