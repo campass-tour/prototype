@@ -99,7 +99,7 @@ function App() {
         />
       </Suspense>
 
-      <NfcSimulatorFab />
+      {/* <NfcSimulatorFab /> */}
 
       <CheckInSuccessModal
         open={isCheckInModalOpen}
