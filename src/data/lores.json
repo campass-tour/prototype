@@ -39,5 +39,10 @@
     "id": "gym",
     "title": "Energy Finds Its Rhythm",
     "content": "The GYM is where students reset, recharge, and push themselves a little further every day. From quick workouts to team practice, it carries the pulse of movement, discipline, and shared momentum across campus. More than a training space, it is where effort becomes routine and energy turns into confidence."
+  },
+  {
+    "id": "eb",
+    "title": "Where Ideas Become Prototypes",
+    "content": "EB brings engineering work into view, from lab tasks and technical drawings to projects taking shape. It is a practical stop for students who learn by building, testing, and improving."
   }
 ]

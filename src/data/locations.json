@@ -4,5 +4,6 @@
   { "id": "gym", "name": "GYM", "x": 71.9, "y": 70.9, "lv": 2 },
   { "id": "fb", "name": "Foundation Building", "gps": { "lat": 31.2746351556584, "lon": 120.7381790098646 }, "lv": 1 },
   { "id": "bs", "name": "BS", "gps": { "lat": 31.26948, "lon": 120.73954 }, "lv": 1 }, 
-  { "id": "hs", "name": "HS", "gps": { "lat": 31.26944, "lon": 120.74126 }, "lv": 1 }
+  { "id": "hs", "name": "HS", "gps": { "lat": 31.26944, "lon": 120.74126 }, "lv": 1 },
+  { "id": "eb", "name": "EB", "x": 63, "y": 55, "lv": 1 }
 ]
