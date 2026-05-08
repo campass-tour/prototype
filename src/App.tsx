@@ -8,6 +8,7 @@ const MapPage = lazy(() => import('./pages/MapPage'));
 const CollectionPage = lazy(() => import('./pages/CollectionPage'));
 const WallPage = lazy(() => import('./pages/WallPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const WardrobeStudioPage = lazy(() => import('./pages/WardrobeStudioPage'));
 const ARModelViewer = lazy(() => import('./components/photo/ARModelViewer'));
 import { getLocationData, LOCATIONS } from './constants/locations';
 import { unlockCollectible, getUnlockedCount } from './lib/storage';
@@ -46,7 +47,11 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname.substring(1);
-  const activeTab = ['explore', 'collection', 'wall', 'profile'].includes(path) ? path as TabId : 'explore';
+  const activeTab = path.startsWith('collection/studio')
+    ? 'collection'
+    : ['explore', 'collection', 'wall', 'profile'].includes(path)
+      ? path as TabId
+      : 'explore';
 
   useEffect(() => {
     // 1. Detection: Check if URL contains checkin parameter
@@ -80,7 +85,7 @@ function App() {
       case 'explore':
         return <MapPage />;
       case 'collection':
-        return <CollectionPage />;
+        return path.startsWith('collection/studio') ? <WardrobeStudioPage /> : <CollectionPage />;
       case 'wall':
         return <WallPage />;
       case 'profile':
