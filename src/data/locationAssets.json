@@ -36,6 +36,24 @@
     "buildingOffset": [0, 0, 0]
   },
   {
+    "id": "bs",
+    "icon": "bs-icon.png",
+    "image": "bs-bird.png",
+    "model": "bs.glb",
+    "birdModel": "bird.glb",
+    "mascotName": "BS Bird",
+    "buildingOffset": [0, 0, 0]
+  },
+  {
+    "id": "hs",
+    "icon": "hs-icon.png",
+    "image": "hs-bird.png",
+    "model": "hs.glb",
+    "birdModel": "bird.glb",
+    "mascotName": "HS Bird",
+    "buildingOffset": [0, 0, 0]
+  },
+  {
     "id": "eb",
     "icon": null,
     "image": "eb-image.png",
