@@ -14,25 +14,7 @@
     "image": "sb-image.png",
     "model": "sb.glb",
     "birdModel": "bird.glb",
-    "mascotName": "Science Building Mascot",
-    "buildingOffset": [0, 0, 0]
-  },
-  {
-    "id": "mus",
-    "icon": null,
-    "image": null,
-    "model": null,
-    "birdModel": "bird.glb",
-    "mascotName": "Museum Mascot",
-    "buildingOffset": [0, 0, 0]
-  },
-  {
-    "id": "hui",
-    "icon": null,
-    "image": null,
-    "model": null,
-    "birdModel": "bird.glb",
-    "mascotName": "Hui Mascot",
+    "mascotName": "Science Building Bird",
     "buildingOffset": [0, 0, 0]
   },
   {
@@ -50,16 +32,25 @@
     "image": "gym-image.png",
     "model": "gym.glb",
     "birdModel": "bird.glb",
-    "mascotName": "GYM Mascot",
+    "mascotName": "GYM Bird",
     "buildingOffset": [0, 0, 0]
   },
   {
     "id": "eb",
-    "icon": "eb-icon.ico",
+    "icon": null,
     "image": "eb-image.png",
     "model": "eb.glb",
     "birdModel": "bird.glb",
-    "mascotName": "EB Mascot",
+    "mascotName": "EB Bird",
     "buildingOffset": [0, 0, 0]
-  }
+  },
+  {
+    "id": "onestop",
+    "icon": "onestop-icon.ico",
+    "image": "onestop-image.png",
+    "model": "onestop.glb",
+    "birdModel": "bird.glb",
+    "mascotName": "One-Stop Bird",
+    "buildingOffset": [0, 0, 0]
+   }
 ]

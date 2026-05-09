@@ -2,7 +2,11 @@ import { useState, useRef, useEffect } from 'react';
 import { SmartphoneNfc, X, MapPin } from 'lucide-react';
 import { LOCATIONS } from '../../constants/locations';
 
-export function NfcSimulatorFab() {
+interface NfcSimulatorFabProps {
+  onClose?: () => void;
+}
+
+export function NfcSimulatorFab({ onClose }: NfcSimulatorFabProps) {
   const [position, setPosition] = useState({ x: 20, y: 80 }); // Top-Left by default to avoid bottom nav
   const [isDragging, setIsDragging] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -112,8 +116,22 @@ export function NfcSimulatorFab() {
       {/* Target Menu */}
       {isOpen && (
         <div className="absolute top-16 left-0 w-64 rounded-[var(--radius-card)] bg-[var(--color-surface)] p-3 shadow-2xl border border-[var(--color-state-disabled)] animate-in fade-in zoom-in-95 duration-200">
-          <div className="mb-2 text-sm font-semibold text-[var(--color-text-secondary)] px-2">
-            Simulate NFC Scan
+          <div className="mb-2 flex items-center justify-between px-2">
+            <div className="text-sm font-semibold text-[var(--color-text-secondary)]">
+              Simulate NFC Scan
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpen(false);
+                onClose?.();
+              }}
+              className="inline-flex h-6 w-6 items-center justify-center rounded-full text-[var(--color-text-secondary)] transition hover:bg-[var(--color-background)] hover:text-[var(--color-text-main)]"
+              aria-label="Close NFC simulator"
+              title="Close"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
           <div className="flex flex-col gap-1">
             {LOCATIONS.map((loc) => (

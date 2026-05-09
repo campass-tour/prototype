@@ -9,9 +9,10 @@ interface DesktopSidebarProps {
   activeTab: TabId;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
+  onCampassLogoClick?: () => void;
 }
 
-export function DesktopSidebar({ tabs, activeTab, isDarkMode, toggleDarkMode }: DesktopSidebarProps) {
+export function DesktopSidebar({ tabs, activeTab, isDarkMode, toggleDarkMode, onCampassLogoClick }: DesktopSidebarProps) {
   return (
     <aside className="hidden md:flex flex-col w-64 bg-(--color-surface) shadow-[2px_0_12px_rgba(0,0,0,0.03)] z-20 shrink-0 h-full border-r border-(--color-state-disabled) relative">
       <button 
@@ -22,7 +23,11 @@ export function DesktopSidebar({ tabs, activeTab, isDarkMode, toggleDarkMode }: 
         {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
       </button>
       <div className="p-8 pb-4 flex items-center justify-center">
-        <h1 className="campass-logo font-extrabold text-4xl tracking-tight flex select-none">
+        <h1
+          className="campass-logo font-extrabold text-4xl tracking-tight flex select-none cursor-pointer"
+          onClick={onCampassLogoClick}
+          title="Campass"
+        >
           <span className="text-(--color-logo-cam)">Cam</span>
           <span className="text-(--color-logo-pass)">pass</span>
         </h1>

@@ -8,6 +8,7 @@ const MapPage = lazy(() => import('./pages/MapPage'));
 const CollectionPage = lazy(() => import('./pages/CollectionPage'));
 const WallPage = lazy(() => import('./pages/WallPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const WardrobeStudioPage = lazy(() => import('./pages/WardrobeStudioPage'));
 const ARModelViewer = lazy(() => import('./components/photo/ARModelViewer'));
 import { getLocationData, LOCATIONS } from './constants/locations';
 import { unlockCollectible, getUnlockedCount } from './lib/storage';
@@ -15,6 +16,9 @@ import { unlockCollectible, getUnlockedCount } from './lib/storage';
 import './App.css';
 
 function App() {
+  const [isNfcFabVisible, setIsNfcFabVisible] = useState(false);
+  const [campassTapCount, setCampassTapCount] = useState(0);
+
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     const checkinId = params.get('checkin');
@@ -43,7 +47,11 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname.substring(1);
-  const activeTab = ['explore', 'collection', 'wall', 'profile'].includes(path) ? path as TabId : 'explore';
+  const activeTab = path.startsWith('collection/studio')
+    ? 'collection'
+    : ['explore', 'collection', 'wall', 'profile'].includes(path)
+      ? path as TabId
+      : 'explore';
 
   useEffect(() => {
     // 1. Detection: Check if URL contains checkin parameter
@@ -65,13 +73,19 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (campassTapCount < 5) return;
+    setIsNfcFabVisible(true);
+    setCampassTapCount(0);
+  }, [campassTapCount]);
+
   // Simple rendering logic based on state
   const renderContent = () => {
     switch (activeTab) {
       case 'explore':
         return <MapPage />;
       case 'collection':
-        return <CollectionPage />;
+        return path.startsWith('collection/studio') ? <WardrobeStudioPage /> : <CollectionPage />;
       case 'wall':
         return <WallPage />;
       case 'profile':
@@ -82,7 +96,10 @@ function App() {
   };
 
   return (
-    <MainLayout activeTab={activeTab}>
+    <MainLayout
+      activeTab={activeTab}
+      onCampassLogoClick={() => setCampassTapCount((prev) => prev + 1)}
+    >
       <Suspense fallback={<div className="h-40 flex items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--color-primary)] border-t-transparent" /></div>}>
         {renderContent()}
 
@@ -94,7 +111,7 @@ function App() {
         />
       </Suspense>
 
-      <NfcSimulatorFab />
+      {isNfcFabVisible && <NfcSimulatorFab onClose={() => setIsNfcFabVisible(false)} />}
 
       <CheckInSuccessModal
         open={isCheckInModalOpen}
