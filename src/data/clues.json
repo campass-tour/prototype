@@ -103,13 +103,15 @@
     "locationId": "sb",
     "clues": {
       "card1": {
-        "image_placeholder": "assets/clues/sb_ambience.jpg",
+        "image_placeholder": "assets/clues/sb-clue1.webp",
         "lv1_text": "A complex of laboratories and futuristic classrooms where scientific equations meet architectural grandeur. Often dubbed the 'bridge of logic'.",
         "lv2_text": "Situated in the heart of South Campus, its unique geometric design features multiple interconnected blocks and distinctive sky bridges."
       },
       "card2": {
-        "image_placeholder": ["assets/clues/sb_exact_nfc.jpg"],
-        "lv3_text": "Walk up the main stairs of Block B to the 2nd floor open study corner. The magic tag hides behind the third whiteboard facing the corridor!"
+        "image_placeholder": [
+          "assets/clues/sb-clue2.webp", "assets/clues/sb-clue3.webp"
+        ],
+        "lv3_text": "Follow the final route images around Science Building B to reach the exact NFC position. The tag is placed at the clearly marked spot shown in the last clue image."
       }
     },
     "quizzes": {

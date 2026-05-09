@@ -10,8 +10,8 @@
   },
   {
     "id": "sb",
-    "icon": null,
-    "image": null,
+    "icon": "sb-icon.ico",
+    "image": "sb-image.png",
     "model": "sb.glb",
     "birdModel": "bird.glb",
     "mascotName": "Science Building Mascot",

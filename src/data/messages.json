@@ -380,5 +380,38 @@
     "author": { "username": "RouteBuilder" },
     "likes": 19,
     "timestamp": "2026-04-07T15:05:00.000Z"
+  },
+  {
+    "id": "msg_47",
+    "locationId": "sb",
+    "content": "The corridor outside the labs was full of group discussions today. SB always feels busy in a focused way.",
+    "author": { "username": "LabWindow", "avatarUrl": "https://i.pravatar.cc/150?u=labwindow_sb" },
+    "likes": 18,
+    "timestamp": "2026-04-08T13:20:00.000Z"
+  },
+  {
+    "id": "msg_48",
+    "locationId": "sb",
+    "content": "Caught a clean angle of Science Building B after class. The sky bridges make it look more futuristic than most campus spots.",
+    "author": { "username": "BridgeView", "avatarUrl": "https://i.pravatar.cc/150?u=bridgeview_sb" },
+    "likes": 27,
+    "timestamp": "2026-04-08T16:10:00.000Z",
+    "imageUrl": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    "id": "msg_49",
+    "locationId": "sb",
+    "content": "Good place to meet before a project session. Everyone just says 'wait near SB' and somehow it works.",
+    "author": { "username": "ProjectMeet" },
+    "likes": 13,
+    "timestamp": "2026-04-09T09:35:00.000Z"
+  },
+  {
+    "id": "msg_50",
+    "locationId": "sb",
+    "content": "The study corner was quiet this morning, except for one team rehearsing a presentation in whispers.",
+    "author": { "username": "QuietLab", "avatarUrl": "https://i.pravatar.cc/150?u=quietlab_sb" },
+    "likes": 16,
+    "timestamp": "2026-04-09T10:25:00.000Z"
   }
 ]
