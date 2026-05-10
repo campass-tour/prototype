@@ -16,7 +16,7 @@ import { unlockCollectible, getUnlockedCount } from './lib/storage';
 import './App.css';
 
 function App() {
-  const [isNfcFabVisible, setIsNfcFabVisible] = useState(false);
+  const [isNfcFabVisible, setIsNfcFabVisible] = useState(true);
   const [campassTapCount, setCampassTapCount] = useState(0);
 
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(() => {
