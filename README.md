@@ -14,6 +14,7 @@ The current version is frontend-first: static data + browser persistence provide
 - [Architecture Overview](#architecture-overview)
 - [Data Handling Notes](#data-handling-notes)
 - [NFC Debug FAB](#nfc-debug-fab)
+- [Source Code](#source-code)
 - [AI Prompt Assets](#prompt-assets)
 - [Project Structure](#project-structure)
 - [Future Work](#future-work)
@@ -155,6 +156,14 @@ Use this URL prefix format:
 
 The value after `checkin=` is the location id. You can look up valid ids in [`src/constants/locations.ts`](./src/constants/locations.ts).
 
+## Source Code
+
+[![GitHub](https://img.shields.io/badge/GitHub-campass--tour%2Fprototype-181717?logo=github)](https://github.com/campass-tour/prototype)  
+React source code (this repository)
+
+[![GitHub](https://img.shields.io/badge/GitHub-campass--tour%2Fcampass-181717?logo=github)](https://github.com/campass-tour/campass)  
+Next.js source code (still under construction)
+
 ## Prompt Assets
 
 The [`.agents`](./.agents) directory stores prompt assets used during development.
@@ -178,5 +187,3 @@ src/
 ## Future Work
 
 We are actively refactoring this prototype into a Next.js full-stack architecture.
-
-[![GitHub](https://img.shields.io/badge/GitHub-campass--tour%2Fcampass-181717?logo=github)](https://github.com/campass-tour/campass)
