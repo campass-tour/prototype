@@ -160,7 +160,7 @@ The value after `checkin=` is the location id. You can look up valid ids in [`sr
 The [`.agents`](./.agents) directory stores prompt assets used during development.
 
 - `skills/` contains global prompting guidance and reusable skills.
-- `log/` contains important implementation-focused prompt records and concrete development notes (for example, [`ailog.md`](./.agents/log/ailog.md)).
+- `ai-logs/` contains important implementation-focused prompt records and concrete development notes (for example, [`ailog.md`](./.agents/ai-logs/ailog.md)).
 
 ## Project Structure
 
