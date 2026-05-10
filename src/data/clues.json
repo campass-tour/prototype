@@ -103,13 +103,15 @@
     "locationId": "sb",
     "clues": {
       "card1": {
-        "image_placeholder": "assets/clues/sb_ambience.jpg",
+        "image_placeholder": "assets/clues/sb-clue1.webp",
         "lv1_text": "A complex of laboratories and futuristic classrooms where scientific equations meet architectural grandeur. Often dubbed the 'bridge of logic'.",
         "lv2_text": "Situated in the heart of South Campus, its unique geometric design features multiple interconnected blocks and distinctive sky bridges."
       },
       "card2": {
-        "image_placeholder": ["assets/clues/sb_exact_nfc.jpg"],
-        "lv3_text": "Walk up the main stairs of Block B to the 2nd floor open study corner. The magic tag hides behind the third whiteboard facing the corridor!"
+        "image_placeholder": [
+          "assets/clues/sb-clue2.webp", "assets/clues/sb-clue3.webp"
+        ],
+        "lv3_text": "Follow the final route images around Science Building B to reach the exact NFC position. The tag is placed at the clearly marked spot shown in the last clue image."
       }
     },
     "quizzes": {
@@ -395,6 +397,214 @@
           ],
           "correctAnswerIndex": 3,
           "successMessage": "Brilliant! You've mastered the art of informal learning. The exact tag location is now unblurred!"
+        }
+      ]
+    }
+  },
+  {
+    "locationId": "bs",
+    "clues": {
+      "card1": {
+        "image_placeholder": "assets/clues/bs-clue1.jpg",
+        "lv1_text": "Glass, warm lights, and a quiet courtyard path hide a business-minded stop behind evening reflections.",
+        "lv2_text": "Move toward the building marked BS near the International Business School signs on the South Campus walkway."
+      },
+      "card2": {
+        "image_placeholder": [
+          "assets/clues/bs-clue3-1.jpg",
+          "assets/clues/bs-clue3-2.jpg",
+          "assets/clues/bs-clue3-3.jpg"
+        ],
+        "lv3_text": "Use these final images to match the glass facade, courtyard sign, and BS reception marker. The team should confirm the BS Building entrance area shown in the photos."
+      }
+    },
+    "quizzes": {
+      "freshman": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "Which campus sign should the team begin looking for to identify this location?",
+          "options": [
+            "A. HS Building",
+            "B. BS Building",
+            "C. GYM",
+            "D. Central Building"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Correct! The business clue narrows the search area."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "What school name appears with the BS marker in the final clues?",
+          "options": [
+            "A. International Business School Suzhou at XJTLU",
+            "B. Humanities & Social Sciences Building",
+            "C. Foundation Building",
+            "D. Engineering Building"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Exactly. The final BS images are now revealed."
+        }
+      ],
+      "senior": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "Which academic area does BS most clearly connect with?",
+          "options": [
+            "A. Business and management studies",
+            "B. Physical training",
+            "C. Library services",
+            "D. Engineering workshops"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct. That academic clue points the team toward BS."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "In the final images, which sign detail confirms the exact building?",
+          "options": [
+            "A. The large BS letters beside iBSS",
+            "B. A yellow-and-blue sports wall",
+            "C. A museum timeline",
+            "D. A coffee counter menu"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Spot on. The exact BS visual route is unlocked."
+        }
+      ],
+      "visitor": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "For a visitor, which description best matches the BS stop?",
+          "options": [
+            "A. A business school building beside a glass-fronted courtyard",
+            "B. A sports facility for indoor training",
+            "C. A museum space for campus history",
+            "D. A general residence entrance"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct. The visitor clue now points to the BS area."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which letters should appear on the freestanding sign at this location?",
+          "options": [
+            "A. CB",
+            "B. BS",
+            "C. HS",
+            "D. EB"
+          ],
+          "correctAnswerIndex": 2,
+          "successMessage": "Exactly. The final BS confirmation images are ready."
+        }
+      ]
+    }
+  },
+  {
+    "locationId": "hs",
+    "clues": {
+      "card1": {
+        "image_placeholder": "assets/clues/hs-clue1.jpg",
+        "lv1_text": "Brick tones, curved glass, and soft courtyard light frame a quieter academic corner.",
+        "lv2_text": "Head along the South Campus walkway toward the Humanities & Social Sciences area, near the building marker labeled HS."
+      },
+      "card2": {
+        "image_placeholder": [
+          "assets/clues/hs-clue3-1.jpg",
+          "assets/clues/hs-clue3-2.jpg",
+          "assets/clues/hs-clue3-3.jpg"
+        ],
+        "lv3_text": "Use these final images to match the curved facade, courtyard sign, and HS reception marker. The team should confirm the HS Building entrance area shown in the photos."
+      }
+    },
+    "quizzes": {
+      "freshman": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "What does HS stand for on the campus sign?",
+          "options": [
+            "A. Humanities & Social Sciences Building",
+            "B. Health Sciences Stadium",
+            "C. High Street Station",
+            "D. Hotel Services"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct! The clue now points toward the HS area."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which letters appear on the freestanding sign in the final clues?",
+          "options": [
+            "A. CB",
+            "B. BS",
+            "C. HS",
+            "D. EB"
+          ],
+          "correctAnswerIndex": 3,
+          "successMessage": "Exactly. The final HS images are now revealed."
+        }
+      ],
+      "senior": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "Which academic area does HS most clearly connect with?",
+          "options": [
+            "A. Humanities and social sciences",
+            "B. Competitive sports training",
+            "C. Business school reception",
+            "D. Engineering prototypes"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct. That subject clue guides the team toward HS."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "Which visual cue confirms the exact HS building area?",
+          "options": [
+            "A. A sign marked HS beside Humanities & Social Sciences Building",
+            "B. A sign marked BS beside iBSS",
+            "C. A yellow-and-blue sports entrance",
+            "D. A central library atrium"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Spot on. The exact HS visual route is unlocked."
+        }
+      ],
+      "visitor": [
+        {
+          "quizId": "q1",
+          "unlocks": "Level 2",
+          "question": "For a visitor, which description best matches the HS stop?",
+          "options": [
+            "A. An academic building for humanities and social sciences",
+            "B. A campus sports venue",
+            "C. A business school sign for iBSS",
+            "D. A student supermarket entrance"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Correct. The visitor clue now points to the HS area."
+        },
+        {
+          "quizId": "q2",
+          "unlocks": "Level 3",
+          "question": "What building name should the team see on the HS sign?",
+          "options": [
+            "A. Humanities & Social Sciences Building",
+            "B. International Business School Suzhou",
+            "C. Foundation Building",
+            "D. Engineering Building"
+          ],
+          "correctAnswerIndex": 1,
+          "successMessage": "Exactly. The final HS confirmation images are ready."
         }
       ]
     }
